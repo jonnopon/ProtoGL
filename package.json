@@ -1,0 +1,14 @@
+{
+    "name": "demo",
+    "version": "0.1.0",
+    "author": "Jonno Allcock",
+    "description": "Ludum Dare game, initial test of build system",
+    "devDependencies": {
+        "grunt": "~0.4.5",
+        "grunt-contrib-concat": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-watch": "*",
+        "grunt-contrib-copy": "*",
+        "grunt-http-server": "*"
+    }
+}
