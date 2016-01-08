@@ -25,9 +25,9 @@
 # Grunt Commands
 ### *grunt dev*
 #### For smoother development
-- Build the game without minimising the JS for debug purposes
+- Build the game without minimising the JS for debugging
 - Open an HTTP server and browser window at the **dist** directory
-- Watch the **src** and **lib** directories for changes.
+- Watch the **src** and **lib** directories for changes
 
 #####NOTES:
 - requires ports *35729* and *8080* be open
