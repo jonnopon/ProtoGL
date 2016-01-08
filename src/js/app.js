@@ -26,7 +26,7 @@ var init = function() {
         this.textUtils.init();
         this.textUtils.setUpFont();
 
-        this.eman.addPlayer(new Player(new Vec2(-0.8, 0.5), this)); //TODO
+        this.eman.addPlayer(new Player(new Vec2(-0.8, -0.25), this)); //TODO
         this.genFood();
     };
 
@@ -43,8 +43,7 @@ var init = function() {
         this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this)); //TODO
         this.genFood();
 
-        this.level = new Level(this); //TODO
-        this.activeState("menu");
+        this.activeState("game");
     }
 
     //STEP 6: attach init and reinit data to the Game object
@@ -63,16 +62,16 @@ var init = function() {
 
     var genFood = function() {
         //TODO: needs work
-        var x = Math.floor(Math.random() * 2) - 0.5
-        var y = Math.floor(Math.random() * 2) - 0.5
+        var x = Math.random() * 1.8 - 0.9;
+        var y = Math.random() * 1.8 - 0.9;
         this.eman.addEnt(new Food(new Vec2(x, y), this));
     };
 
     var genEnemy = function() {
         if (this.points !== this.lastGen) {
             //TODO: needs work
-            var x = Math.floor(Math.random() * 2) - 0.5
-            var y = Math.floor(Math.random() * 2) - 0.5
+            var x = Math.random() * 1.8 - 0.9;
+            var y = Math.random() * 1.8 - 0.9;
             this.eman.addEnt(new Enemy(new Vec2(x, y), this));
             this.lastGen = this.points;
         }
@@ -90,9 +89,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textUtils.addString("Crappy Font Simulator", 0.125, new Vec2(-0.98, 0.75), false);
-        game.textUtils.addString("ProtoGL Demo", 0.115, new Vec2(-0.98, 0.5), false);
-        game.textUtils.addString("Space to Start", 0.095, new Vec2(-0.98, 0.3), false);
+        game.textUtils.addString("ProtoGL Demo", 0.15, new Vec2(-0.9, 0.75), false);
+        game.textUtils.addString("Crappy Font", 0.135, new Vec2(-0.75, 0.5), false);
+        game.textUtils.addString("Simulator", 0.125, new Vec2(-0.6, 0.35), false);
+        game.textUtils.addString("Space to Start", 0.12, new Vec2(-0.85, -0.9), false);
 
 
         if (window.keys.indexOf(game.keyCodes.space) > -1 && !game.menuTimeout) {
@@ -109,7 +109,8 @@ var init = function() {
         var player = game.eman.player;
 
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
-        game.textUtils.addString("Points " + game.points, 0.1, new Vec2(-0.98, 0.85), false);
+        game.textUtils.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
+        game.textUtils.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
 
         if (window.keys.indexOf(game.keyCodes.w) > -1) {
             game.eman.player.turn(0);
@@ -132,7 +133,7 @@ var init = function() {
             game.activeState("pause");
         }
 
-        if (game.points > 0 && game.points % 3 == 0) {
+        if (game.points > 0 && game.points % 5 == 0) {
             game.genEnemy();
         }
 
@@ -145,8 +146,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textUtils.addString("Paused", 0.125, new Vec2(-0.98, 0.8), false);
-        game.textUtils.addString("Space to resume", 0.1, new Vec2(-0.98, 0.65), false);
+        game.textUtils.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
+        game.textUtils.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
+        game.textUtils.addString("Paused", 0.2, new Vec2(-0.55, 0), false);
+        game.textUtils.addString("Space to resume", 0.12, new Vec2(-0.9, -0.2), false);
 
         if (window.keys.indexOf(game.keyCodes.space) > -1) {
             game.activeState("game");
@@ -161,9 +164,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textUtils.addString("Points " + game.points, 0.1, new Vec2(-0.98, 0.85), false);
-        game.textUtils.addString("DEAD", 0.1, new Vec2(-0.98, 0.7), false);
-        game.textUtils.addString("Space to restart", 0.1, new Vec2(-0.98, 0.5), false);
+        game.textUtils.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
+        game.textUtils.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
+        game.textUtils.addString("DEAD", 0.35, new Vec2(-0.65, 0), false );
+        game.textUtils.addString("Space to restart", 0.12, new Vec2(-0.96, -0.2), false);
 
         game.eman.render();
         game.textUtils.render();

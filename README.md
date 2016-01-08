@@ -36,3 +36,26 @@ The **dist** directory now contains your optimised distributable game.
 
 ----
 ----
+
+# TODO
+### Boilerplate Refactors
+- All code needs a look over; need to pick one consistent style and sweep
+- Remove unneeded stuff
+    - possible EG: levelmanager and levelpiece
+        - useful conceptually but the same could be achieved with just a "workd" flag on ents
+- Text needs a serious overhaul (incl. font texture + accuracy of u/v coords)
+    - alignment, colours, size, orientation, maybe lower case?
+- Entity structure needs overhaul
+    - Follow style of the incremental renderer capabilities;
+        - flexible extensible manager
+        - flexible entities; switches for behaviour types and physics - set of defaults + extensible
+            - components??????
+    - Really don't like the getVerts() method of rendering
+    - animation
+- Renderer should use element arrays
+    - will require changes to all which return data to the renderer
+- Renderer needs splitting into 2D and 3D renderer?
+    - Reasons
+- CanvasRenderer as fallback/alternate?
+- UI moduile
+    - panels, etc
