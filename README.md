@@ -3,10 +3,21 @@
 ----
 
 # Setup
-- Clone the repository (switch to branch "new" for the moment)
+- Clone the repository
 - CD into the root directory
-- run command ***npm install*** to download the necessary node_modules
-- run either ***grunt dev*** or ***grunt dist*** (info below)
+- run ***npm install***
+- run ***grunt dev*** to develop or ***grunt dist*** to optimise (details below)
+
+----
+----
+
+#Usage (grunt dev)
+- Modify/add game files in the **src** directory
+- Modify/add "engine"/boilerplate files in the **lib/protoGL-base** directory
+- Add new third party libraries to the **lib/** directory
+- Changes are reloaded automatically in your browser window
+- in-place demo application provides example for replaement/expansion
+- *documentation on protoGL-base capabilities coming soon*
 
 ----
 ----
@@ -18,21 +29,16 @@
 - Open an HTTP server and browser window at the **dist** directory
 - Watch the **src** and **lib** directories for changes.
 
-Modify files in the game's **src** or **lib** directories to see changes automatically reloaded on the server and in your browser window.
-
-##### NOTE: requires ports *35729* and *8080* be open
-##### NOTE: requires the following script to be present in the game's main HTML page (eg. src/app.html):
-
-###### ***script src="http://localhost:35729/livereload.js"/>***
-
+#####NOTES:
+- requires ports *35729* and *8080* be open
+- requires the following script to be present in the game's main HTML page (eg. src/app.html):
+- ***script src="http://localhost:35729/livereload.js"/>***
 
 ----
 
 ### *grunt dist*
 #### For creating an optimised distribution build
-Build the game, minimising the JS
-
-The **dist** directory now contains your optimised distributable game.
+- Build the distributable, with minimised JS
 
 ----
 ----
@@ -43,6 +49,7 @@ The **dist** directory now contains your optimised distributable game.
 - Remove unneeded stuff
     - possible EG: levelmanager and levelpiece
         - useful conceptually but the same could be achieved with just a "workd" flag on ents
+- Initial protoGL-base Documentation
 - Text needs a serious overhaul (incl. font texture + accuracy of u/v coords)
     - alignment, colours, size, orientation, maybe lower case?
 - Entity structure needs overhaul
@@ -59,3 +66,6 @@ The **dist** directory now contains your optimised distributable game.
 - CanvasRenderer as fallback/alternate?
 - UI moduile
     - panels, etc
+
+----
+----

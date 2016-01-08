@@ -49,7 +49,7 @@ module.exports = function(grunt) {
             libStatic: {
                 files: [{
                     expand: true,
-                    cwd: 'lib/jsengine/',
+                    cwd: 'lib/protoGL-base/',
                     src: ['res/**'],
                     dest: 'dist/'
                 }]
