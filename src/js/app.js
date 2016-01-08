@@ -95,24 +95,16 @@ var init = function() {
         game.textUtils.addString("Points " + game.points, 0.1, new Vec2(-0.98, 0.85), false);
 
         if (window.keys.indexOf(game.keyCodes.w) > -1) {
-            // game.eman.player.jump(90);
-        }
-
-        if (window.keys.indexOf(game.keyCodes.a) > -1) {
-            // game.eman.player.moveHor(-1);
+            game.eman.player.turn(0);
         }
         else if (window.keys.indexOf(game.keyCodes.d) > -1) {
-            // game.eman.player.moveHor(1);
+            game.eman.player.turn(1);
         }
-        else {
-            // game.eman.player.moveHor(0);
+        else if (window.keys.indexOf(game.keyCodes.s) > -1) {
+            game.eman.player.turn(2);
         }
-
-        if (window.keys.indexOf(game.keyCodes.space) > -1) {
-            // game.eman.player.slowDescent();
-        }
-        else {
-            // game.eman.player.resetDescent();
+        else if (window.keys.indexOf(game.keyCodes.a) > -1) {
+            game.eman.player.turn(3)
         }
 
         if (game.eman.player.dead) {
