@@ -35,7 +35,7 @@
 #####NOTES:
 - requires ports *35729* and *8080* be open
 - requires the following script to be present in the game's main HTML page (eg. src/app.html):
-- ***script src="http://localhost:35729/livereload.js"/>***
+    - ***script src="http://localhost:35729/livereload.js"/>***
 
 ----
 
