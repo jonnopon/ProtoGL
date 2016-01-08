@@ -16,8 +16,10 @@
 - Modify/add "engine"/boilerplate files in the **lib/protoGL-base** directory
 - Add new third party libraries to the **lib/** directory
 - Changes are reloaded automatically in your browser window
-- in-place demo application provides example for replaement/expansion
+- in-place demo application provides example for replacement/expansion
 - *documentation on protoGL-base capabilities coming soon*
+- The **dist** directory always contains the running build of the game;
+    - *overwrite it with a ***grunt-dist*** to temporarily test the distribution build in your browser before making further changes to the application*
 
 ----
 ----
@@ -25,7 +27,7 @@
 # Grunt Commands
 ### *grunt dev*
 #### For smoother development
-- Build the game without minimising the JS for debugging
+- Build the game to the **dist** directory without minimising the JS for debugging
 - Open an HTTP server and browser window at the **dist** directory
 - Watch the **src** and **lib** directories for changes
 
@@ -38,24 +40,24 @@
 
 ### *grunt dist*
 #### For creating an optimised distribution build
-- Build the distributable, with minimised JS
+- Build the distributable to the **dist** directory, with minimised JS
 
 ----
 ----
 
 # TODO
-### Boilerplate Refactors
+### ProtoGL-Base Refactors
 - All code needs a look over; need to pick one consistent style and sweep
 - Remove unneeded stuff
     - possible EG: levelmanager and levelpiece
-        - useful conceptually but the same could be achieved with just a "workd" flag on ents
+        - useful conceptually but the same could be achieved with just a "world" flag on ents
 - Initial protoGL-base Documentation
-- Text needs a serious overhaul (incl. font texture + accuracy of u/v coords)
+- Text needs a serious overhaul (incl. font texture + accuracy of u/v coordinates)
     - alignment, colours, size, orientation, maybe lower case?
 - Entity structure needs overhaul
     - Follow style of the incremental renderer capabilities;
         - flexible extensible manager
-        - flexible entities; switches for behaviour types and physics - set of defaults + extensible
+        - flexible entities; switches for behavior types and physics - set of defaults + extensible
             - components??????
     - Really don't like the getVerts() method of rendering
     - animation
@@ -64,7 +66,7 @@
 - Renderer needs splitting into 2D and 3D renderer?
     - Reasons
 - CanvasRenderer as fallback/alternate?
-- UI moduile
+- UI module
     - panels, etc
 
 ----
