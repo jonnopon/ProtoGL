@@ -1,11 +1,4 @@
-# Blockman Panic
-## Ludum Dare 34
-**Theme:** *Growing* and *Two Button Control*
-
-Initially created for the Ludum Dare Compo; then improved slightly for the extended Jam.
-
-Now serving as a workplace and test application for the formalisation of a WebGL engine I've been building for a while.
-
+## Description Here...
 ----
 ----
 
