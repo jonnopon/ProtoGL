@@ -1,7 +1,5 @@
 var Player = function(pos, game) {
-    this.game = game;
-
-    var dimensions = new Vec2(0.1, 0.1);
+    var dimensions = new Vec2(0.125, 0.125);
     Entity.prototype.constructor.call(this, pos, dimensions, game);
 
     this.health = 3;
@@ -59,8 +57,19 @@ var Player = function(pos, game) {
         }
     };
 
-    this.collidedWithEnt = function(e) {
+    this.tick = function() {
+        if (this.health < 0) {
+            this.dead = true;
+        }
+    }
 
+    this.collidedWithEnt = function(e) {
+        if (e instanceof Enemy) {
+            this.health--;
+        }
+        if (e instanceof Food) {
+            this.game.addPoints(1);
+        }
     };
 
     this.collidedWithLvl = function(e) {
