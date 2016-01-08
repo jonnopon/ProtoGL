@@ -20,7 +20,7 @@
 - in-place demo application provides example for replacement/expansion
 - *documentation on protoGL-base capabilities coming soon*
 - The **dist** directory always contains the running build of the game;
-    - *overwrite it with a ***grunt-dist*** to temporarily test the distribution build in your browser before making further changes to the application*
+    - *overwrite it with a **grunt dist** to temporarily test the distribution build in your browser before making further changes to the application*
 
 ----
 ----
