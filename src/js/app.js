@@ -5,15 +5,15 @@ var init = function() {
     //STEP 1: define game initial attributes in dictionary
     var gameData = {
         "ents": [],
+        "lastGen": -1,
         "points": 0,
-        "level": null
     };
 
     //STEP 2: define which attributes should reinitialise on game reset
     var gameReinitData = {
         "ents": [],
+        "lastGen": -1,
         "points": 0,
-        "level": null
     };
 
     //STEP 3: define game init function
@@ -27,8 +27,7 @@ var init = function() {
         this.textUtils.setUpFont();
 
         this.eman.addPlayer(new Player(new Vec2(-0.8, 0.5), this)); //TODO
-
-        this.level = new Level(this); //TODO
+        this.genFood();
     };
 
     ///STEP 4: define game reinit function
@@ -42,6 +41,7 @@ var init = function() {
         this.textUtils.setUpFont();
         
         this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this)); //TODO
+        this.genFood();
 
         this.level = new Level(this); //TODO
         this.activeState("menu");
@@ -61,8 +61,27 @@ var init = function() {
         this.points += p;
     };
 
+    var genFood = function() {
+        //TODO: needs work
+        var x = Math.floor(Math.random() * 2) - 0.5
+        var y = Math.floor(Math.random() * 2) - 0.5
+        this.eman.addEnt(new Food(new Vec2(x, y), this));
+    };
+
+    var genEnemy = function() {
+        if (this.points !== this.lastGen) {
+            //TODO: needs work
+            var x = Math.floor(Math.random() * 2) - 0.5
+            var y = Math.floor(Math.random() * 2) - 0.5
+            this.eman.addEnt(new Enemy(new Vec2(x, y), this));
+            this.lastGen = this.points;
+        }
+    }
+
     ///STEP 9: attach utility methods to Game object by name
     game.addMethod("addPoints", addPoints);
+    game.addMethod("genFood", genFood);
+    game.addMethod("genEnemy", genEnemy);
 
     //STEP 10: define Game State function bodies describing the frame of each state
     //a state function can take any number of params as long as denoted in assignment to Game
@@ -81,9 +100,7 @@ var init = function() {
         }
 
         game.eman.render();
-        game.lman.render();
         game.eman.update(game.delta);
-        game.lman.update(game.delta);
         game.textUtils.render();
     };
 
@@ -115,10 +132,11 @@ var init = function() {
             game.activeState("pause");
         }
 
+        if (game.points > 0 && game.points % 3 == 0) {
+            game.genEnemy();
+        }
+
         game.eman.render();
-        game.lman.render();
-        game.lman.update(game.delta);
-        game.level.update(game.delta);
         game.eman.update(game.delta);
         game.textUtils.render();
     };
@@ -148,7 +166,6 @@ var init = function() {
         game.textUtils.addString("Space to restart", 0.1, new Vec2(-0.98, 0.5), false);
 
         game.eman.render();
-        game.lman.render();
         game.textUtils.render();
 
         if (window.keys.indexOf(game.keyCodes.space) > -1) {
