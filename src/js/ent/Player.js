@@ -13,6 +13,9 @@ var Player = function(pos, game) {
     this.v1 = 1;
     this.v2 = 0;
 
+    this.noCollideTimer = 0;
+    this.noCollideTimeMax = 76;
+
     this.turn = function(dir) {
         switch (dir) {
             case 0:
@@ -55,28 +58,35 @@ var Player = function(pos, game) {
         else if (this.pos.y + this.height < -1) {
             this.pos.y = 1;
         }
-    };
 
-    this.tick = function() {
-        if (this.health < 0) {
+        if (this.health <= 0) {
             this.dead = true;
         }
-    }
+
+        if (this.noCollideEnt) {
+            this.noCollideTimer++;
+            if (this.noCollideTimer > this.noCollideTimeMax) {
+                this.noCollideTimer = 0;
+                this.visible = true;
+                this.noCollideEnt = false;
+            }
+            else {
+                this.visible = this.noCollideTimer % 5 !== 0;
+            }
+        }
+    };
 
     this.collidedWithEnt = function(e) {
-        if (e instanceof Enemy) {
+        if (e instanceof Enemy && !this.noCollideEnt) {
             this.health--;
+            this.noCollideEnt = true;
         }
-        if (e instanceof Food) {
+        else if (e instanceof Food) {
             this.game.addPoints(1);
         }
     };
 
     this.collidedWithLvl = function(e) {
-
-    };
-
-    this.tick = function() {
 
     };
 };
