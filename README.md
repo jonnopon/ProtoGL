@@ -3,6 +3,7 @@
 ----
 
 # Setup
+- Install project dependencies [Grunt](http://gruntjs.com/) and [Node (with npm)](https://nodejs.org) if necessary
 - Clone the repository
 - CD into the root directory
 - run ***npm install***
