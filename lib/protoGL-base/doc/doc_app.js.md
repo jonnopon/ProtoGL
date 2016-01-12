@@ -42,6 +42,8 @@
 ----
 
 ##Template
+
+```javascript
 var init = function() {
     //Construct the Abstract Game object, setting its width and height
     var game = new Game(640, 480);
@@ -242,3 +244,4 @@ var init = function() {
     //STEP 14: start the game
     game.start();
 };
+```
