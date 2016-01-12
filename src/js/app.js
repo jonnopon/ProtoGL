@@ -69,7 +69,6 @@ var init = function() {
 
     var genEnemy = function() {
         if (this.points !== this.lastGen) {
-            //TODO: needs work
             var x = Math.random() * 1.8 - 0.9;
             var y = Math.random() * 1.8 - 0.9;
             this.eman.addEnt(new Enemy(new Vec2(x, y), this));
