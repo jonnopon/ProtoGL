@@ -1,6 +1,4 @@
-## Description Here...
-----
-----
+A WebGL prototyping "engine" - provides a sizeable, organised bed of boilerplate on which a game can be built. In active development.
 
 # Setup
 - Install project dependencies [Grunt](http://gruntjs.com/) and [Node (with npm)](https://nodejs.org) if necessary
