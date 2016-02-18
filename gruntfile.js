@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                separator: ';'
+                separator: ''
             },
             js: {
                 src: ['lib/**/*.js', 'src/**/*.js'],

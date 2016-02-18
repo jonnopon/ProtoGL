@@ -30,5 +30,5 @@ var Enemy = function(pos, game) {
         else if (this.pos.y + this.height < -1) {
             this.pos.y = 1;
         }
-    }
+    };
 };
