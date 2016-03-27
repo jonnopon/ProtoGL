@@ -5,15 +5,13 @@ var init = function() {
     //STEP 1: define game initial attributes in dictionary
     var gameData = {
         "ents": [],
-        "lastGen": -1,
-        "points": 0,
+        "points": 0
     };
 
     //STEP 2: define which attributes should reinitialise on game reset
     var gameReinitData = {
         "ents": [],
-        "lastGen": -1,
-        "points": 0,
+        "points": 0
     };
 
     //STEP 3: define game init function
@@ -21,13 +19,11 @@ var init = function() {
     var initFunc = function() {
         this.loadAttributes(this.initData);
         this.initManagers();
-        this.sman.addSound("coin-chunkpass", "res/snd/coin.wav");
 
         this.textUtils.init();
         this.textUtils.setUpFont();
 
-        this.eman.addPlayer(new Player(new Vec2(-0.8, -0.25), this)); //TODO
-        this.genFood();
+        this.eman.addPlayer(new Player(new Vec2(-0.8, -0.25), this));
     };
 
     ///STEP 4: define game reinit function
@@ -35,13 +31,11 @@ var init = function() {
     var reinitFunc = function() {
         this.loadAttributes(this.reinitData);
         this.initManagers();
-        this.sman.addSound("coin-chunkpass", "res/snd/coin.wav");
 
         this.textUtils.init();
         this.textUtils.setUpFont();
         
-        this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this)); //TODO
-        this.genFood();
+        this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this));
 
         this.activeState("game");
     }
@@ -56,30 +50,14 @@ var init = function() {
 
     //STEP 8: define global utility methods for Game
     //this refers to game since this method will be injected
-    var addPoints = function(p) {
-        this.points += p;
-    };
-
-    var genFood = function() {
-        //TODO: needs work
-        var x = Math.random() * 1.8 - 0.9;
-        var y = Math.random() * 1.8 - 0.9;
-        this.eman.addEnt(new Food(new Vec2(x, y), this));
-    };
-
-    var genEnemy = function() {
-        if (this.points !== this.lastGen) {
-            var x = Math.random() * 1.8 - 0.9;
-            var y = Math.random() * 1.8 - 0.9;
-            this.eman.addEnt(new Enemy(new Vec2(x, y), this));
-            this.lastGen = this.points;
-        }
-    }
+    //example:
+    // var addPoints = function(p) {
+    //     this.points += p;
+    // };
 
     ///STEP 9: attach utility methods to Game object by name
-    game.addMethod("addPoints", addPoints);
-    game.addMethod("genFood", genFood);
-    game.addMethod("genEnemy", genEnemy);
+    //example:
+    // game.addMethod("addPoints", addPoints);
 
     //STEP 10: define Game State function bodies describing the frame of each state
     //a state function can take any number of params as long as denoted in assignment to Game
@@ -130,10 +108,6 @@ var init = function() {
 
         if (window.keys.indexOf(game.keyCodes.p) > -1) {
             game.activeState("pause");
-        }
-
-        if (game.points > 0 && game.points % 5 == 0) {
-            game.genEnemy();
         }
 
         game.eman.render();
