@@ -1,4 +1,5 @@
-A WebGL prototyping "engine" - provides a sizeable, organised bed of boilerplate on which a game can be built. In active development.
+A WebGL prototyping "engine" - provides a sizeable, organised bed of boilerplate on which a game can be built.
+**Currently just an amalgamation of a lot of compunding work done to produce small prototypes for Ludum Dare competitions; in no way clean, finished, fully functional or user-friendly. In "active" (occasional) development.**
 
 # Setup
 - Install project dependencies [Grunt](http://gruntjs.com/) and [Node (with npm)](https://nodejs.org) if necessary
