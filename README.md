@@ -49,7 +49,14 @@ So, without further ado: TODO/SANITY CHECK...
         - Either remove or think of a reason for it to exist alongside significant differences from the Entity system that justify its separate existence
         
     - Game (main object) (*lib/protogl-base/Game.js)
-        - As with Entity, to sanity check this I really need to have a proper look and think. Not a good idea in the same sitting as checking the rest of the system.
+        - Needs to be able to change the width and height of...well, the game
+            - Right now this is actually done in Renderer's initialisation; it gets the canvas, sets its width and height and uses that canvas to get and alter the gl context
+            - **New Logic:** *Game* gets Canvas and sets its width and height, passes that onto the Renderer which gets and alters the gl context
+        - Need to figure out what this trickery with setting a window property "game" actually does/if it's necessary - understand WHY in either case
+        - Need a simple function to check "is a key pressed?" to remove the need to do stupid long-winded indexOf's in the application
+        - Why is the "run" function set as a named array property rather in the normal fashion? Understand WHY and change if necessary/possible
+        - setSoundManager and setEntityManager are set in a different way as well...like, statically I guess?
+        - addAttr and addMethod do the same thing exactly - come up with a good common name and remove one
         
     - **New** Shapes - CREATE IN (*lib/protogl-base/shapes*)????? Depends how I play the Entity resructure I guess
         - part of entity system? Is a shape inherently a game object? Or are they generic concepts used by any other system?
