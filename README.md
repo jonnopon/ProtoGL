@@ -1,3 +1,7 @@
+RTS game made for MiniLD 66 - "You Must Create Additional RTS Games"
+Built on top of the ProtoGL base project to allow simplistic back-porting of any engine improvements made.
+Having to do this has made me realise what is "wrong" with this project. Must eventually change to fit.
+
 A WebGL prototyping "engine" - provides a sizeable, organised bed of boilerplate on which a game can be built.
 **Currently just an amalgamation of a lot of compunding work done to produce small prototypes for Ludum Dare competitions; in no way clean, finished, fully functional or user-friendly. In "active" (occasional) development.**
 
