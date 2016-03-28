@@ -22,15 +22,63 @@ module.exports = function(grunt) {
             }
         },
         copy: {
-            html: {
+            dev_html: {
                 files: [{
                     expand: true,
                     cwd: 'src/',
-                    src: ['*.html'],
+                    src: ['*-dev.html'],
+                    dest: 'dev/'
+                }]
+            },
+            dev_jsApp: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['js/**'],
+                    dest: 'dev/'
+                }]
+            },
+            dev_jsLib: {
+                files: [{
+                    expand: true,
+                    src: ['lib/**'],
+                    dest: 'dev/'
+                }]
+            },
+            dev_css: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['css/**'],
+                    dest: 'dev/'
+                }]
+            },
+            dev_appStatic: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['res/**'],
+                    dest: 'dev/'
+                }]
+            },
+            dev_libStatic: {
+                files: [{
+                    expand: true,
+                    cwd: 'lib/protogl-base/',
+                    src: ['res/**'],
+                    dest: 'dev/'
+                }]
+            },
+
+            dist_html: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['*-dist.html'],
                     dest: 'dist/'
                 }]
             },
-            css: {
+            dist_css: {
                 files: [{
                     expand: true,
                     cwd: 'src/',
@@ -38,7 +86,7 @@ module.exports = function(grunt) {
                     dest: 'dist/'
                 }]
             },
-            appStatic: {
+            dist_appStatic: {
                 files: [{
                     expand: true,
                     cwd: 'src/',
@@ -46,10 +94,10 @@ module.exports = function(grunt) {
                     dest: 'dist/'
                 }]
             },
-            libStatic: {
+            dist_libStatic: {
                 files: [{
                     expand: true,
-                    cwd: 'lib/protoGL-base/',
+                    cwd: 'lib/protogl-base/',
                     src: ['res/**'],
                     dest: 'dist/'
                 }]
@@ -59,30 +107,34 @@ module.exports = function(grunt) {
             options: {
                 livereload: true
             },
-            js: {
-                files: ['src/**/*.js', 'lib/**/*.js'],
-                tasks: ['concat']
+            jsApp: {
+                files: ['src/**/*.js'],
+                tasks: ['copy:dev_jsApp']
+            },
+            jsLib: {
+                files: ['lib/**/*.js'],
+                tasks: ['copy:dev_jsLib']
             },
             html: {
                 files: ['src/*.html'],
-                tasks: ['copy:html']
+                tasks: ['copy:dev_html']
             },
             css: {
                 files: ['src/**/*.css'],
-                tasks: ['copy:css']
+                tasks: ['copy:dev_css']
             },
             appStatic: {
                 files: ['src/res/**'],
-                tasks: ['copy:appStatic']
+                tasks: ['copy:dev_appStatic']
             },
             libStatic: {
                 files: ['lib/res/**'],
-                tasks: ['copy:libStatic']
+                tasks: ['copy:dev_libStatic']
             }
         },
         'http-server': {
-            'dev': {
-                root: 'dist/',
+            dev: {
+                root: 'dev/',
                 port: 8080,
                 runInBackground: true,
                 openBrowser: true
@@ -99,11 +151,12 @@ module.exports = function(grunt) {
     grunt.registerTask('default', []);
     grunt.registerTask(
         'dev', [
-            'concat',
-            'copy:html',
-            'copy:css',
-            'copy:appStatic',
-            'copy:libStatic',
+            'copy:dev_html',
+            'copy:dev_jsApp',
+            'copy:dev_jsLib',
+            'copy:dev_css',
+            'copy:dev_appStatic',
+            'copy:dev_libStatic',
             'http-server',
             'watch'
         ]
@@ -112,10 +165,10 @@ module.exports = function(grunt) {
         'dist', [
             'concat',
             'uglify',
-            'copy:html',
-            'copy:css',
-            'copy:appStatic',
-            'copy:libStatic'
+            'copy:dist_html',
+            'copy:dist_css',
+            'copy:dist_appStatic',
+            'copy:dist_libStatic',
         ]
     );
 };

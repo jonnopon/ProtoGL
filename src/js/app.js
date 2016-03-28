@@ -1,6 +1,6 @@
 var init = function() {
     //Construct the Abstract Game object, setting its width and height
-    var game = new Game(640, 480);
+    var game = new Game(800, 600);
 
     //STEP 1: define game initial attributes in dictionary
     var gameData = {
@@ -20,9 +20,6 @@ var init = function() {
         this.loadAttributes(this.initData);
         this.initManagers();
 
-        this.textUtils.init();
-        this.textUtils.setUpFont();
-
         this.eman.addPlayer(new Player(new Vec2(-0.8, -0.25), this));
     };
 
@@ -31,9 +28,6 @@ var init = function() {
     var reinitFunc = function() {
         this.loadAttributes(this.reinitData);
         this.initManagers();
-
-        this.textUtils.init();
-        this.textUtils.setUpFont();
         
         this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this));
 
