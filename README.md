@@ -48,7 +48,7 @@ So, without further ado: TODO/SANITY CHECK...
         - WHY DOES THIS EXIST? SERIOUSLY REDUNDANT
         - Either remove or think of a reason for it to exist alongside significant differences from the Entity system that justify its separate existence
         
-    - Game (main object) (*lib/protogl-base/Game.js)
+    - Game (main object) (*lib/protogl-base/Game.js*)
         - Needs to be able to change the width and height of...well, the game
             - Right now this is actually done in Renderer's initialisation; it gets the canvas, sets its width and height and uses that canvas to get and alter the gl context
             - **New Logic:** *Game* gets Canvas and sets its width and height, passes that onto the Renderer which gets and alters the gl context
