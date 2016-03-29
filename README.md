@@ -58,12 +58,12 @@ So, without further ado: TODO/SANITY CHECK...
         
     - Text (*lib/protogl-base/text*)
         - Needs to allow for:
-            - alignment??
-                - Should be center-aligned by default
+            - ~~rotation~~
+            - ~~alignment??~~
             - ~~colouring~~
             - sizing
-            - orientation
             - line breaks?
+                - Could be as simple as using a special char in string creation and having the TextManager break into new Strings on that character?
         - font image itself needs updating to make it less absolutely crappy
             - U/V texture coordinates in the textUtils module need refining to be more accurate and predictable
             - font image should somehow allow for lower-case text; two images? Two alphabetic character sets?
