@@ -60,10 +60,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString("ProtoGL Demo", 0.15, new Vec2(-0.9, 0.75), false);
-        game.textManager.addString("Crappy Font", 0.135, new Vec2(-0.75, 0.5), false);
-        game.textManager.addString("Simulator", 0.125, new Vec2(-0.6, 0.35), false);
-        game.textManager.addString("Space to Start", 0.12, new Vec2(-0.85, -0.9), false);
+        game.textManager.addString("ProtoGL Demo", 0.15, new Vec2(-0.9, 0.75), new Vec3(1, 0, 0));
+        game.textManager.addString("Crappy Font", 0.135, new Vec2(-0.75, 0.5), new Vec3(0, 1, 0));
+        game.textManager.addString("Simulator", 0.125, new Vec2(-0.6, 0.35), new Vec3(0, 0, 1));
+        game.textManager.addString("Space to Start", 0.12, new Vec2(-0.85, -0.9), new Vec3(1, 1, 1));
 
         if (game.keyDown(game.keyCodes.space)) {
             game.activeState("game");
