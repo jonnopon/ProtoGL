@@ -46,6 +46,8 @@ So, without further ado: TODO/SANITY CHECK...
         
     - Game (main object) (*lib/protogl-base/Game.js*)
         - Key detection system is a little off; likely will need replacing with an **input module** anyway
+        - Resize capability (will require adding the same to Renderer to redefine the glViewport)
+            - Maybe construct a Game with a minWidth and minHeight; below these being available in browser window size, alt displayed?
         
     - **New** Shapes - CREATE IN (*lib/protogl-base/shapes*)????? Depends how I play the Entity resructure I guess
         - part of entity system? Is a shape inherently a game object? Or are they generic concepts used by any other system?
@@ -53,7 +55,8 @@ So, without further ado: TODO/SANITY CHECK...
         - This will lead into helping conceptually replace the Entity system system AND feed directly into...
     - **New** UI - CREATE IN (*lib/protogl-base/ui*)
         - Panels, buttons, text boxes, all kinds of juicy lovelies that simply do not exist yet for some reason (laziness/"lack of need")
-    - Text (*lib/protogl-base/utils/textUtils.js*) - MOVE TO -> (*lib/protogl-base/text*)
+        
+    - Text (*lib/protogl-base/text*)
         - Needs to be flexible and configurable, as with the current renderer
         - Needs to allow for:
             - alignment
