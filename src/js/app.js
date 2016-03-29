@@ -60,10 +60,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textUtils.addString("ProtoGL Demo", 0.15, new Vec2(-0.9, 0.75), false);
-        game.textUtils.addString("Crappy Font", 0.135, new Vec2(-0.75, 0.5), false);
-        game.textUtils.addString("Simulator", 0.125, new Vec2(-0.6, 0.35), false);
-        game.textUtils.addString("Space to Start", 0.12, new Vec2(-0.85, -0.9), false);
+        game.textManager.addString("ProtoGL Demo", 0.15, new Vec2(-0.9, 0.75), false);
+        game.textManager.addString("Crappy Font", 0.135, new Vec2(-0.75, 0.5), false);
+        game.textManager.addString("Simulator", 0.125, new Vec2(-0.6, 0.35), false);
+        game.textManager.addString("Space to Start", 0.12, new Vec2(-0.85, -0.9), false);
 
         if (game.keyDown(game.keyCodes.space)) {
             game.activeState("game");
@@ -71,7 +71,7 @@ var init = function() {
 
         game.eman.render();
         game.eman.update(game.delta);
-        game.textUtils.render();
+        game.textManager.render();
     };
 
     var gameFunc = function(args) {
@@ -79,8 +79,8 @@ var init = function() {
         var player = game.eman.player;
 
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
-        game.textUtils.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
-        game.textUtils.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
+        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
+        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
         
         
         if (game.keyDown(game.keyCodes.w)) {
@@ -110,37 +110,37 @@ var init = function() {
 
         game.eman.render();
         game.eman.update(game.delta);
-        game.textUtils.render();
+        game.textManager.render();
     };
 
     var pauseFunc = function(args) {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textUtils.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
-        game.textUtils.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
-        game.textUtils.addString("Paused", 0.2, new Vec2(-0.55, 0), false);
-        game.textUtils.addString("Space to resume", 0.12, new Vec2(-0.9, -0.2), false);
+        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
+        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
+        game.textManager.addString("Paused", 0.2, new Vec2(-0.55, 0), false);
+        game.textManager.addString("Space to resume", 0.12, new Vec2(-0.9, -0.2), false);
 
         if (game.keyDown(game.keyCodes.space)) {
             game.activeState("game");
         }
 
         game.eman.render();
-        game.textUtils.render();
+        game.textManager.render();
     };
 
     var deadFunc = function(args) {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textUtils.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
-        game.textUtils.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
-        game.textUtils.addString("DEAD", 0.35, new Vec2(-0.65, 0), false );
-        game.textUtils.addString("Space to restart", 0.12, new Vec2(-0.96, -0.2), false);
+        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
+        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
+        game.textManager.addString("DEAD", 0.35, new Vec2(-0.65, 0), false );
+        game.textManager.addString("Space to restart", 0.12, new Vec2(-0.96, -0.2), false);
 
         game.eman.render();
-        game.textUtils.render();
+        game.textManager.render();
 
         if (game.keyDown(game.keyCodes.space)) {
             game.reinit();
