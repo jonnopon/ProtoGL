@@ -43,10 +43,6 @@ So, without further ado: TODO/SANITY CHECK...
                         ~~- components??????~~
                 ~~- Really don't like the getVerts() method of rendering~~
                 ~~- animation~~
-   
-    - Level (*lib/protogl-base/lvl*)
-        - WHY DOES THIS EXIST? SERIOUSLY REDUNDANT
-        - Either remove or think of a reason for it to exist alongside significant differences from the Entity system that justify its separate existence
         
     - Game (main object) (*lib/protogl-base/Game.js*)
         - Key detection system is a little off; likely will need replacing with an **input module** anyway

@@ -51,7 +51,7 @@ var init = function() {
 
     ///STEP 9: attach utility methods to Game object by name
     //example:
-    // game.addMethod("addPoints", addPoints);
+    // game.attach("addPoints", addPoints);
 
     //STEP 10: define Game State function bodies describing the frame of each state
     //a state function can take any number of params as long as denoted in assignment to Game
@@ -144,25 +144,27 @@ var init = function() {
         }
     };
 
-    //STEP 11: construct States with names and function bodies
+    //STEP 11: construct States with names
     var menuState = new State("menu");
     var gameState = new State("game");
     var pauseState = new State("pause");
     var deadState = new State("dead");
+
+    //STEP 12: add functional bodies to the states, along with a list of arguments to send to their 'tick' functions
     menuState.setFunc(menuFunc, [game]);
     gameState.setFunc(gameFunc, [game]);
     pauseState.setFunc(pauseFunc, [game]);
     deadState.setFunc(deadFunc, [game]);
 
-    //STEP 12: attach States to Game object
+    //STEP 13: attach States to Game object
     game.addState(menuState);
     game.addState(gameState);
     game.addState(deadState);
     game.addState(pauseState);
 
-    //STEP 13: choose an initially active state
+    //STEP 14: choose an initially active state
     game.activeState("menu");
 
-    //STEP 14: start the game
+    //STEP 15: start the game
     game.start();
 };
