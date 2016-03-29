@@ -60,10 +60,9 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString("ProtoGL Demo", 0.15, new Vec2(-0.9, 0.75), new Vec3(1, 0, 0));
-        game.textManager.addString("Crappy Font", 0.135, new Vec2(-0.75, 0.5), new Vec3(0, 1, 0));
-        game.textManager.addString("Simulator", 0.125, new Vec2(-0.6, 0.35), new Vec3(0, 0, 1));
-        game.textManager.addString("Space to Start", 0.12, new Vec2(-0.85, -0.9), new Vec3(1, 1, 1));
+        game.textManager.addString('Left Aligned', 'left', 0.1, new Vec2(-1, 0.9), new Vec3(1, 0, 0), degToRad(0));
+        game.textManager.addString('Center Aligned', 'center', 0.1, new Vec2(0, 0.5), new Vec3(0, 1, 0), degToRad(0));
+        game.textManager.addString('Right Aligned', 'right', 0.1, new Vec2(1, 0.1), new Vec3(0, 0, 1), degToRad(0));
 
         if (game.keyDown(game.keyCodes.space)) {
             game.activeState("game");
@@ -79,8 +78,8 @@ var init = function() {
         var player = game.eman.player;
 
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
-        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
-        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
+        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), new Vec3(1, 1, 1));
+        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), new Vec3(1, 1, 1));
         
         
         if (game.keyDown(game.keyCodes.w)) {
@@ -117,10 +116,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
-        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
-        game.textManager.addString("Paused", 0.2, new Vec2(-0.55, 0), false);
-        game.textManager.addString("Space to resume", 0.12, new Vec2(-0.9, -0.2), false);
+        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), new Vec3(1, 1, 1));
+        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), new Vec3(1, 1, 1));
+        game.textManager.addString("Paused", 0.2, new Vec2(-0.55, 0), new Vec3(1, 1, 1));
+        game.textManager.addString("Space to resume", 0.12, new Vec2(-0.9, -0.2), new Vec3(1, 1, 1));
 
         if (game.keyDown(game.keyCodes.space)) {
             game.activeState("game");
@@ -134,10 +133,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
-        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
-        game.textManager.addString("DEAD", 0.35, new Vec2(-0.65, 0), false );
-        game.textManager.addString("Space to restart", 0.12, new Vec2(-0.96, -0.2), false);
+        game.textManager.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), new Vec3(1, 1, 1));
+        game.textManager.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), new Vec3(1, 1, 1));
+        game.textManager.addString("DEAD", 0.35, new Vec2(-0.65, 0), new Vec3(1, 1, 1));
+        game.textManager.addString("Space to restart", 0.12, new Vec2(-0.96, -0.2), new Vec3(1, 1, 1));
 
         game.eman.render();
         game.textManager.render();
