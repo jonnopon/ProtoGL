@@ -104,6 +104,10 @@ var init = function() {
             game.activeState("pause");
         }
 
+        if (game.keyDown(game.keyCodes.esc)) {
+            game.activeState("menu");
+        }
+
         game.eman.render();
         game.eman.update(game.delta);
         game.textUtils.render();
@@ -123,7 +127,6 @@ var init = function() {
         }
 
         game.eman.render();
-        game.lman.render();
         game.textUtils.render();
     };
 
