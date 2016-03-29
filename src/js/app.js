@@ -15,7 +15,7 @@ var init = function() {
     };
 
     //STEP 3: define game init function
-    ///this refers to game since this method will be injected
+    //this refers to game since this method will be injected
     var initFunc = function() {
         this.loadAttributes(this.initData);
         this.initManagers();
@@ -23,24 +23,24 @@ var init = function() {
         this.eman.addPlayer(new Player(new Vec2(-0.8, -0.25), this));
     };
 
-    ///STEP 4: define game reinit function
+    //STEP 4: define game reinit function
     //this refers to game since this method will be injected
-    var reinitFunc = function() {
+    var reinitFunc = function () {
         this.loadAttributes(this.reinitData);
         this.initManagers();
-        
+
         this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this));
 
         this.activeState("game");
-    }
+    };
 
     //STEP 6: attach init and reinit data to the Game object
-    game.addAttr("initData", gameData);
-    game.addAttr("reinitData", gameReinitData);
+    game.attach("initData", gameData);
+    game.attach("reinitData", gameReinitData);
 
     //STEP 7: attach init func and reinit func to Game object
-    game.addMethod("initFunc", initFunc);
-    game.addMethod("reinitFunc", reinitFunc);
+    game.attach("initFunc", initFunc);
+    game.attach("reinitFunc", reinitFunc);
 
     //STEP 8: define global utility methods for Game
     //this refers to game since this method will be injected
@@ -65,8 +65,7 @@ var init = function() {
         game.textUtils.addString("Simulator", 0.125, new Vec2(-0.6, 0.35), false);
         game.textUtils.addString("Space to Start", 0.12, new Vec2(-0.85, -0.9), false);
 
-
-        if (window.keys.indexOf(game.keyCodes.space) > -1 && !game.menuTimeout) {
+        if (game.keyDown(game.keyCodes.space)) {
             game.activeState("game");
         }
 
@@ -82,17 +81,18 @@ var init = function() {
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
         game.textUtils.addString("Points " + game.points, 0.075, new Vec2(-0.98, 0.9), false);
         game.textUtils.addString("Health " + game.eman.player.health, 0.075, new Vec2(-0.98, 0.775), false);
-
-        if (window.keys.indexOf(game.keyCodes.w) > -1) {
+        
+        
+        if (game.keyDown(game.keyCodes.w)) {
             game.eman.player.turn(0);
         }
-        else if (window.keys.indexOf(game.keyCodes.d) > -1) {
+        else if (game.keyDown(game.keyCodes.d)) {
             game.eman.player.turn(1);
         }
-        else if (window.keys.indexOf(game.keyCodes.s) > -1) {
+        else if (game.keyDown(game.keyCodes.s)) {
             game.eman.player.turn(2);
         }
-        else if (window.keys.indexOf(game.keyCodes.a) > -1) {
+        else if (game.keyDown(game.keyCodes.a)) {
             game.eman.player.turn(3)
         }
 
@@ -100,7 +100,7 @@ var init = function() {
             game.activeState("dead");
         }
 
-        if (window.keys.indexOf(game.keyCodes.p) > -1) {
+        if (game.keyDown(game.keyCodes.p)) {
             game.activeState("pause");
         }
 
@@ -118,7 +118,7 @@ var init = function() {
         game.textUtils.addString("Paused", 0.2, new Vec2(-0.55, 0), false);
         game.textUtils.addString("Space to resume", 0.12, new Vec2(-0.9, -0.2), false);
 
-        if (window.keys.indexOf(game.keyCodes.space) > -1) {
+        if (game.keyDown(game.keyCodes.space)) {
             game.activeState("game");
         }
 
@@ -139,7 +139,7 @@ var init = function() {
         game.eman.render();
         game.textUtils.render();
 
-        if (window.keys.indexOf(game.keyCodes.space) > -1) {
+        if (game.keyDown(game.keyCodes.space)) {
             game.reinit();
         }
     };
