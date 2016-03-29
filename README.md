@@ -57,12 +57,13 @@ So, without further ado: TODO/SANITY CHECK...
         - Panels, buttons, text boxes, all kinds of juicy lovelies that simply do not exist yet for some reason (laziness/"lack of need")
         
     - Text (*lib/protogl-base/text*)
-        - Needs to be flexible and configurable, as with the current renderer
         - Needs to allow for:
-            - alignment
-            - colouring
+            - alignment??
+                - Should be center-aligned by default
+            - ~~colouring~~
             - sizing
             - orientation
+            - line breaks?
         - font image itself needs updating to make it less absolutely crappy
             - U/V texture coordinates in the textUtils module need refining to be more accurate and predictable
             - font image should somehow allow for lower-case text; two images? Two alphabetic character sets?
