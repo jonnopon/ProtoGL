@@ -61,11 +61,11 @@ So, without further ado: TODO/SANITY CHECK...
             - ~~rotation~~
             - ~~alignment??~~
             - ~~colouring~~
-            - sizing
-            - line breaks?
-                - Could be as simple as using a special char in string creation and having the TextManager break into new Strings on that character?
-        - font image itself needs updating to make it less absolutely crappy
-            - U/V texture coordinates in the textUtils module need refining to be more accurate and predictable
+            - ~~line breaks?~~
+                - ~~Could be as simple as using a special char in string creation and having the TextManager break into new Strings on that character?~~
+        - ~~font image itself needs updating to make it less absolutely crappy~~
+            - ~~U/V texture coordinates in the textUtils module need refining to be more accurate and predictable~~
+                - Turns out this wasn't the problem; it was all in the font texture itself
             - font image should somehow allow for lower-case text; two images? Two alphabetic character sets?
         - Support for swapping the font?
             - This would likely be a complete refactor, maybe even deprecate the entire functionality...
