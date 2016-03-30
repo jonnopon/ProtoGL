@@ -128,7 +128,7 @@ module.exports = function(grunt) {
                 tasks: ['copy:dev_appStatic']
             },
             libStatic: {
-                files: ['lib/res/**'],
+                files: ['lib/protogl-base/res/**'],
                 tasks: ['copy:dev_libStatic']
             }
         },
