@@ -61,8 +61,7 @@ var init = function() {
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
         game.textManager.addString('ProtoGL Demo', 'center', 0.15, new Vec2(0, 0.75), new Vec3(1, 0, 0), degToRad(0));
-        game.textManager.addString('Decent Font', 'center', 0.135, new Vec2(0, 0.5), new Vec3(0, 1, 0), degToRad(0));
-        game.textManager.addString('Simulator', 'center', 0.125, new Vec2(0, 0.35), new Vec3(0, 0, 1), degToRad(0));
+        game.textManager.addString('Decent Font\\nSimulator', 'center', 0.135, new Vec2(0, 0.5), new Vec3(0, 1, 0), degToRad(0));
         game.textManager.addString('Space to Start', 'center', 0.12, new Vec2(0, -0.9), new Vec3(1, 1, 1), degToRad(0));
 
         if (game.keyDown(game.keyCodes.space)) {
