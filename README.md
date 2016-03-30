@@ -57,16 +57,9 @@ So, without further ado: TODO/SANITY CHECK...
         - Panels, buttons, text boxes, all kinds of juicy lovelies that simply do not exist yet for some reason (laziness/"lack of need")
         
     - Text (*lib/protogl-base/text*)
-        - Needs to allow for:
-            - ~~rotation~~
-            - ~~alignment??~~
-            - ~~colouring~~
-            - ~~line breaks?~~
-                - ~~Could be as simple as using a special char in string creation and having the TextManager break into new Strings on that character?~~
-        - ~~font image itself needs updating to make it less absolutely crappy~~
-            - ~~U/V texture coordinates in the textUtils module need refining to be more accurate and predictable~~
-                - Turns out this wasn't the problem; it was all in the font texture itself
-            - font image should somehow allow for lower-case text; two images? Two alphabetic character sets?
+        - ~~Font image needs to expand to include punctuation previously supported (if appropriate/desired)~~
+        - Font image should somehow allow for lower-case text; two images? Two alphabetic character sets?
+            - NOPE, I like it as-is and screw drawing 26 more, even more complex, characters
         - Support for swapping the font?
             - This would likely be a complete refactor, maybe even deprecate the entire functionality...
             - EG: support TTF? Goodbye PNG-based font images and the need for all that complex logic (probably?)

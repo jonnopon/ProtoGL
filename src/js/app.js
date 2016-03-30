@@ -60,17 +60,23 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString('ProtoGL Demo', 'center', 0.15, new Vec2(0, 0.75), new Vec3(1, 0, 0), degToRad(0));
-        game.textManager.addString('Decent Font\\nSimulator', 'center', 0.135, new Vec2(0, 0.5), new Vec3(0, 1, 0), degToRad(0));
-        game.textManager.addString('Space to Start', 'center', 0.12, new Vec2(0, -0.9), new Vec3(1, 1, 1), degToRad(0));
+        game.textManager.addString('ProtoGL Demo!', 'center', 0.15, new Vec2(0, 0.9), new Vec3(1, 1, 0), degToRad(0));
+        game.textManager.addString('Default Font:', 'left', 0.1, new Vec2(-1, 0.5), new Vec3(0, 1, 1), degToRad(0));
 
-        if (game.keyDown(game.keyCodes.space)) {
-            game.activeState("game");
-        }
+        game.textManager.addString('abcdefghijklm', 'center', 0.15, new Vec2(0, 0.2), new Vec3(1, 0, 0), degToRad(0));
+        game.textManager.addString('nopqrstuvwxyz', 'center', 0.15, new Vec2(0, 0), new Vec3(0, 1, 0), degToRad(0));
 
-        game.eman.render();
-        game.eman.update(game.delta);
+        game.textManager.addString('()[]+-*/!?\'"#', 'center', 0.15, new Vec2(0, -0.2), new Vec3(0, 0, 1), degToRad(0));
+        game.textManager.addString('£$&%^,.:;<>_', 'center', 0.15, new Vec2(0, -0.4), new Vec3(1, 1, 1), degToRad(0));
+
         game.textManager.render();
+
+        // if (game.keyDown(game.keyCodes.space)) {
+        //     game.activeState("game");
+        // }
+
+        // game.eman.render();
+        // game.eman.update(game.delta);
     };
 
     var gameFunc = function(args) {
