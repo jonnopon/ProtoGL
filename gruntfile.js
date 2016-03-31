@@ -64,9 +64,9 @@ module.exports = function(grunt) {
             dev_libStatic: {
                 files: [{
                     expand: true,
-                    cwd: 'lib/protogl-base/',
-                    src: ['res/**'],
-                    dest: 'dev/'
+                    cwd: 'lib/protogl-base/text/',
+                    src: ['font.png'],
+                    dest: 'dev/res/img/'
                 }]
             },
 
@@ -97,9 +97,9 @@ module.exports = function(grunt) {
             dist_libStatic: {
                 files: [{
                     expand: true,
-                    cwd: 'lib/protogl-base/',
-                    src: ['res/**'],
-                    dest: 'dist/'
+                    cwd: 'lib/protogl-base/text/',
+                    src: ['font.png'],
+                    dest: 'dist/res/img/'
                 }]
             }
         },
@@ -128,7 +128,7 @@ module.exports = function(grunt) {
                 tasks: ['copy:dev_appStatic']
             },
             libStatic: {
-                files: ['lib/protogl-base/res/**'],
+                files: ['lib/protogl-base/text/font.png'],
                 tasks: ['copy:dev_libStatic']
             }
         },
