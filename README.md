@@ -29,10 +29,11 @@ The list is fluid. As I tackle more and more, the requirements will change. The 
                 - There are reasons for and against this of course, the major FOR being *fallbacks are good* and the major AGAINST being *Have to double my work to reliably add capabilities*
                 - To be fair, not even sure if a CanvasRenderer fallback would *work* for representing all the things I wish to represent...
         - Shaders
-            - I actually really like how I've done this. Built-in defaults for both frag and vert, with ability to store new ones at runtime for retrieval and use later on
-            - Allows for future expansion (create one for an app that is generally useful? Copy into the back-end for permanent storage)
-            - Allows for per-app runtime expansion.
-            - Nice! (I think)
+            - Update all vert involving (2D) positions to do the clipspace conversion manually
+            - Update all vert involving (3D) colour to convert from 0->255 to 0->1
+            - Revise the structure - split into 2D and 3D related shaders maybe?
+            - Revise the shaders (will come as part of revising the Renderer itself)
+            - Update all frag shaders to convert from 0->255 RGB to 0->1 floats?
         - RendererSettings
             - At the moment, this object is designed to represent settings to configure the renderer PER "type" of drawn object (text, entitites, level stuff, etc)
             - This kind of works well, and I think it's sane. It is also extensible if I find any other use for it (EG those assumed Uniform types?)
