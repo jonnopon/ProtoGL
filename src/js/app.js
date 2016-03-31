@@ -60,15 +60,7 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString('ProtoGL Demo!', 'center', 0.15, new Vec2(0, 0.9), new Vec3(1, 1, 0), degToRad(0));
-        game.textManager.addString('Default Font:', 'left', 0.1, new Vec2(-1, 0.5), new Vec3(0, 1, 1), degToRad(0));
-
-        game.textManager.addString('abcdefghijklm', 'center', 0.15, new Vec2(0, 0.2), new Vec3(1, 0, 0), degToRad(0));
-        game.textManager.addString('nopqrstuvwxyz', 'center', 0.15, new Vec2(0, 0), new Vec3(0, 1, 0), degToRad(0));
-        game.textManager.addString('0123456789', 'left', 0.15, new Vec2(-1, -0.2), new Vec3(0, 0, 1), degToRad(0));
-
-        game.textManager.addString('()[]+-*/!?\'"#', 'center', 0.15, new Vec2(0, -0.4), new Vec3(1, 0, 1), degToRad(0));
-        game.textManager.addString('£$&%^,.:;<>_', 'center', 0.15, new Vec2(0, -0.6), new Vec3(1, 1, 1), degToRad(0));
+        game.textManager.addString('prodrastivitation\\n    Simulator', 'left', 0.1175, new Vec2(-1, 0), new Vec3(0, 1, 1), degToRad(0));
 
         game.textManager.render();
         
