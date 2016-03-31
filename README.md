@@ -5,8 +5,8 @@ I'm probably over-exaggerating, but I have *no idea* how the current state of th
 I may, or may not, be a psychopath who is most comfortable with crappy code and even worse framework structure.
 So, without further ado: TODO/SANITY CHECK...
 ----
-- ALL EXISTING CODE needs a go-over to pick a single consistent style and sweep it throughout BEFORE THE FOLLOWING
-    - And omg pick a file-naming convention. Do I have an upper-case or a lower-case to start? Camel case or dashes or underscores? fix it pls
+- ~~ALL EXISTING CODE needs a go-over to pick a single consistent style and sweep it throughout BEFORE THE FOLLOWING~~
+    - ~~And omg pick a file-naming convention. Do I have an upper-case or a lower-case to start? Camel case or dashes or underscores? fix it pls~~
 - FUNCTIONAL MODULES:
     - Rendering (*lib/protogl-base/screen*)
         - Renderer
@@ -35,7 +35,6 @@ So, without further ado: TODO/SANITY CHECK...
     - Entity (game object representation) (*lib/protogl-base/ent*)
         - OH BOY THIS IS A MESS
         - Will detail wtf to do here later, it's too much to think about in one sitting...
-        
         - *From old TODO, potentially useful as a thought-proker when I come to re-design this module*
              ~~- Follow style of the incremental renderer capabilities;~~
                     ~~- flexible extensible manager~~
@@ -57,9 +56,6 @@ So, without further ado: TODO/SANITY CHECK...
         - Panels, buttons, text boxes, all kinds of juicy lovelies that simply do not exist yet for some reason (laziness/"lack of need")
         
     - Text (*lib/protogl-base/text*)
-        - ~~Font image needs to expand to include punctuation previously supported (if appropriate/desired)~~
-        - Font image should somehow allow for lower-case text; two images? Two alphabetic character sets?
-            - NOPE, I like it as-is and screw drawing 26 more, even more complex, characters
         - Support for swapping the font?
             - This would likely be a complete refactor, maybe even deprecate the entire functionality...
             - EG: support TTF? Goodbye PNG-based font images and the need for all that complex logic (probably?)
@@ -77,7 +73,7 @@ So, without further ado: TODO/SANITY CHECK...
         - **New** Math - CREATE IN (*lib/protogl-base/math*)
             - (custom) Matrix math is a MUST; replace gl-matrix; it doesn't fit my code style or object representation preferences, and I know the math. Why am I using it at all!?
             - Along the same lines; vector math needs a redo
-                - Kind of already exists in a weak partial form in (*lib/protogl-base/utils/utils.js*)
+                - Kind of already exists in a weak partial form in (*lib/protogl-base/utils/Utils.js*)
         - States (*lib/protogl-base/State.js*)
             - Probably fine as-is, though...
                 - Initialisation data per-state? (will naturally alter the Game object appropriately if done)

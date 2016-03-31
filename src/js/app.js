@@ -65,12 +65,13 @@ var init = function() {
 
         game.textManager.addString('abcdefghijklm', 'center', 0.15, new Vec2(0, 0.2), new Vec3(1, 0, 0), degToRad(0));
         game.textManager.addString('nopqrstuvwxyz', 'center', 0.15, new Vec2(0, 0), new Vec3(0, 1, 0), degToRad(0));
+        game.textManager.addString('0123456789', 'left', 0.15, new Vec2(-1, -0.2), new Vec3(0, 0, 1), degToRad(0));
 
-        game.textManager.addString('()[]+-*/!?\'"#', 'center', 0.15, new Vec2(0, -0.2), new Vec3(0, 0, 1), degToRad(0));
-        game.textManager.addString('£$&%^,.:;<>_', 'center', 0.15, new Vec2(0, -0.4), new Vec3(1, 1, 1), degToRad(0));
+        game.textManager.addString('()[]+-*/!?\'"#', 'center', 0.15, new Vec2(0, -0.4), new Vec3(1, 0, 1), degToRad(0));
+        game.textManager.addString('£$&%^,.:;<>_', 'center', 0.15, new Vec2(0, -0.6), new Vec3(1, 1, 1), degToRad(0));
 
         game.textManager.render();
-
+        
         // if (game.keyDown(game.keyCodes.space)) {
         //     game.activeState("game");
         // }
