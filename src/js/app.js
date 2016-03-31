@@ -60,7 +60,10 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString('prodrastivitation\\n    Simulator', 'left', 0.1175, new Vec2(-1, 0), new Vec3(0, 1, 1), degToRad(0));
+        game.textManager.addString('prodrastivitation\\nSimulator', 'center', 45, new Vec2(400, 500), new Vec3(255, 255, 255), degToRad(0));
+
+        game.textManager.addString('(procrastination\\n+\\n  productivity)', 'center', 45,
+            new Vec2(400, 200), new Vec3(0, 255, 255), degToRad(0));
 
         game.textManager.render();
         
