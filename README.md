@@ -2,7 +2,7 @@
 A WebGL prototyping "engine" and game template - provides a sizeable, organised bed of boilerplate with a demo application serving as a template for any given project.
 In active development. API, overall structure, engine capabilities and demo/template application are fluid.
 
-## This brand (Mini-LD-66)
+## This branch (Mini-LD-66)
 Originally branched for the purposes of creating an RTS game for MiniLD66.
 Immediately, I began tinkering with the engine itself, and after months of ignoring the project due to anxiety about the workload I began to figure out what was fundamentally "wrong" and where to go.
 As such, this branch is now the home for necessary ProtoGL improvements - by the time I'm done, the engine will be as modular and extensible as I want it to be.

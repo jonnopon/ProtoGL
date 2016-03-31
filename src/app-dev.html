@@ -1,47 +1,55 @@
 <!doctype html>
 <html>
-<head>
-    <title>ProtoGL Demo</title>
+    <head>
+        <title>ProtoGL Demo</title>
+        <link rel="stylesheet" href="css/style.css">
 
-    <script type="text/javascript" src="lib/gl-matrix/common.js"></script>
-    <script type="text/javascript" src="lib/gl-matrix/mat4.js"></script>
+        <!-- 3rd party (SOON TO BE GONE) -->
+        <script type="text/javascript" src="lib/gl-matrix/common.js"></script>
+        <script type="text/javascript" src="lib/gl-matrix/mat4.js"></script>
 
-    <script type="text/javascript" src="lib/protogl-base/audio/SoundManager.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/ent/Entity.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/ent/EntityManager.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/screen/shaders/_frag.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/screen/shaders/_vert.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/screen/Renderer.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/screen/RendererSettings.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/text/TextManager.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/utils/KeyCodes.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/utils/State.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/utils/todo-Matrix.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/utils/Utils.js"></script>
-    <script type="text/javascript" src="lib/protogl-base/Game.js"></script>
+        <!-- ProtoGL base -->
+        <script type="text/javascript" src="lib/protogl-base/audio/SoundManager.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/ent/Entity.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/ent/EntityManager.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/screen/shaders/_frag.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/screen/shaders/_vert.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/screen/Renderer.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/screen/RendererSettings.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/text/TextManager.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/game/State.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/input/KeyCodes.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/math/Mat3.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/math/Mat4.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/math/UsefulMath.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/math/Vec2.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/math/Vec3.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/utils/Utils.js"></script>
+        <script type="text/javascript" src="lib/protogl-base/Game.js"></script>
 
-    <script type="text/javascript" src="js/ent/Player.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+        <!-- Application -->
+        <script type="text/javascript" src="js/ent/Player.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+    </head>
+    <body onload="init()">
+        <header>
+            <h1>ProtoGL Demo Application</h1>
+        </header>
 
+        <main>
+            <canvas id="gameCanvas"></canvas>
+        </main>
 
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body onload="init()">
-<header>
-    <h1>ProtoGL Demo Application</h1>
-</header>
+        <footer>
+            <h2>@jonnopon3000</h2>
+            <small>
+                <strong>
+                    <a href="https://www.github.com/jonnopon3000/protoGL">Github</a>
+                </strong>
+            </small>
+        </footer>
 
-<main>
-    <canvas id="gameCanvas"></canvas>
-</main>
-
-<footer>
-    <h2>@jonnopon3000</h2>
-    <small><strong>
-        <a href="https://www.github.com/jonnopon3000/protoGL">Github</a>
-    </strong></small>
-</footer>
-
-<script src="http://localhost:35729/livereload.js"></script>
-</body>
+        <!-- allows the livereload during the grunt dev process -->
+        <script src="http://localhost:35729/livereload.js"></script>
+    </body>
 </html>
