@@ -66,6 +66,22 @@ var init = function() {
             new Vec2(400, 200), new Vec3(0, 255, 255), degToRad(0));
 
         game.textManager.render();
+
+
+        var m1 = new Mat4();
+        var m2 = new Mat4([
+            0, 1, 1, 0,
+            1, 0, 0, 1,
+            0, 1, 1, 0,
+            1, 0, 0, 1
+        ]);
+
+        // console.log(m1.str());
+        // console.log("plus");
+        // console.log(m2.str());
+        // console.log("equals");
+        m1.mat4Mult(m2);
+        // console.log(m1.str());
         
         // if (game.keyDown(game.keyCodes.space)) {
         //     game.activeState("game");
