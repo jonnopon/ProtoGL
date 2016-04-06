@@ -175,9 +175,9 @@ var Renderer = function(gameCanvas) {
         var mMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'modelMatrix');
         var vMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'viewMatrix');
 
-        gl.uniformMatrix4fv(pMatrixUniformLoc, false, this.projectionMatrix);
-        gl.uniformMatrix4fv(mMatrixUniformLoc, false, this.modelMatrix);
-        gl.uniformMatrix4fv(vMatrixUniformLoc, false, this.viewMatrix);
+        gl.uniformMatrix4fv(pMatrixUniformLoc, false, this.projectionMatrix.values);
+        gl.uniformMatrix4fv(mMatrixUniformLoc, false, this.modelMatrix.values);
+        gl.uniformMatrix4fv(vMatrixUniformLoc, false, this.viewMatrix.values);
 
         if (rebuffer) {
             var posAttrib = gl.getAttribLocation(this.activeShaderProgram, 'pos');
@@ -204,16 +204,16 @@ var Renderer = function(gameCanvas) {
     this.projectionMatrix = new Mat4();
 
     //TODO: currently does nothing
-    this.projectionMatrix.setAsPerspective(); /* = mat4.perspective(this.projectionMatrix, Math.PI / 4, gameCanvas.clientWidth / gameCanvas.clientHeight, 1, 10);*/
+    this.projectionMatrix.setAsPerspective(Math.PI / 4, game.resolution.x / game.resolution.y, 1, 10);
 
     this.modelMatrix = new Mat4();
     this.viewMatrix = new Mat4();
 
     //TODO: currently does nothing
-    this.viewMatrix.translate(new Vec3(0, 0, -4)); /*mat4.translate(this.viewMatrix, this.viewMatrix, [0, 0, -4]);*/
+    this.viewMatrix.translate(new Vec3(0, 0, -4));
 
     //TODO: currently does nothing
-    this.modelMatrix.setAsLookAt(); /*mat4.lookAt(this.modelMatrix, [0, 0, 0], [0, 0, -4.5], [0, 1, 0]); */
+    this.modelMatrix.setAsLookAt(new Vec3(0, 0, 0), new Vec3(0, 0, -4.5), new Vec3(0, 1, 0));
 
     this.verts['BASIC'] = {'dataPerVert':5, 'array':new Float32Array([
         -0.5, -0.5, 0, 0, 1,
