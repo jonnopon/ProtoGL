@@ -68,10 +68,6 @@ The list is fluid. As I tackle more and more, the requirements will change. The 
         - May require something more advanced than the browser's Audio object, need to look into this more seriously
         
     - Utilities (globally available to applications)
-        - ~~**New** Math - CREATE IN (*lib/protogl-base/math*)~~
-            - ~~(custom) Matrix math is a MUST; replace gl-matrix; it doesn't fit my code style or object representation preferences, and I know the math. Why am I using it at all!?~~
-            - ~~Along the same lines; vector math needs a redo~~
-                - ~~Kind of already exists in a weak partial form in (*lib/protogl-base/utils/Utils.js*)~~
         - States (*lib/protogl-base/State.js*)
             - Probably fine as-is, though...
                 - Initialisation data per-state? (will naturally alter the Game object appropriately if done)

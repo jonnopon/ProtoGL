@@ -208,12 +208,12 @@ var Mat4 = function(values) {
             x = axisVector.x, y = axisVector.y, z = axisVector.z,
             len = Math.sqrt(x * x + y * y + z * z),
             s, c, t,
-            a00, a01, a02, a03,
-            a10, a11, a12, a13,
-            a20, a21, a22, a23,
-            b00, b01, b02,
-            b10, b11, b12,
-            b20, b21, b22,
+            v00, v01, v02, v03,
+            v10, v11, v12, v13,
+            v20, v21, v22, v23,
+            n00, n01, n02,
+            n10, n11, n12,
+            n20, n21, n22,
             newMat = [];
 
         if (Math.abs(len) < 0.000001) {
@@ -229,28 +229,26 @@ var Mat4 = function(values) {
         c = Math.cos(angle);
         t = 1 - c;
 
-        a00 = v[0]; a01 = v[1]; a02 = v[2]; a03 = v[3];
-        a10 = v[4]; a11 = v[5]; a12 = v[6]; a13 = v[7];
-        a20 = v[8]; a21 = v[9]; a22 = v[10]; a23 = v[11];
+        v00 = v[0]; v01 = v[1]; v02 = v[2]; v03 = v[3];
+        v10 = v[4]; v11 = v[5]; v12 = v[6]; v13 = v[7];
+        v20 = v[8]; v21 = v[9]; v22 = v[10]; v23 = v[11];
 
-        // Construct the elements of the rotation matrix
-        b00 = x * x * t + c; b01 = y * x * t + z * s; b02 = z * x * t - y * s;
-        b10 = x * y * t - z * s; b11 = y * y * t + c; b12 = z * y * t + x * s;
-        b20 = x * z * t + y * s; b21 = y * z * t - x * s; b22 = z * z * t + c;
+        n00 = x * x * t + c; n01 = y * x * t + z * s; n02 = z * x * t - y * s;
+        n10 = x * y * t - z * s; n11 = y * y * t + c; n12 = z * y * t + x * s;
+        n20 = x * z * t + y * s; n21 = y * z * t - x * s; n22 = z * z * t + c;
 
-        // Perform rotation-specific matrix multiplication
-        newMat[0] = a00 * b00 + a10 * b01 + a20 * b02;
-        newMat[1] = a01 * b00 + a11 * b01 + a21 * b02;
-        newMat[2] = a02 * b00 + a12 * b01 + a22 * b02;
-        newMat[3] = a03 * b00 + a13 * b01 + a23 * b02;
-        newMat[4] = a00 * b10 + a10 * b11 + a20 * b12;
-        newMat[5] = a01 * b10 + a11 * b11 + a21 * b12;
-        newMat[6] = a02 * b10 + a12 * b11 + a22 * b12;
-        newMat[7] = a03 * b10 + a13 * b11 + a23 * b12;
-        newMat[8] = a00 * b20 + a10 * b21 + a20 * b22;
-        newMat[9] = a01 * b20 + a11 * b21 + a21 * b22;
-        newMat[10] = a02 * b20 + a12 * b21 + a22 * b22;
-        newMat[11] = a03 * b20 + a13 * b21 + a23 * b22;
+        newMat[0] = v00 * n00 + v10 * n01 + v20 * n02;
+        newMat[1] = v01 * n00 + v11 * n01 + v21 * n02;
+        newMat[2] = v02 * n00 + v12 * n01 + v22 * n02;
+        newMat[3] = v03 * n00 + v13 * n01 + v23 * n02;
+        newMat[4] = v00 * n10 + v10 * n11 + v20 * n12;
+        newMat[5] = v01 * n10 + v11 * n11 + v21 * n12;
+        newMat[6] = v02 * n10 + v12 * n11 + v22 * n12;
+        newMat[7] = v03 * n10 + v13 * n11 + v23 * n12;
+        newMat[8] = v00 * n20 + v10 * n21 + v20 * n22;
+        newMat[9] = v01 * n20 + v11 * n21 + v21 * n22;
+        newMat[10] = v02 * n20 + v12 * n21 + v22 * n22;
+        newMat[11] = v03 * n20 + v13 * n21 + v23 * n22;
         newMat[12] = v[12];
         newMat[13] = v[13];
         newMat[14] = v[14];

@@ -79,20 +79,18 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        // game.textManager.addString('prodrastivitation\\nSimulator', 'center', 45, new Vec2(400, 500), new Vec3(255, 255, 255), degToRad(0));
+        game.textManager.addString('ProtoGL Demo', 'center', 45, new Vec2(400, 500), new Vec3(255, 255, 255), degToRad(0));
 
-        // game.textManager.addString('(procrastination\\n+\\n  productivity)', 'center', 45,
-        //     new Vec2(400, 200), new Vec3(0, 255, 255), degToRad(0));
-
-        // game.textManager.render();
+        game.textManager.addString('(it can *do* things now)', 'center', 25,
+            new Vec2(400, 200), new Vec3(0, 255, 255), degToRad(0));
 
         game.cube.render();
 
-
         game.renderer.viewMatrix.rotate(degToRad(1), new Vec3(-1, 1, 0));
 
-        // game.eman.render();
-        // game.eman.update(game.delta);
+        game.eman.render();
+        game.eman.update(game.delta);
+        game.textManager.render();
     };
 
     var gameFunc = function(args) {
