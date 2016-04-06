@@ -201,12 +201,19 @@ var Renderer = function(gameCanvas) {
     this.activeVBO;
     this.activeVerts;
     this.activeShaderProgram;
-    this.projectionMatrix = mat4.create();
-    this.projectionMatrix = mat4.perspective(this.projectionMatrix, Math.PI / 4, gameCanvas.clientWidth / gameCanvas.clientHeight, 1, 10);
-    this.modelMatrix = mat4.create();
-    this.viewMatrix = mat4.identity(mat4.create());
-    mat4.translate(this.viewMatrix, this.viewMatrix, [0, 0, -4]);
-    mat4.lookAt(this.modelMatrix, [0, 0, 0], [0, 0, -4.5], [0, 1, 0]); //TODO optional
+    this.projectionMatrix = new Mat4();
+
+    //TODO: currently does nothing
+    this.projectionMatrix.setAsPerspective(); /* = mat4.perspective(this.projectionMatrix, Math.PI / 4, gameCanvas.clientWidth / gameCanvas.clientHeight, 1, 10);*/
+
+    this.modelMatrix = new Mat4();
+    this.viewMatrix = new Mat4();
+
+    //TODO: currently does nothing
+    this.viewMatrix.translate(new Vec3(0, 0, -4)); /*mat4.translate(this.viewMatrix, this.viewMatrix, [0, 0, -4]);*/
+
+    //TODO: currently does nothing
+    this.modelMatrix.setAsLookAt(); /*mat4.lookAt(this.modelMatrix, [0, 0, 0], [0, 0, -4.5], [0, 1, 0]); */
 
     this.verts['BASIC'] = {'dataPerVert':5, 'array':new Float32Array([
         -0.5, -0.5, 0, 0, 1,

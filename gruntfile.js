@@ -7,7 +7,7 @@ module.exports = function(grunt) {
                 separator: ''
             },
             js: {
-                src: ['lib/**/*.js', 'src/**/*.js'],
+                src: ['protogl-base/Game.js', 'protogl-base/**/*.js', 'src/**/*.js'],
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
         },
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
             dev_jsLib: {
                 files: [{
                     expand: true,
-                    src: ['lib/**'],
+                    src: ['protogl-base/**'],
                     dest: 'dev/'
                 }]
             },
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
             dev_libStatic: {
                 files: [{
                     expand: true,
-                    cwd: 'lib/protogl-base/text/',
+                    cwd: 'protogl-base/text/',
                     src: ['font.png'],
                     dest: 'dev/res/img/'
                 }]
@@ -97,7 +97,7 @@ module.exports = function(grunt) {
             dist_libStatic: {
                 files: [{
                     expand: true,
-                    cwd: 'lib/protogl-base/text/',
+                    cwd: 'protogl-base/text/',
                     src: ['font.png'],
                     dest: 'dist/res/img/'
                 }]
@@ -112,7 +112,7 @@ module.exports = function(grunt) {
                 tasks: ['copy:dev_jsApp']
             },
             jsLib: {
-                files: ['lib/**/*.js'],
+                files: ['protogl-base/Game.js', 'protogl-base/**/*.js'],
                 tasks: ['copy:dev_jsLib']
             },
             html: {
@@ -128,7 +128,7 @@ module.exports = function(grunt) {
                 tasks: ['copy:dev_appStatic']
             },
             libStatic: {
-                files: ['lib/protogl-base/text/font.png'],
+                files: ['protogl-base/text/font.png'],
                 tasks: ['copy:dev_libStatic']
             }
         },
