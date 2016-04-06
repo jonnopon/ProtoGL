@@ -117,42 +117,75 @@ var Mat3 = function(values) {
     };
 
     this.translate = function(transVector) {
+        var v = this.values,
+            v00 = v[0], v01 = v[1], v02 = v[2],
+            v10 = v[3], v11 = v[4], v12 = v[5],
+            v20 = v[6], v21 = v[7], v22 = v[8],
 
+            x = transVector.x, y = transVector.y,
+
+            newMat = [];
+
+        newMat[0] = v00;
+        newMat[1] = v01;
+        newMat[2] = v02;
+        newMat[3] = v10;
+        newMat[4] = v11;
+        newMat[5] = v12;
+
+        newMat[6] = x * v00 + y * v10 + v20;
+        newMat[7] = x * v01 + y * v11 + v21;
+        newMat[8] = x * v02 + y * v12 + v22;
+
+        this.values = newMat;
     };
 
     this.scale = function(scaleVector) {
+        var x = scaleVector.x, y = scaleVector.y,
+            newMat = [];
 
+        newMat[0] = x * this.values[0];
+        newMat[1] = x * this.values[1];
+        newMat[2] = x * this.values[2];
+        newMat[3] = y * this.values[3];
+        newMat[4] = y * this.values[4];
+        newMat[5] = y * this.values[5];
+        newMat[6] = this.values[6];
+        newMat[7] = this.values[7];
+        newMat[8] = this.values[8];
+
+        this.values = newMat;
     };
 
-    this.rotate = function(angle, axisVector) {
+    this.rotate = function(angle) {
+        var v = this.values,
+            v00 = v[0], v01 = v[1], v02 = v[2],
+            v10 = v[3], v11 = v[4], v12 = v[5],
+            v20 = v[6], v21 = v[7], v22 = v[8],
 
+            s = Math.sin(angle), c = Math.cos(angle),
+
+            newMat = [];
+
+        newMat[0] = c * v00 + s * v10;
+        newMat[1] = c * v01 + s * v11;
+        newMat[2] = c * v02 + s * v12;
+
+        newMat[3] = c * v10 - s * v00;
+        newMat[4] = c * v11 - s * v01;
+        newMat[5] = c * v12 - s * v02;
+
+        newMat[6] = v20;
+        newMat[7] = v21;
+        newMat[8] = v22;
     };
 
-    this.setAsPerspective = function(fov, aspectRatio, near, far) {
-
-
-//projection?????
-// function make2DProjection(width, height) {
-//     return [
-//         2 / width, 0, 0,
-//         0, 2 / height, 0,
-//         -1, 1, 1
-//     ];
-// }
-
-
-    };
-
-    this.setAsLookAt = function(eye, center, up) {
-
-    };
-
-    this.setAsOrtho = function(left, right, bottom, top, near, far) {
-
-    };
-
-    this.setAsFrustum = function(left, right, bottom, top, near, far) {
-
+    this.setAs2DProjection = function(width, height) {
+        this.values = [
+            2 / width, 0, 0,
+            0, 2 / height, 0,
+            -1, 1, 1
+        ];
     };
 
     this.str = function() {

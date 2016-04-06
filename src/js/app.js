@@ -5,13 +5,15 @@ var init = function() {
     //STEP 1: define game initial attributes in dictionary
     var gameData = {
         "ents": [],
-        "points": 0
+        "points": 0,
+        "cube": null
     };
 
     //STEP 2: define which attributes should reinitialise on game reset
     var gameReinitData = {
         "ents": [],
-        "points": 0
+        "points": 0,
+        "cube": null
     };
 
     //STEP 3: define game init function
@@ -20,7 +22,16 @@ var init = function() {
         this.loadAttributes(this.initData);
         this.initManagers();
 
-        this.eman.addPlayer(new Player(new Vec2(-0.8, -0.25), this));
+        // this.eman.addPlayer(new Player(new Vec2(-0.8, -0.25), this));
+
+
+        //Set up shader program for cube
+        var frag = _getFragShader('pass-through');
+        var vert = _getVertShader('3d');
+        this.renderer.addShaderProgram('3d', [vert, frag]);
+        this.renderer.bindShaderProgram('3d');
+
+        this.cube = new Cube(this.renderer);
     };
 
     //STEP 4: define game reinit function
@@ -29,7 +40,15 @@ var init = function() {
         this.loadAttributes(this.reinitData);
         this.initManagers();
 
-        this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this));
+        // this.eman.addPlayer(new Player(new Vec2(-0.5, 0.5), this));
+
+        //Set up shader program for cube
+        var frag = _getFragShader('pass-through');
+        var vert = _getVertShader('3d');
+        this.renderer.addShaderProgram('3d', [vert, frag]);
+        this.renderer.bindShaderProgram('3d');
+
+        this.cube = new Cube(this.renderer);
 
         this.activeState("game");
     };
@@ -60,32 +79,17 @@ var init = function() {
         var game = args[0];
         game.renderer.clearScreen(new Vec3(0, 0, 0), false);
 
-        game.textManager.addString('prodrastivitation\\nSimulator', 'center', 45, new Vec2(400, 500), new Vec3(255, 255, 255), degToRad(0));
+        // game.textManager.addString('prodrastivitation\\nSimulator', 'center', 45, new Vec2(400, 500), new Vec3(255, 255, 255), degToRad(0));
 
-        game.textManager.addString('(procrastination\\n+\\n  productivity)', 'center', 45,
-            new Vec2(400, 200), new Vec3(0, 255, 255), degToRad(0));
+        // game.textManager.addString('(procrastination\\n+\\n  productivity)', 'center', 45,
+        //     new Vec2(400, 200), new Vec3(0, 255, 255), degToRad(0));
 
-        game.textManager.render();
+        // game.textManager.render();
+
+        game.cube.render();
 
 
-        var m1 = new Mat4();
-        var m2 = new Mat4([
-            0, 1, 1, 0,
-            1, 0, 0, 1,
-            0, 1, 1, 0,
-            1, 0, 0, 1
-        ]);
-
-        // console.log(m1.str());
-        // console.log("plus");
-        // console.log(m2.str());
-        // console.log("equals");
-        m1.mat4Mult(m2);
-        // console.log(m1.str());
-        
-        // if (game.keyDown(game.keyCodes.space)) {
-        //     game.activeState("game");
-        // }
+        game.renderer.viewMatrix.rotate(degToRad(1), new Vec3(-1, 1, 0));
 
         // game.eman.render();
         // game.eman.update(game.delta);
