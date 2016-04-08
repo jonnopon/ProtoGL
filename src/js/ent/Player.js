@@ -1,20 +1,21 @@
 var Player = function(pos, game) {
-    var dimensions = new Vec2(0.125, 0.125);
+    var vertMul = game.height / game.height;
+    var dimensions = new Vec2(40, 40 * vertMul);
     Entity.prototype.constructor.call(this, pos, dimensions, game);
 
     this.health = 3;
-    this.maxDXMag = 0.15;
-    this.maxDYMag = 0.15;
+    this.maxDXMag = 75;
+    this.maxDYMag = 75 * vertMul;
 
     this.dead = false;
 
     this.u1 = 0;
-    this.u2 = 0.5;
+    this.u2 = 0.25;
     this.v1 = 1;
     this.v2 = 0;
 
     this.noCollideTimer = 0;
-    this.noCollideTimeMax = 76;
+    this.noCollideTimeMax = 85;
 
     this.turn = function(dir) {
         switch (dir) {
@@ -45,18 +46,18 @@ var Player = function(pos, game) {
 
     this.update = function(delta) {
         //override super update because entity is a refactor I don't want to touch right now
-        if (this.pos.x + this.width < -1) {
-            this.pos.x = 1;
+        if (this.pos.x + this.width < 0) {
+            this.pos.x = this.game.width;
         }
-        else if (this.pos.x >= 1) {
-            this.pos.x = -1 - this.width;
+        else if (this.pos.x >= game.width) {
+            this.pos.x = -this.width;
         }
 
-        if (this.pos.y > 1) {
-            this.pos.y = -1 - this.height;
+        if (this.pos.y > game.height) {
+            this.pos.y = - this.height;
         }
-        else if (this.pos.y + this.height < -1) {
-            this.pos.y = 1;
+        else if (this.pos.y + this.height < 0) {
+            this.pos.y = game.height;
         }
 
         if (this.health <= 0) {
@@ -71,7 +72,7 @@ var Player = function(pos, game) {
                 this.noCollideEnt = false;
             }
             else {
-                this.visible = this.noCollideTimer % 5 !== 0;
+                this.visible = this.noCollideTimer % 2 !== 0;
             }
         }
     };
@@ -80,13 +81,11 @@ var Player = function(pos, game) {
         if (e instanceof Enemy && !this.noCollideEnt) {
             this.health--;
             this.noCollideEnt = true;
+            this.game.sman.playSound("hit");
         }
         else if (e instanceof Food) {
             this.game.addPoints(1);
+            this.game.sman.playSound("point");
         }
-    };
-
-    this.collidedWithLvl = function(e) {
-
     };
 };

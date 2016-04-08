@@ -129,7 +129,7 @@ var Renderer = function(gameCanvas) {
 
         if (settings.textureName !== null) {
             gl.enable(gl.BLEND);
-            gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
             gl.activeTexture(this.textures[settings.textureName].ident);
             gl.bindTexture(gl.TEXTURE_2D, this.textures[settings.textureName].tex);
@@ -202,17 +202,10 @@ var Renderer = function(gameCanvas) {
     this.activeVerts;
     this.activeShaderProgram;
     this.projectionMatrix = new Mat4();
-
-    //TODO: currently does nothing
     this.projectionMatrix.setAsPerspective(Math.PI / 4, game.resolution.x / game.resolution.y, 1, 10);
-
     this.modelMatrix = new Mat4();
     this.viewMatrix = new Mat4();
-
-    //TODO: currently does nothing
     this.viewMatrix.translate(new Vec3(0, 0, -4));
-
-    //TODO: currently does nothing
     this.modelMatrix.setAsLookAt(new Vec3(0, 0, 0), new Vec3(0, 0, -4.5), new Vec3(0, 1, 0));
 
     this.verts['BASIC'] = {'dataPerVert':5, 'array':new Float32Array([

@@ -51,39 +51,39 @@ var EntityManager = function(game) {
             && (e1.pos.y + e1.height) > e2.pos.y
         );
 	};
-    this.checkLvlCollision = function(e, p) {
-        return (
-            e.pos.x < (p.pos.x + p.width)
-            &&
-            (e.pos.x + e.width) > p.pos.x
-            &&
-            e.pos.y < (p.pos.y + p.height)
-            &&
-            (e.pos.y + e.height) > p.pos.y
-        );
-    };
-    this.scanDown = function(e) {
-        var t = new Entity(
-            new Vec2(e.pos.x + (e.width / 4), e.pos.y - (e.height - 0.1)), 
-            new Vec2(e.width / 2, 0.2),
-                                    this, this.lman, this.sman);
-        for (i = 0; i < this.lman.pieces.length; i++) {
-            if (this.checkLvlCollision(t, this.lman.pieces[i])) {
-                return true;
-            }
-        }
-    };
-    this.scanRight = function(e) {
-        var t = new Entity(new Vec2(e.pos.x + (e.width - 0.1), e.pos.y + (e.height / 4)),
-                    new Vec2(0.2, e.height / 2), 
-                                            this, this.lman, this.sman);
-
-        for (i = 0; i < this.lman.pieces.length; i++) {
-            if (this.checkLvlCollision(t, this.lman.pieces[i])) {
-                return true;
-            }
-        }
-    }
+    // this.checkLvlCollision = function(e, p) {
+    //     return (
+    //         e.pos.x < (p.pos.x + p.width)
+    //         &&
+    //         (e.pos.x + e.width) > p.pos.x
+    //         &&
+    //         e.pos.y < (p.pos.y + p.height)
+    //         &&
+    //         (e.pos.y + e.height) > p.pos.y
+    //     );
+    // };
+    // this.scanDown = function(e) {
+    //     var t = new Entity(
+    //         new Vec2(e.pos.x + (e.width / 4), e.pos.y - (e.height - 0.1)),
+    //         new Vec2(e.width / 2, 0.2),
+    //                                 this, this.lman, this.sman);
+    //     for (i = 0; i < this.lman.pieces.length; i++) {
+    //         if (this.checkLvlCollision(t, this.lman.pieces[i])) {
+    //             return true;
+    //         }
+    //     }
+    // };
+    // this.scanRight = function(e) {
+    //     var t = new Entity(new Vec2(e.pos.x + (e.width - 0.1), e.pos.y + (e.height / 4)),
+    //                 new Vec2(0.2, e.height / 2),
+    //                                         this, this.lman, this.sman);
+    //
+    //     for (i = 0; i < this.lman.pieces.length; i++) {
+    //         if (this.checkLvlCollision(t, this.lman.pieces[i])) {
+    //             return true;
+    //         }
+    //     }
+    // }
 
     this.addPlayer = function(p) {
         //designed to be called on game init so ents list is empty
