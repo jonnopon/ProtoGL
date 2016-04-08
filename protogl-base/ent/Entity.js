@@ -77,20 +77,21 @@ var Entity = function(pos, dimensions, game) {
             }
         }
 
-        //gravity 
-        if (this.falling) {
-            var newVel = this.vel.y - (this.gravity * delta) / 100;
-            if (newVel >= -this.maxDYMag) {
-                 this.vel.y  = newVel;
+        if (this.hasGravity) {
+            if (this.falling) {
+                var newVel = this.vel.y - (this.gravity * delta) / 100;
+                if (newVel >= -this.maxDYMag) {
+                    this.vel.y  = newVel;
+                }
+                else {
+                    this.vel.y = -this.maxDYMag;
+                }
             }
             else {
-                this.vel.y = -this.maxDYMag;
-            }
-        }
-        else {
-            this.falling = !this.eman.scanDown(this);
-            if (this.falling) {
-                this.canJump = false;
+                this.falling = !this.eman.scanDown(this);
+                if (this.falling) {
+                    this.canJump = false;
+                }
             }
         }
 
@@ -247,6 +248,10 @@ var Entity = function(pos, dimensions, game) {
 	this.rotate = function(angle) {
 		this.rotation += angle;
 	};
+
+    this.setRotation = function(angle) {
+        this.rotation = angle;
+    };
 
     this.visualScale = function(scale) {
         this.scaler = scale;
