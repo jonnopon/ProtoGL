@@ -2,6 +2,10 @@
 A WebGL prototyping "engine" and game template - provides a sizeable, organised bed of boilerplate with a demo application serving as a template for any given project.
 In active development. API, overall structure, engine capabilities and demo/template application are fluid.
 
+##This Branch (Structural Changes)
+The place to safely gut and replace the inheritance-based entity system in favour of a data-driven component-based one.
+Also likely where a lot of main Game object changes and Renderer changes will take place, as well as the knock-ons for how the application itself must be written.
+
 ----
 
 ##Rough TODO
