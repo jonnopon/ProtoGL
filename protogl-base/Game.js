@@ -27,9 +27,6 @@ var Game = function(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
     
-    //TODO: temporary
-    this.ents = [];
-
     window.onkeydown = function(event) {
         //TODO allow for queueing similar keys? Debouncing presses rather than just ignoring same-key presses?
         if (event.which !== KEYS.f5 && event.which !== KEYS.f12) {
@@ -61,6 +58,9 @@ var Game = function(width, height) {
         game.renderer.clearScreen(game.backgroundColor, false);
 
         game.currentState.tick();
+
+        //TODO: might make more sense as something a state must implement?
+        game.entityManager.update();
 
         requestAnimationFrame(game.run);
     };
@@ -99,17 +99,11 @@ var Game = function(width, height) {
     };
 
     this.addEntity = function(e) {
-        // this.eman.addEnt(e);
-
-        //TODO: temporary
-        this.ents.push(e);
+        this.entityManager.addEntity(e);
     };
 
     this.removeEntity = function(e) {
-        // this.eman.removeEnt(e);
-
-        //TODO: temporary
-        this.ents.splice(this.ents.indexOf(e), 1);
+        this.entityManager.removeEntity(e);
     };
 
     this.attach = function(name, value) {
@@ -143,6 +137,18 @@ var Game = function(width, height) {
 
     this.setBackgroundColor = function(colorVector) {
         this.backgroundColor = colorVector;
+    };
+
+    this.filterEntitiesByComponent = function(component) {
+        return this.entityManager.getEntsWithComponent(component);
+    };
+
+    this.filterEntitiesByComponentList = function(componentList) {
+        return this.entityManager.getEntsWithComponents(componentList);
+    };
+    
+    this.getAllEntities = function() {
+        return this.entityManager.getAllEntities();    
     };
 
     window.game = this;
