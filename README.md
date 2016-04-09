@@ -1,5 +1,69 @@
-A WebGL prototyping "engine" - provides a sizeable, organised bed of boilerplate on which a game can be built.
-**Currently just an amalgamation of a lot of compunding work done to produce small prototypes for Ludum Dare competitions; in no way clean, finished, fully functional or user-friendly. In "active" (occasional) development.**
+#ProtoGL
+A WebGL prototyping "engine" and game template - provides a sizeable, organised bed of boilerplate with a demo application serving as a template for any given project.
+In active development. API, overall structure, engine capabilities and demo/template application are fluid.
+
+----
+
+##Rough TODO
+Not necessarily a complete list, definitely not in priority order 
+
+- ***Rendering***
+    - *Renderer*
+        - Stop assuming uniform types!
+        - Split render calls for different kinds of geometry? (future concern?)
+        - Split 2D and 3D rendering completely?
+        - Use. Element. Arrays. (where appropriate if not everywhere)
+    - *RendererSettings*
+        - Add uniform type to uniform definition (see above)
+        - Revise usefulness going forward
+    - *Shaders*
+        - Split 2D and 3D shaders?
+        - Refine and reduce currently-available library
+            - 2D projection matrix (partially complete)
+            - 2D matrix(3) usage in general?
+            - Update all involving colour to convert from 0-225 to 0-1 (partially complete)
+            - Transparent colouring shader should be an available option (likely to be useful for UI and such)
+- ***Text***
+    - *Rendering/logic*
+        - Fix bugs surrounding rotation + alignment when used together
+        - Redefine alignment - doesn't make much sense at the moment
+        - Allow wrapping within a given space (likely a follow-on from UI)
+        - Allow for colour sequencing per character per String?
+        - Allow somehow for scrolling/animated text
+        - Allow for moving text
+    - *Font*
+        - Support for swapping the font
+            - By current workings; would require an override texture in application as well as config of the character set in the app.js
+- ***Game***
+    - Will be updated to adapt to State changes and the component based Entity system (all as knock-ons)
+    - Support for click and scroll type input events
+- ***Audio***
+    - Allow for muting
+    - Potentially (if necessary) switch to using something more advanced than the JS Audio object; giving rise to:
+        - Volume control
+        - Pausing/stopping/looping sounds
+- ***Entity***
+    - Switch to a component based Entity system rather than a messy inheritance structure
+    - This is the biggest change on this list and will have knock-ons all over the place
+- ***(new) Shapes/Geometry***
+    - Define geometry for various useful shapes both 2D and 3D
+    - For use in creating UI elements as well as in defining Entities
+- ***(new) UI***
+    - Flexible system allowing for panels, buttons, text boxes, etc
+    - Basic layout systems built in? (grid/columns/etc?)
+- ***Utilities***
+    - *States*
+        - Adapt to include init and exit data/functions?
+            - Could end up better representing an entire game state; the data it operates on, how it transitions and behaves, etc
+    - *Math*
+        - Quite well fleshed out for now, but will likely require some additions and changes going forward
+            - EG: Vec4 for alpha chanel colours?
+
+
+
+
+----
+----
 
 # Setup
 - Install project dependencies [Grunt](http://gruntjs.com/) and [Node (with npm)](https://nodejs.org) if necessary
@@ -41,33 +105,6 @@ A WebGL prototyping "engine" - provides a sizeable, organised bed of boilerplate
 ### *grunt dist*
 #### For creating an optimised distribution build
 - Build the distributable to the **dist** directory, with minimised JS
-
-----
-----
-
-# TODO
-### ProtoGL-Base Refactors
-- All code needs a look over; need to pick one consistent style and sweep
-- Remove unneeded stuff
-    - possible EG: levelmanager and levelpiece
-        - useful conceptually but the same could be achieved with just a "world" flag on ents
-- Initial protoGL-base Documentation
-- Text needs a serious overhaul (incl. font texture + accuracy of u/v coordinates)
-    - alignment, colours, size, orientation, maybe lower case?
-- Entity structure needs overhaul
-    - Follow style of the incremental renderer capabilities;
-        - flexible extensible manager
-        - flexible entities; switches for behavior types and physics - set of defaults + extensible
-            - components??????
-    - Really don't like the getVerts() method of rendering
-    - animation
-- Renderer should use element arrays
-    - will require changes to all which return data to the renderer
-- Renderer needs splitting into 2D and 3D renderer?
-    - Reasons
-- CanvasRenderer as fallback/alternate?
-- UI module
-    - panels, etc
 
 ----
 ----
