@@ -61,10 +61,11 @@ var init = function() {
 
         game.textManager.render();
 
-        game.systems['2DMovement'](game.delta, game.ents);
+        game.systems['2DMovement'](game.delta, game.filterEntitiesByComponentList([Position2D, Velocity2D]));
 
-        for (var i = 0; i < game.ents.length; i++) {
-            game.ents[i].print();
+        var allEnts = game.getAllEntities();
+        for (var i = 0; i < allEnts.length; i++) {
+            allEnts[i].print();
         }
     };
 
