@@ -2,21 +2,23 @@ var Game = function(width, height) {
     this.width = width;
     this.height = height;
     this.resolution = new Vec2(width, height);
+    this.backgroundColor = new Vec3(0, 0, 0);
 
-    this.eman = null;
-    this.sman = null;
-    this.renderer = null;
+    this.entityManager = null;
+    this.soundManager = null;
     this.textManager = null;
+    this.renderer = null;
 
     this.states = {};
-
     this.currentState = null;
+    this.systems = {};
+
+    this.displayStats = false;
     this.keys = [];
     this.delta = 0;
 
     this.lastLoopTime = 0;
     this.initData = {};
-
     this.reinitData = {};
     this.initFunc = null;
     this.reinitFunc = null;
@@ -24,8 +26,9 @@ var Game = function(width, height) {
     this.canvas = document.getElementById("gameCanvas");
     this.canvas.width = width;
     this.canvas.height = height;
-
-    this.displayStats = false;
+    
+    //TODO: temporary
+    this.ents = [];
 
     window.onkeydown = function(event) {
         //TODO allow for queueing similar keys? Debouncing presses rather than just ignoring same-key presses?
@@ -55,12 +58,7 @@ var Game = function(width, height) {
 
         game.resizeCanvas();
 
-        if (game.clearScreen) {
-            game.renderer.clearScreen(new Vec3(0, 0, 0), false);
-        }
-        else {
-            game.clearScreen = true;
-        }
+        game.renderer.clearScreen(game.backgroundColor, false);
 
         game.currentState.tick();
 
@@ -80,29 +78,42 @@ var Game = function(width, height) {
     };
 
     this.initManagers = function() {
-        this.renderer = new Renderer(this.canvas);
+        this.renderer = new Renderer(this.canvas); //TODO: might change
         this.textManager = new TextManager(this);
-
-        //TODO can probably just put the bodies of these functions into the constructor since I'm implicitly saying here that they're part of the textUtils' setup process
-
-        this.sman = new SoundManager();
-        this.eman = new EntityManager(this);
-    }
+        this.soundManager = new SoundManager();
+        this.entityManager = new EntityManagerNew(this);
+    };
 
     this.addState = function(state) {
         this.states[state.getName()] = state;
     };
 
     this.activeState = function(name) {
+        //TODO: might change (state switching might become a little more involved/encapsulated in the state itself)
+        //think "switch to state" instead of just "set new state"
         this.currentState = this.states[name];
     };
 
-    this.addEnt = function(e) {
-        this.eman.addEnt(e);
-    }
+    this.addSystem = function(name, system) {
+        this.systems[name] = system;
+    };
 
-    this.removeEnt = function(e) {
-        this.eman.removeEnt(e);
+    this.addEntity = function(e) {
+        // this.eman.addEnt(e);
+
+        //TODO: temporary
+        this.ents.push(e);
+    };
+
+    this.removeEntity = function(e) {
+        // this.eman.removeEnt(e);
+
+        //TODO: temporary
+        this.ents.splice(this.ents.indexOf(e), 1);
+    };
+
+    this.attach = function(name, value) {
+        this[name] = value;
     };
 
     this.loadAttributes = function(data) {
@@ -111,15 +122,13 @@ var Game = function(width, height) {
         }
     };
 
-    this.attach = function(name, value) {
-        this[name] = value;
-    };
-
     this.init = function() {
+        this.loadAttributes(this.initData);
         this.initFunc();
     };
 
     this.reinit = function() {
+        this.loadAttributes(this.reinitData);
         this.reinitFunc();
     };
 
@@ -130,6 +139,10 @@ var Game = function(width, height) {
 
     this.keyDown = function(keyCode) {
         return this.keys.indexOf(keyCode) > -1;
+    };
+
+    this.setBackgroundColor = function(colorVector) {
+        this.backgroundColor = colorVector;
     };
 
     window.game = this;
