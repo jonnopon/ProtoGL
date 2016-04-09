@@ -91,7 +91,7 @@ var init = function() {
         game.textManager.addString("ProtoGL Demo", "center", 45, new Vec2(game.width / 2, game.height - 100), new Vec3(50, 255, 255), degToRad(0));
         game.textManager.addString("Space to Start", "center", 45, new Vec2(game.width / 2, 100), new Vec3(255, 255, 255), degToRad(0));
 
-        if (game.keyDown(game.keyCodes.space)) {
+        if (game.keyDown(KEYS.space)) {
             game.activeState("game");
         }
 
@@ -133,19 +133,19 @@ var init = function() {
             game.genEnemy();
         }
 
-        if (game.keyDown(game.keyCodes.w)) {
+        if (game.keyDown(KEYS.w)) {
             player.turn(0);
             player.setRotation(degToRad(0));
         }
-        else if (game.keyDown(game.keyCodes.d)) {
+        else if (game.keyDown(KEYS.d)) {
             player.turn(1);
             player.setRotation(degToRad(-90));
         }
-        else if (game.keyDown(game.keyCodes.s)) {
+        else if (game.keyDown(KEYS.s)) {
             player.turn(2);
             player.setRotation(degToRad(180));
         }
-        else if (game.keyDown(game.keyCodes.a)) {
+        else if (game.keyDown(KEYS.a)) {
             player.turn(3)
             player.setRotation(degToRad(90));
         }
@@ -153,10 +153,10 @@ var init = function() {
         if (player.dead) {
             game.activeState("dead");
         }
-        if (game.keyDown(game.keyCodes.p)) {
+        if (game.keyDown(KEYS.p)) {
             game.activeState("pause");
         }
-        if (game.keyDown(game.keyCodes.esc)) {
+        if (game.keyDown(KEYS.esc)) {
             game.activeState("menu");
         }
 
@@ -175,7 +175,7 @@ var init = function() {
         game.textManager.addString("Paused", "center", 45, new Vec2(game.width / 2, game.height - 150), new Vec3(50, 255, 255), degToRad(0));
         game.textManager.addString("Space to Resume", "center", 45, new Vec2(game.width / 2, 100), new Vec3(255, 255, 255), degToRad(0));
 
-        if (game.keyDown(game.keyCodes.space)) {
+        if (game.keyDown(KEYS.space)) {
             game.activeState("game");
         }
 
@@ -190,7 +190,7 @@ var init = function() {
         game.textManager.addString("Points: " + game.points, "center", 55, new Vec2(game.width / 2, game.height / 2), new Vec3(255, 255, 255), 0);
         game.textManager.addString("Space to Restart", "center", 45, new Vec2(game.width / 2, 100), new Vec3(255, 255, 255), degToRad(0));
 
-        if (game.keyDown(game.keyCodes.space)) {
+        if (game.keyDown(KEYS.space)) {
             game.reinit();
         }
 

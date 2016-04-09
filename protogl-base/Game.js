@@ -12,7 +12,6 @@ var Game = function(width, height) {
 
     this.currentState = null;
     this.keys = [];
-    this.keyCodes = new KeyCodes();
     this.delta = 0;
 
     this.lastLoopTime = 0;
@@ -30,7 +29,7 @@ var Game = function(width, height) {
 
     window.onkeydown = function(event) {
         //TODO allow for queueing similar keys? Debouncing presses rather than just ignoring same-key presses?
-        if (event.which !== window.game.keyCodes.f5 && event.which !== window.game.keyCodes.f12) {
+        if (event.which !== KEYS.f5 && event.which !== KEYS.f12) {
             event.preventDefault();
             if (window.game.keys.indexOf(event.which) === -1) {
                 window.game.keys.push(event.which);
@@ -39,7 +38,7 @@ var Game = function(width, height) {
     };
 
     window.onkeyup = function(event) {
-        if (event.which !== window.game.keyCodes.f5 && event.which !== window.game.keyCodes.f12) {
+        if (event.which !== KEYS.f5 && event.which !== KEYS.f12) {
             event.preventDefault();
             window.game.keys.splice(window.game.keys.indexOf(event.which), 1);
         }
