@@ -20,12 +20,7 @@ var init = function() {
     var initFunc = function() {
         this.initManagers();
         this.displayStats = true;
-        
-        this.addSystem("2DMovement", MovementSystem2D);
-        var e = new EntityNew();
-        e.addComponent(new Position2D(this.width / 2, this.height / 2));
-        e.addComponent(new Velocity2D(5, 5, 75, 75));
-        this.addEntity(e);
+        this.switchToState("onlyState");
     };
 
     //STEP 4: define game reinit function
@@ -34,7 +29,7 @@ var init = function() {
         this.initManagers();
         this.displayStats = true;
 
-        this.activeState("onlyState");
+        this.switchToState("onlyState");
     };
 
     //STEP 6: attach init and reinit data to the Game object
@@ -50,37 +45,53 @@ var init = function() {
 
     ///STEP 9: attach utility methods to Game object by name
 
-    //STEP 10: define Game State function bodies describing the frame of each state
-    //a state function can take any number of params as long as denoted in assignment to Game
-    ///for this simple game, just passing the Game object
-    var onlyStateFunc = function(args) {
-        var game = args[0];
+    //STEP 10: define Game State function bodies describing the initialisation and the frame of each state
+    //a state function takes the game object as its only parameter
+    var onlyStateInit = function(game) {
+        game.addSystem(PhysicsSystem2D);
 
+        var e = new EntityNew();
+        e.addComponent(new Sprite(0, 0, 0.25, 1))
+        e.addComponent(new Transform2D(new Vec2(game.width / 2, game.height / 2), new Vec2(40, 40), new Vec2(0, 0)));
+        game.addEntity(e);
+
+        e = new EntityNew();
+        e.addComponent(new Sprite(0.25, 0, 0.5, 1));
+        e.addComponent(new Transform2D(new Vec2(100, game.height / 2), new Vec2(30, 30), new Vec2(0, 0)));
+        game.addEntity(e);
+    };
+    var onlyStateFunc = function(game) {
         game.textManager.addString("ProtoGL Demo", "center", 45, new Vec2(game.width / 2, game.height - 100), new Vec3(50, 255, 255), degToRad(0));
         game.textManager.addString("Space to Start", "center", 45, new Vec2(game.width / 2, 100), new Vec3(255, 255, 255), degToRad(0));
 
-        game.textManager.render();
+        game.systems['physics2D'](game.delta, game.filterEntitiesByComponent(Transform2D));
 
-        game.systems['2DMovement'](game.delta, game.filterEntitiesByComponentList([Position2D, Velocity2D]));
+        if (game.entityManager.ents[0]) {
+            //TODO really shouldn't need to do this check
+            game.entityManager.ents[0].components.transform2D.angle += degToRad(1);
+
+            game.entityManager.ents[1].components.transform2D.angle -= degToRad(0.5);
+        }
+
+
 
         var allEnts = game.getAllEntities();
+
         for (var i = 0; i < allEnts.length; i++) {
             allEnts[i].print();
         }
+
+        game.entityManager.render();
+
+        game.textManager.render();
     };
 
     //STEP 11: construct States with names
-    var onlyState = new State("onlyState");
+    var onlyState = new State("onlyState", onlyStateInit, onlyStateFunc, game);
 
-    //STEP 12: add functional bodies to the states, along with a list of arguments to send to their 'tick' functions
-    onlyState.setFunc(onlyStateFunc, [game]);
-
-    //STEP 13: attach States to Game object
+    //STEP 12: attach States to Game object
     game.addState(onlyState);
 
-    //STEP 14: choose an initially active state
-    game.activeState("onlyState");
-
-    //STEP 15: start the game
+    //STEP 14: start the game
     game.start();
 };
