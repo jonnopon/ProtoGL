@@ -21,7 +21,7 @@ var EntityManagerNew = function(game) {
     this.renderSettings.addAttribute("texCoord", 2);
     this.renderSettings.addAttribute("angle", 1);
     this.renderSettings.addAttribute("scale", 1);
-    this.renderSettings.addAttribute("centre", 1);
+    this.renderSettings.addAttribute("centre", 2);
     this.renderSettings.addUniform("tex", texPos);
     this.renderSettings.addUniform("resX", game.resolution.x);
     this.renderSettings.addUniform("resY", game.resolution.y);
@@ -73,6 +73,47 @@ var EntityManagerNew = function(game) {
         }
     };
 
+    this.render = function() {
+        //TODO: group entities and make multiple render calls changing renderSettings as necessary!
+        //TODO: for now, assumes all entities have a 2D transform component and a sprite
+
+        var renderer = this.renderer;
+
+        var vertSize = (8 * 48) * this.ents.length;
+        this.verts = new Float32Array(vertSize);
+        var off = 0;
+
+        for (var i = 0; i < this.ents.length; i++) {
+            var pos = this.ents[i].components.transform2D.position;
+            var dim = this.ents[i].components.transform2D.dimensions;
+            var angle = this.ents[i].components.transform2D.angle;
+            var scale = this.ents[i].components.transform2D.scale.x; //TODO: scale needs to be a vec2 not an int
+            var center = new Vec2((pos.x + (pos.x + dim.x)) / 2, (pos.y + (pos.y + dim.y)) / 2);
+            var spriteTL = this.ents[i].components.sprite.topLeft;
+            var spriteBR = this.ents[i].components.sprite.bottomRight;
+
+            var tempVerts = [
+                pos.x, pos.y, spriteTL.x, spriteTL.y, angle, scale, center.x, center.y,
+                pos.x + dim.x, pos.y, spriteBR.x, spriteTL.y, angle, scale, center.x, center.y,
+                pos.x + dim.x, pos.y + dim.y, spriteBR.x, spriteBR.y, angle, scale, center.x, center.y,
+
+                pos.x + dim.x, pos.y + dim.y, spriteBR.x, spriteBR.y, angle, scale, center.x, center.y,
+                pos.x, pos.y + dim.y, spriteTL.x, spriteBR.y, angle, scale, center.x, center.y,
+                pos.x, pos.y, spriteTL.x, spriteTL.y, angle, scale, center.x, center.y
+            ];
+
+            this.verts.set(tempVerts, off);
+            off += tempVerts.length;
+        }
+
+        renderer.addVerts("entVerts", this.verts, 8);
+        renderer.bufferVertsToVBO("entVerts", this.vboName);
+        renderer.bindVBO(this.vboName);
+        renderer.bindVerts("entVerts");
+        renderer.bindShaderProgram(this.shaderProgramName);
+        renderer.render2D(true, this.renderSettings);
+    };
+
     this.getEntsWithComponent = function(component) {
         var matching = [];
         for (var i = 0; i < this.ents.length; i++) {
@@ -102,6 +143,10 @@ var EntityManagerNew = function(game) {
 
     this.getAllEntities = function() {
         return this.ents;
+    };
+
+    this.clearAllEntities = function() {
+        this.ents = [];
     };
 
     //TODO - more utilities? CheckEntCollision might not be necessary...

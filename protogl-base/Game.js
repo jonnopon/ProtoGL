@@ -48,15 +48,12 @@ var Game = function(width, height) {
         var game = window.game;
         game.delta = Date.now() - game.lastLoopTime;
         game.lastLoopTime = Date.now();
+        game.renderer.clearScreen(game.backgroundColor, false);
+        game.resizeCanvas();
 
         if (game.displayStats) {
             game.textManager.addString("FPS: " + Math.round((1000 / game.delta) * 10) / 10, "right", 25, new Vec2(game.width - 10, game.height - 25), new Vec3(255, 255, 255), 0);
         }
-
-        game.resizeCanvas();
-
-        game.renderer.clearScreen(game.backgroundColor, false);
-
         game.currentState.tick();
 
         //TODO: might make more sense as something a state must implement?
@@ -87,15 +84,14 @@ var Game = function(width, height) {
     this.addState = function(state) {
         this.states[state.getName()] = state;
     };
-
-    this.activeState = function(name) {
-        //TODO: might change (state switching might become a little more involved/encapsulated in the state itself)
-        //think "switch to state" instead of just "set new state"
+    
+    this.switchToState = function(name) {
         this.currentState = this.states[name];
+        this.currentState.init();
     };
 
-    this.addSystem = function(name, system) {
-        this.systems[name] = system;
+    this.addSystem = function(system) {
+        this.systems[system.prototype.name] = system;
     };
 
     this.addEntity = function(e) {
@@ -149,6 +145,10 @@ var Game = function(width, height) {
     
     this.getAllEntities = function() {
         return this.entityManager.getAllEntities();    
+    };
+
+    this.clearEntities = function() {
+        this.entityManager.clearAllEntities();
     };
 
     window.game = this;
