@@ -1,15 +1,20 @@
-var EntityNew = function() {
+var Entity = function(tag, game) {
     this.id = (+new Date()).toString(16) + (Math.random() * 10000000 | 0).toString(16);
-    
+    this.tag = tag;
+    this.game = game;
     this.components = {};
     
+    //TODO going against the ECS architecture? D:
+    this.onCollision = null;
+    this.tick = null;
+
     this.addComponent = function(component) {
-        this.components[component.name] = component;    
+        this.components[component.name] = component;
     };
     
     this.removeComponent = function(component) {
         //support for removing components passed as functions or components by name
-        var name = typeof component === 'function' ? component.name : component;
+        var name = typeof component === 'function' ? component.prototype.name : component;
         
         delete this.components[name];
     };

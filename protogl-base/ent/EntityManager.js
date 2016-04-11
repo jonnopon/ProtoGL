@@ -1,4 +1,4 @@
-var EntityManagerNew = function(game) {
+var EntityManager = function(game) {
     this.renderer = game.renderer;
     this.ents = [];
     this.removeList = [];
@@ -64,7 +64,12 @@ var EntityManagerNew = function(game) {
     };
 
     this.update = function() {
-        //TODO - maybe not even necessary?
+        for (var i = 0; i < this.ents.length; i++) {
+            if (this.ents[i].tick !== undefined && this.ents[i].tick !== null) {
+                this.ents[i].tick();
+            }
+        }
+
         if (this.addList.length) {
             this.loadEnts();
         }
@@ -75,22 +80,24 @@ var EntityManagerNew = function(game) {
 
     this.render = function() {
         //TODO: group entities and make multiple render calls changing renderSettings as necessary!
-        //TODO: for now, assumes all entities have a 2D transform component and a sprite
+        //TODO: for now, only deals with entities that have a 2D transform component and a sprite
 
         var renderer = this.renderer;
+        
+        var spriteEnts = this.getEntsWithComponents([Sprite, Transform2D]);
 
-        var vertSize = (8 * 48) * this.ents.length;
+        var vertSize = (8 * 48) * spriteEnts.length;
         this.verts = new Float32Array(vertSize);
         var off = 0;
 
-        for (var i = 0; i < this.ents.length; i++) {
-            var pos = this.ents[i].components.transform2D.position;
-            var dim = this.ents[i].components.transform2D.dimensions;
-            var angle = this.ents[i].components.transform2D.angle;
-            var scale = this.ents[i].components.transform2D.scale.x; //TODO: scale needs to be a vec2 not an int
+        for (var i = 0; i < spriteEnts.length; i++) {
+            var pos = spriteEnts[i].components.transform2D.position;
+            var dim = spriteEnts[i].components.transform2D.dimensions;
+            var angle = spriteEnts[i].components.transform2D.angle;
+            var scale = spriteEnts[i].components.transform2D.scale.x; //TODO: scale needs to be a vec2 not an int
             var center = new Vec2((pos.x + (pos.x + dim.x)) / 2, (pos.y + (pos.y + dim.y)) / 2);
-            var spriteTL = this.ents[i].components.sprite.topLeft;
-            var spriteBR = this.ents[i].components.sprite.bottomRight;
+            var spriteTL = spriteEnts[i].components.sprite.topLeft;
+            var spriteBR = spriteEnts[i].components.sprite.bottomRight;
 
             var tempVerts = [
                 pos.x, pos.y, spriteTL.x, spriteTL.y, angle, scale, center.x, center.y,
@@ -134,6 +141,17 @@ var EntityManagerNew = function(game) {
         var matching = [];
         for (var i = 0; i < this.ents.length; i++) {
             if (this.ents[i].hasComponents(componentNames)) {
+                matching.push(this.ents[i]);
+            }
+        }
+
+        return matching;
+    };
+
+    this.getEntsWithTag = function(tag) {
+        var matching = [];
+        for (var i = 0; i < this.ents.length; i++) {
+            if (this.ents[i].tag === tag) {
                 matching.push(this.ents[i]);
             }
         }
