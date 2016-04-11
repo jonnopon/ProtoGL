@@ -33,32 +33,46 @@ Not necessarily a complete list, definitely not in priority order
         - Redefine alignment - doesn't make much sense at the moment
         - Allow wrapping within a given space (likely a follow-on from UI)
         - Allow for colour sequencing per character per String?
-        - Allow somehow for scrolling/animated text
-        - Allow for moving text
+        - Allow somehow for scrolling/animated/moving text
     - *Font*
         - Support for swapping the font
             - By current workings; would require an override texture in application as well as config of the character set in the app.js
 - ***Game***
-    - Will be updated to adapt to State changes and the component based Entity system (all as knock-ons)
+    - ~~Will be updated to adapt to State changes and the component based Entity system (all as knock-ons)~~
     - Support for click and scroll type input events
 - ***Audio***
     - Allow for muting
     - Potentially (if necessary) switch to using something more advanced than the JS Audio object; giving rise to:
         - Volume control
-        - Pausing/stopping/looping sounds
+        - Pausing/stopping/looping/positioning sounds
 - ***Entity***
-    - Switch to a component based Entity system rather than a messy inheritance structure
-    - This is the biggest change on this list and will have knock-ons all over the place
+    - ~~Switch to a component based Entity system rather than a messy inheritance structure~~
+    - Systems
+        - Physics2D
+            - Handle acceleration (to start)
+        - AABBCollisionSystem
+            - Integrate into the physics system? Seems to make sense...
+        - PlayerControlled
+            - Do *not* understand any of the input system examples I've come across, but this should "do something"
+    - Components
+        - Transform2D
+            - Handle acceleration (to start)
+                - Does this belong in a new component of some kind?
+        - Sprite
+            - need to change to somehow allow the user to say "texture slot 1/2/etc" rather than explicitly giving texture coordinates
+        - PlayerControlled
+            - Do *not* understand any of the input system examples I've come across, but this should "do something"
 - ***(new) Shapes/Geometry***
     - Define geometry for various useful shapes both 2D and 3D
-    - For use in creating UI elements as well as in defining Entities
+    - For use in creating UI elements as well as in defining Entity geometry
 - ***(new) UI***
     - Flexible system allowing for panels, buttons, text boxes, etc
     - Basic layout systems built in? (grid/columns/etc?)
 - ***Utilities***
     - *States*
-        - Adapt to include init and exit data/functions?
-            - Could end up better representing an entire game state; the data it operates on, how it transitions and behaves, etc
+        - ~~Adapt to include init and exit data/functions?~~
+            - ~~Could end up better representing an entire game state; the data it operates on, how it transitions and behaves, etc~~
+        - States now have an init function but I don't necessarily like this. Re-think and change if necessary
     - *Math*
         - Quite well fleshed out for now, but will likely require some additions and changes going forward
             - EG: Vec4 for alpha chanel colours?

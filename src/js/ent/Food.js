@@ -1,22 +1,23 @@
-var Food = function(pos, game) {
-    // var vertMul = game.height / game.height;
-    // var dimensions = new Vec2(25, 25 * vertMul);
-    // Entity.prototype.constructor.call(this, pos, dimensions, game);
-    //
-    // this.u1 = 0.5;
-    // this.u2 = 0.75;
-    // this.v1 = 1;
-    // this.v2 = 0;
-    //
-    // this.tick = function() {
-    //     this.rotation += degToRad(-5);
-    // };
-    //
-    // this.collidedWithEnt = function(e) {
-    //     if (e instanceof Player) {
-    //         this.game.genFood();
-    //         this.destroy();
-    //         this.noCollideEnt = true;
-    //     }
-    // };
-};
+var Food = function(game) {
+    var posX = randomBetween(50, game.width - 50);
+    var posY = randomBetween(50, game.height - 50);
+    var pos = new Vec2(posX, posY);
+
+    var entity = new Entity("food", game);
+    entity.addComponent(new Sprite(0.5, 0, 0.75, 1));
+    entity.addComponent(new Transform2D(pos, new Vec2(25, 25), new Vec2(0, 0)));
+    entity.addComponent(new AABBCollisionBox(new Vec2(25, 25)));
+
+    entity.tick = function() {
+        this.components.transform2D.angle -= degToRad(3);
+    };
+
+    entity.onCollision = function(e) {
+        if (e.tag === "player") {
+            this.game.genFood();
+            this.game.removeEntity(this);
+        };
+    };
+
+    return entity;
+}

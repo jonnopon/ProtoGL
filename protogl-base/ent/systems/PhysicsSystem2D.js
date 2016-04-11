@@ -1,11 +1,13 @@
-var PhysicsSystem2D = function(delta, entities) {
+var PhysicsSystem2D = function(game) {
+    var validEnts = game.filterEntitiesByComponent(Transform2D);
+
     //handle 2D movement
-    for (var i = 0; i < entities.length; i++) {
-        var position = entities[i].components.transform2D.position;
-        var velocity = entities[i].components.transform2D.velocity;
+    for (var i = 0; i < validEnts.length; i++) {
+        var position = validEnts[i].components.transform2D.position;
+        var velocity = validEnts[i].components.transform2D.velocity;
         var deltaVelocity = velocity.clone();
 
-        deltaVelocity.vec2Mult(new Vec2(delta / 100, delta / 100));
+        deltaVelocity.vec2Mult(new Vec2(game.delta / 100, game.delta / 100));
         position.addVec2(deltaVelocity);
     }
     
@@ -13,4 +15,3 @@ var PhysicsSystem2D = function(delta, entities) {
     
     //handle scaling?
 };
-PhysicsSystem2D.prototype.name = "physics2D";

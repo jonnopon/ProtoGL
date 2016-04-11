@@ -1,51 +1,56 @@
-var Enemy = function(pos, game) {
-    // var vertMul = game.height / game.height;
-    // var dimensions = new Vec2(30, 30 * vertMul);
-    // Entity.prototype.constructor.call(this, pos, dimensions, game);
-    //
-    // this.u1 = 0.25;
-    // this.u2 = 0.5;
-    // this.v1 = 1;
-    // this.v2 = 0;
-    //
-    // var maxVel = 75,
-    //     minVel = 30;
-    //
-    // var vel = randomBetween(minVel, maxVel);
-    // var r = Math.random();
-    // var dir =  r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
-    // var xVel = dir == 1 ? vel : dir == 3 ? -vel : 0;
-    // var yVel = dir == 0 ? vel : dir == 2 ? -vel : 0;
-    // this.vel = new Vec2(xVel, yVel);
-    //
-    // var angle = 0;
-    // switch (dir) {
-    //     case 1:
-    //         angle = -90;
-    //         break;
-    //     case 2:
-    //         angle = 180;
-    //         break;
-    //     case 3:
-    //         angle = 90;
-    //         break;
-    // }
-    //
-    // this.setRotation(degToRad(angle));
-    //
-    // this.update = function() {
-    //     if (this.pos.x + this.width < 0) {
-    //         this.pos.x = this.game.width;
-    //     }
-    //     else if (this.pos.x >= game.width) {
-    //         this.pos.x = -this.width;
-    //     }
-    //
-    //     if (this.pos.y > game.height) {
-    //         this.pos.y = - this.height;
-    //     }
-    //     else if (this.pos.y + this.height < 0) {
-    //         this.pos.y = game.height;
-    //     }
-    // };
-};
+var Enemy = function(game) {
+    var minVel = 30,
+        maxVel = 75;
+
+    var velMag = randomBetween(minVel, maxVel);
+    var r = Math.random();
+    var dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
+    var xVel = dir === 1 ? velMag : dir === 3 ? -velMag : 0;
+    var yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
+    var vel = new Vec2(xVel, yVel);
+
+    var posX = randomBetween(50, game.width - 50);
+    var posY = randomBetween(50, game.height - 50);
+    var pos = new Vec2(posX, posY);
+
+    var angle = 180;
+    switch (dir) {
+        case 1:
+            angle = 90;
+            break;
+        case 2:
+            angle = 0;
+            break;
+        case 3:
+            angle = -90;
+            break;
+    }
+
+    var entity = new Entity("enemy", game);
+    entity.addComponent(new Sprite(0.25, 0, 0.5, 1));
+    entity.addComponent(new Transform2D(pos, new Vec2(30, 30), vel));
+    entity.addComponent(new AABBCollisionBox(new Vec2(30, 30)));
+
+    entity.components.transform2D.angle = degToRad(angle);
+
+    entity.tick = function() {
+        var pos = this.components.transform2D.position;
+        var dim = this.components.transform2D.dimensions;
+
+        if (pos.x + dim.x < 0) {
+            pos.x = this.game.width;
+        }
+        else if (pos.x > this.game.width) {
+            pos.x = -dim.x;
+        }
+
+        if (pos.y > this.game.height) {
+            pos.y = -dim.y;
+        }
+        else if (pos.y + dim.y < 0) {
+            pos.y = this.game.height;
+        }
+    };
+
+    return entity;
+}

@@ -11,7 +11,7 @@ var Game = function(width, height) {
 
     this.states = {};
     this.currentState = null;
-    this.systems = {};
+    this.systems = [];
 
     this.displayStats = false;
     this.keys = [];
@@ -56,8 +56,11 @@ var Game = function(width, height) {
         }
         game.currentState.tick();
 
-        //TODO: might make more sense as something a state must implement?
-        game.entityManager.update();
+        for (var i = 0; i < game.systems.length; i++) {
+            game.systems[i](game);
+        }
+
+        game.textManager.render();
 
         requestAnimationFrame(game.run);
     };
@@ -78,7 +81,7 @@ var Game = function(width, height) {
         this.renderer = new Renderer(this.canvas); //TODO: might change
         this.textManager = new TextManager(this);
         this.soundManager = new SoundManager();
-        this.entityManager = new EntityManagerNew(this);
+        this.entityManager = new EntityManager(this);
     };
 
     this.addState = function(state) {
@@ -91,7 +94,11 @@ var Game = function(width, height) {
     };
 
     this.addSystem = function(system) {
-        this.systems[system.prototype.name] = system;
+        this.systems.push(system);
+    };
+
+    this.removeSystem = function(system) {
+        this.systems.splice(this.systems.indexOf(system, 1));
     };
 
     this.addEntity = function(e) {
@@ -141,6 +148,10 @@ var Game = function(width, height) {
 
     this.filterEntitiesByComponentList = function(componentList) {
         return this.entityManager.getEntsWithComponents(componentList);
+    };
+
+    this.filterEntitiesByTag = function(tag) {
+        return this.entityManager.getEntsWithTag(tag);
     };
     
     this.getAllEntities = function() {
