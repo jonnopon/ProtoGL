@@ -1,23 +1,25 @@
 //TODO: does this make sense as its own system? Should it be part of the PhysicsSystem? (probably)
-var AABBCollisionSystem = function(game) {
-    this.collides = function(e1, e2) {
-        //TODO: center the collision box on the entity
-        var p1 = e1.components.transform2D.position;
-        var d1 = e1.components.AABBCollisionBox.dimensions;
-        var p2 = e2.components.transform2D.position;
-        var d2 = e2.components.AABBCollisionBox.dimensions;
 
-        return (
-            p1.x < (p2.x + d2.x)
-            &&
-            (p1.x + d1.x) > p2.x
-            &&
-            p1.y < (p2.y + d2.y)
-            &&
-            (p1.y + d1.y) > p2.y
-        );
-    };
-    
+//TODO: need to find a better place to put this...
+var collides = function(e1, e2) {
+    //TODO: center the collision box on the entity
+    var p1 = e1.components.transform2D.position;
+    var d1 = e1.components.AABBCollisionBox.dimensions;
+    var p2 = e2.components.transform2D.position;
+    var d2 = e2.components.AABBCollisionBox.dimensions;
+
+    return (
+        p1.x < (p2.x + d2.x)
+        &&
+        (p1.x + d1.x) > p2.x
+        &&
+        p1.y < (p2.y + d2.y)
+        &&
+        (p1.y + d1.y) > p2.y
+    );
+};
+
+var AABBCollisionSystem = function(game) {
     var validEnts = game.filterEntitiesByComponentList([Transform2D, AABBCollisionBox]);
     for (var i = 0; i < validEnts.length; i++) {
         for (var j = i + 1; j < validEnts.length; j++) {
@@ -28,7 +30,7 @@ var AABBCollisionSystem = function(game) {
             //THE LIST SHOULD HAVE A SPECIAL KEYWORD THAT TURNS OFF ALL COLLISIONS FOR A GIVEN ENTITY (ALL?)
 
             // var canCollide = validEnts[i].components.AABBCollisionBox.active && validEnts[j].components.AABBCollisionBox.active;
-            if (/*canCollide && */this.collides(validEnts[i], validEnts[j])) {
+            if (/*canCollide && */collides(validEnts[i], validEnts[j])) {
                 if (validEnts[i].onCollision !== null) {
                     validEnts[i].onCollision(validEnts[j]);
                 }

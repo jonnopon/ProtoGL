@@ -3,16 +3,14 @@ var State = function(name, initFunc, tickFunc, game) {
     this.initFunc = initFunc;
     this.tickFunc = tickFunc;
     this.game = game;
+};
 
-    this.init = function() {
-        this.initFunc.apply(this, [this.game]);
-    };
-
-    this.tick = function() {
-        this.tickFunc.apply(this, [this.game]);
-    };
-
-    this.getName = function() {
-        return this.name;
-    };
+State.prototype.init = function() {
+    this.initFunc.apply(this, [this.game]);
+};
+State.prototype.tick = function() {
+    this.tickFunc.apply(this, [this.game]);
+};
+State.prototype.getName = function() {
+    return this.name;
 };

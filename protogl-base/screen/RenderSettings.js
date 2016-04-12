@@ -3,17 +3,17 @@ var RendererSettings = function() {
     this.uniforms = [];
     this.shape = gl.TRIANGLES;
     this.textures = [];
+};
 
-    this.addAttribute = function(name, length) {
-	    this.attributes.push({'name': name, 'length': length});
-	};
-	this.addUniform = function(name, val) {
-	    this.uniforms.push({'name': name, 'val': val});
-	};
-	this.setShape = function(shape) {
-	    this.shape = shape;
-	};
-	this.setTextureName = function(name) {
-	    this.textureName = name;
-	};
+RendererSettings.prototype.addAttribute = function(name, length) {
+	this.attributes.push({'name': name, 'length': length});
+};
+RendererSettings.prototype.addUniform = function(name, val) {
+	this.uniforms.push({'name': name, 'val': val});
+};
+RendererSettings.prototype.setShape = function(shape) {
+	this.shape = shape;
+};
+RendererSettings.prototype.setTextureName = function(name) {
+	this.textureName = name;
 };

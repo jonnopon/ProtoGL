@@ -5,35 +5,31 @@ var Entity = function(tag, game) {
     this.components = {};
     this.onCollision = null;
     this.onUpdate = null;
+};
 
-    this.addComponent = function(component) {
-        this.components[component.name] = component;
-    };
-    
-    this.removeComponent = function(component) {
-        //support for removing components passed as functions or components by name
-        var name = typeof component === 'function' ? component.prototype.name : component;
-        
-        delete this.components[name];
-    };
-    
-    this.hasComponent = function(componentName) {
-        return Object.keys(this.components).indexOf(componentName) > -1;
-    };
-    
-    this.hasComponents = function(componentNameList) {
-        var has = false;
-        for (var i = 0; i < componentNameList.length; i++) {
-            has = this.hasComponent(componentNameList[i]);
-            
-            if (!has) {
-                return false;
-            }
+Entity.prototype.addComponent = function(component) {
+    this.components[component.name] = component;
+};
+Entity.prototype.removeComponent = function(component) {
+    //support for removing components passed as functions or components by name
+    var name = typeof component === 'function' ? component.prototype.name : component;
+
+    delete this.components[name];
+};
+Entity.prototype.hasComponent = function(componentName) {
+    return Object.keys(this.components).indexOf(componentName) > -1;
+};
+Entity.prototype.hasComponents = function(componentNameList) {
+    var has = false;
+    for (var i = 0; i < componentNameList.length; i++) {
+        has = this.hasComponent(componentNameList[i]);
+
+        if (!has) {
+            return false;
         }
-        return true;
-    };
-    
-    this.print = function() {
-        console.log(JSON.stringify(this, null, 4));
-    };
+    }
+    return true;
+};
+Entity.prototype.print = function() {
+    console.log(JSON.stringify(this, null, 4));
 };
