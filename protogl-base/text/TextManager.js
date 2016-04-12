@@ -9,8 +9,8 @@ var TextManager = function(game) {
         texPos = this.renderer.createTexture(this.textureName, 'res/img/font.png');
     }
 
-    var frag = _getFragShader('2d-textured-colored');
-    var vert = _getVertShader('2d-transform-textured-colored');
+    var frag = FRAGSHADERS["textured-colored"];
+    var vert = VERTSHADERS2D["transform-textured-colored"];
     this.renderer.addShaderProgram(this.shaderProgramName, [vert, frag]);
 
     this.renderer.addVBO(this.vboName);

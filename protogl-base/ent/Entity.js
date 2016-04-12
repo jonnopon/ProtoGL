@@ -3,10 +3,8 @@ var Entity = function(tag, game) {
     this.tag = tag;
     this.game = game;
     this.components = {};
-    
-    //TODO going against the ECS architecture? D:
     this.onCollision = null;
-    this.tick = null;
+    this.onUpdate = null;
 
     this.addComponent = function(component) {
         this.components[component.name] = component;

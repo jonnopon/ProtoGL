@@ -8,7 +8,7 @@ var Food = function(game) {
     entity.addComponent(new Transform2D(pos, new Vec2(25, 25), new Vec2(0, 0)));
     entity.addComponent(new AABBCollisionBox(new Vec2(25, 25)));
 
-    entity.tick = function() {
+    entity.onUpdate = function() {
         this.components.transform2D.angle -= degToRad(3);
     };
 
