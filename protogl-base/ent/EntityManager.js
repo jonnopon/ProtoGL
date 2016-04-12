@@ -14,8 +14,8 @@ var EntityManager = function(game) {
     var texPos = this.renderer.createTexture(this.textureName, "res/img/ent.png");
 
     //TODO: temporary - needs to be configurable/adapt to actual entities in the system
-    var frag = _getFragShader("2d-textured");
-    var vert = _getVertShader("2d-transform-textured");
+    var frag = FRAGSHADERS["textured"];
+    var vert = VERTSHADERS2D["transform-textured"];
     this.renderer.addShaderProgram(this.shaderProgramName, [vert, frag]);
     this.renderSettings.addAttribute("pos", 2);
     this.renderSettings.addAttribute("texCoord", 2);
@@ -59,14 +59,10 @@ var EntityManager = function(game) {
         this.removeList = [];
     };
 
-    this.render = function() {
-        //TODO
-    };
-
     this.update = function() {
         for (var i = 0; i < this.ents.length; i++) {
-            if (this.ents[i].tick !== undefined && this.ents[i].tick !== null) {
-                this.ents[i].tick();
+            if (this.ents[i].onUpdate !== null) {
+                this.ents[i].onUpdate();
             }
         }
 
@@ -94,7 +90,7 @@ var EntityManager = function(game) {
             var pos = spriteEnts[i].components.transform2D.position;
             var dim = spriteEnts[i].components.transform2D.dimensions;
             var angle = spriteEnts[i].components.transform2D.angle;
-            var scale = spriteEnts[i].components.transform2D.scale.x; //TODO: scale needs to be a vec2 not an int
+            var scale = spriteEnts[i].components.transform2D.scale.x; //TODO: scale needs to be a vec2 not an int/float
             var center = new Vec2((pos.x + (pos.x + dim.x)) / 2, (pos.y + (pos.y + dim.y)) / 2);
             var spriteTL = spriteEnts[i].components.sprite.topLeft;
             var spriteBR = spriteEnts[i].components.sprite.bottomRight;

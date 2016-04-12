@@ -8,9 +8,10 @@ var Player = function(game) {
     // entity.addComponent(new PlayerControlled());
 
     entity.components.transform2D.maxVelocity = new Vec2(75, 75);
+    entity.components.transform2D.angle = degToRad(180);
     entity.components.AABBCollisionBox.coolDownTime = 75;
 
-    entity.tick = function() {
+    entity.onUpdate = function() {
         var pos = this.components.transform2D.position;
         var dim = this.components.transform2D.dimensions;
         
@@ -50,32 +51,18 @@ var Player = function(game) {
                 }
             }
         }
-    
-        // if (this.health <= 0) {
-        //     this.dead = true;
-        // }
-    
-        // if (this.noCollideEnt) {
-        //     this.noCollideTimer++;
-        //     if (this.noCollideTimer > this.noCollideTimeMax) {
-        //         this.noCollideTimer = 0;
-        //         this.visible = true;
-        //         this.noCollideEnt = false;
-        //     }
-        //     else {
-        //         this.visible = this.noCollideTimer % 2 !== 0;
-        //     }
-        // }        
     };
     
     entity.onCollision = function(e) {
         if (e.tag === "food") {
             this.components.points.value++;
+            this.game.soundManager.playSound("point");
         }
         else if (e.tag === "enemy") {
             if (this.components.AABBCollisionBox.active) {
                 this.components.health.value--;
                 this.components.AABBCollisionBox.active = false;
+                this.game.soundManager.playSound("hit");
             }
         }
     };

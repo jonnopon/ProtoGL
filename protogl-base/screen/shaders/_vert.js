@@ -1,5 +1,8 @@
-var vertShaders = {};
-vertShaders['pass-through'] =
+var VERTSHADERS2D = {};
+var VERTSHADERS3D = {};
+
+/*************************************************** 2D ***************************************************/
+VERTSHADERS2D["colored"] =
     'attribute vec2 pos;' +
     'attribute vec3 col;' +
     'varying vec3 Col;' +
@@ -8,33 +11,24 @@ vertShaders['pass-through'] =
     '    gl_Position = vec4(pos, 1.0, 1.0);' +
     '}'
 ;
-vertShaders['3d'] =
-    'attribute vec3 pos;' +
-    'attribute vec3 col;' +
-    'uniform mat4 modelMatrix;' +
-    'uniform mat4 viewMatrix;' +
-    'uniform mat4 projectionMatrix;' +
-    'varying vec3 Col;' +
-    'void main(void) {' +
-    '   Col = col;' +
-    '   gl_Position =  projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1.0);' +
-    '}'
-;
-vertShaders['3d-textured'] =
+//TODO move the matrix creation out of the shader duh
+VERTSHADERS2D["transform-colored"] =
     'attribute vec2 pos;' +
     'attribute vec3 col;' +
-    'attribute vec2 texCoord;' +
-    'uniform mat4 modelViewMatrix;' +
-    'uniform mat4 projectionMatrix;' +
+    'attribute float angle;' +
+    'attribute float scale;' +
+    'attribute vec2 centre;' +
     'varying vec3 Col;' +
-    'varying vec2 TexCoord;' +
-    'void main(void) {' +
+    'void main() {' +
     '   Col = col;' +
-    '   TexCoord = texCoord;' +
-    '   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);' +
+    '	mat4 rot = mat4(cos(angle) * scale, -sin(angle), 0.0, 0.0, sin(angle), cos(angle) * scale, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+    '	mat4 tr = mat4(1.0, 0.0, 0.0, centre.x, 0.0, 1.0, 0.0, centre.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+    '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -centre.x, 0.0, 1.0, 0.0, -centre.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+    '   gl_Position = vec4(pos, 1.0, 1.0) * tr1 * rot * tr;' +
     '}'
 ;
-vertShaders['2d-transform-textured'] =
+//TODO move the matrix creation out of the shader duh
+VERTSHADERS2D["transform-textured"] =
     'attribute vec2 pos;' +
     'attribute vec2 texCoord;' +
     'attribute float angle;' +
@@ -53,7 +47,8 @@ vertShaders['2d-transform-textured'] =
     '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
     '}';
 ;
-vertShaders['2d-transform-textured-colored'] =
+//TODO move the matrix creation out of the shader duh
+VERTSHADERS2D["transform-textured-colored"] =
     'attribute vec2 pos;' +
     'attribute vec2 texCoord;' +
     'attribute vec3 col;' +
@@ -75,26 +70,31 @@ vertShaders['2d-transform-textured-colored'] =
     '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
     '}';
 ;
-vertShaders['2d-transform-color'] =
-    'attribute vec2 pos;' +
+
+/*************************************************** 3D ***************************************************/
+VERTSHADERS3D["transform"] =
+    'attribute vec3 pos;' +
     'attribute vec3 col;' +
-    'attribute float angle;' +
-    'attribute float scale;' +
-    'attribute vec2 centre;' +
+    'uniform mat4 modelMatrix;' +
+    'uniform mat4 viewMatrix;' +
+    'uniform mat4 projectionMatrix;' +
     'varying vec3 Col;' +
-    'void main() {' +
+    'void main(void) {' +
     '   Col = col;' +
-    '	mat4 rot = mat4(cos(angle) * scale, -sin(angle), 0.0, 0.0, sin(angle), cos(angle) * scale, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '	mat4 tr = mat4(1.0, 0.0, 0.0, centre.x, 0.0, 1.0, 0.0, centre.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -centre.x, 0.0, 1.0, 0.0, -centre.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   gl_Position = vec4(pos, 1.0, 1.0) * tr1 * rot * tr;' +
+    '   gl_Position =  projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1.0);' +
     '}'
 ;
-
-var _addVertShader = function(name, src) {
-    vertShaders[name] = src;
-};
-
-var _getVertShader = function(name) {
-    return vertShaders[name];
-};
+VERTSHADERS3D["textured"] =
+    'attribute vec2 pos;' +
+    'attribute vec3 col;' +
+    'attribute vec2 texCoord;' +
+    'uniform mat4 modelViewMatrix;' +
+    'uniform mat4 projectionMatrix;' +
+    'varying vec3 Col;' +
+    'varying vec2 TexCoord;' +
+    'void main(void) {' +
+    '   Col = col;' +
+    '   TexCoord = texCoord;' +
+    '   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);' +
+    '}'
+;

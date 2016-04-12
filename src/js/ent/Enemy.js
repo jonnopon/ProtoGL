@@ -33,7 +33,7 @@ var Enemy = function(game) {
 
     entity.components.transform2D.angle = degToRad(angle);
 
-    entity.tick = function() {
+    entity.onUpdate = function() {
         var pos = this.components.transform2D.position;
         var dim = this.components.transform2D.dimensions;
 

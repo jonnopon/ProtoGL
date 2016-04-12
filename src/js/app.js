@@ -18,6 +18,9 @@ var init = function() {
     var initFunc = function() {
         this.initManagers();
         this.displayStats = true;
+
+        this.soundManager.addSound("point", "res/snd/collect.wav");
+        this.soundManager.addSound("hit", "res/snd/hit.wav");
         this.switchToState("menu");
     };
 
@@ -26,6 +29,9 @@ var init = function() {
     var reinitFunc = function () {
         this.initManagers();
         this.displayStats = true;
+
+        this.soundManager.addSound("point", "res/snd/collect.wav");
+        this.soundManager.addSound("hit", "res/snd/hit.wav");
         this.switchToState("game");
     };
 

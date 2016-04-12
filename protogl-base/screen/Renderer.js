@@ -208,16 +208,6 @@ var Renderer = function(gameCanvas) {
     this.viewMatrix.translate(new Vec3(0, 0, -4));
     this.modelMatrix.setAsLookAt(new Vec3(0, 0, 0), new Vec3(0, 0, -4.5), new Vec3(0, 1, 0));
 
-    this.verts['BASIC'] = {'dataPerVert':5, 'array':new Float32Array([
-        -0.5, -0.5, 0, 0, 1,
-        0.5, -0.5, 0, 1, 0,
-        0.5, 0.5, 1, 0, 0,
-
-        0.5, 0.5, 0, 1, 1,
-        -0.5, 0.5, 1, 1, 0,
-        -0.5, -0.5, 1, 1, 1
-    ])};
-
     try {
         gl = gameCanvas.getContext("webgl");
     } catch (e) {
@@ -228,27 +218,6 @@ var Renderer = function(gameCanvas) {
         alert("Could not initialise WebGL");
         return false;
     }
-
-    /* Initialise shaders with passthroughs */
-    this.shaderPrograms['BASIC'] = this.createShaderProgram(gl, _getVertShader('pass-through'), _getFragShader('pass-through'));
-    if (!this.shaderPrograms['BASIC']) {
-        alert('Failed to create shader program named BASIC');
-        return false;
-    }
-    this.activeShaderProgram = this.shaderPrograms['BASIC'];
-
-    /* Initialise vertex buffer objects + basic data (square)*/
-    this.activeVerts = this.verts['BASIC'];
-    this.vbos['BASIC'] = gl.createBuffer();
-    this.activeVBO = this.vbos['BASIC'];
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.activeVBO);
-    gl.bufferData(gl.ARRAY_BUFFER, this.activeVerts.array, gl.DYNAMIC_DRAW);
-    var posAttrib = gl.getAttribLocation(this.activeShaderProgram, 'pos');
-    gl.enableVertexAttribArray(posAttrib);
-    gl.vertexAttribPointer(posAttrib, 2, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, 0);
-    var colAttrib = gl.getAttribLocation(this.activeShaderProgram, 'col');
-    gl.enableVertexAttribArray(colAttrib);
-    gl.vertexAttribPointer(colAttrib, 3, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, 2 * 4);
 
     //initialise texture capabilities
     this.textureIdentifiers = [
