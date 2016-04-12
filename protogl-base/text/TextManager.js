@@ -18,7 +18,7 @@ var TextManager = function(game) {
 	this.renderSettings = new RendererSettings();
 	this.renderSettings.addAttribute('pos', 2);
 	this.renderSettings.addAttribute('texCoord', 2);
-    this.renderSettings.addAttribute('col', 3);
+    this.renderSettings.addAttribute('col', 4);
 	this.renderSettings.addAttribute('angle', 1);
 	this.renderSettings.addAttribute('scale', 1);
 	this.renderSettings.addAttribute('centre', 2);
@@ -80,6 +80,7 @@ TextManager.prototype.addString = function(text, align, size, pos, col, angle) {
                 r: col.x,
                 g: col.y,
                 b: col.z,
+                a: col.w,
                 angle: angle
             }
         );
@@ -128,6 +129,7 @@ TextManager.prototype.getVerts = function() {
         var r = this.strings[i].r;
         var g = this.strings[i].g;
         var b = this.strings[i].b;
+        var a = this.strings[i].a;
         var tempVerts = [];
 
         var angle = this.strings[i].angle;
@@ -138,13 +140,13 @@ TextManager.prototype.getVerts = function() {
             var v1 = this.transformedStrings[i][j].v1;
             var v2 = this.transformedStrings[i][j].v2;
             tempVerts.push([
-                startPoint.x + (fontSize * j), startPoint.y, u1, v1, r, g, b, angle, 1, stringCenter.x, stringCenter.y,
-                startPoint.x + (fontSize * j) + fontSize, startPoint.y, u2, v1, r, g, b, angle, 1, stringCenter.x, stringCenter.y,
-                startPoint.x + (fontSize * j) + fontSize, startPoint.y + fontSize, u2, v2, r, g, b, angle, 1, stringCenter.x, stringCenter.y,
+                startPoint.x + (fontSize * j), startPoint.y, u1, v1, r, g, b, a, angle, 1, stringCenter.x, stringCenter.y,
+                startPoint.x + (fontSize * j) + fontSize, startPoint.y, u2, v1, r, g, b, a, angle, 1, stringCenter.x, stringCenter.y,
+                startPoint.x + (fontSize * j) + fontSize, startPoint.y + fontSize, u2, v2, r, g, b, a, angle, 1, stringCenter.x, stringCenter.y,
 
-                startPoint.x + (fontSize * j) + fontSize, startPoint.y + fontSize, u2, v2, r, g, b, angle, 1, stringCenter.x, stringCenter.y,
-                startPoint.x + (fontSize * j), startPoint.y + fontSize, u1, v2, r, g, b, angle, 1, stringCenter.x, stringCenter.y,
-                startPoint.x + (fontSize * j), startPoint.y, u1, v1, r, g, b, angle, 1, stringCenter.x, stringCenter.y
+                startPoint.x + (fontSize * j) + fontSize, startPoint.y + fontSize, u2, v2, r, g, b, a, angle, 1, stringCenter.x, stringCenter.y,
+                startPoint.x + (fontSize * j), startPoint.y + fontSize, u1, v2, r, g, b, a, angle, 1, stringCenter.x, stringCenter.y,
+                startPoint.x + (fontSize * j), startPoint.y, u1, v1, r, g, b, a, angle, 1, stringCenter.x, stringCenter.y
             ]);
         }
         for (var k = 0; k < tempVerts.length; k++) {
@@ -163,7 +165,7 @@ TextManager.prototype.render = function() {
     }
 
     this.prepareForRendering();
-    this.renderer.addVerts('textVerts', this.getVerts(), 11);
+    this.renderer.addVerts('textVerts', this.getVerts(), 12);
     this.renderer.bufferVertsToVBO('textVerts', this.vboName);
     this.renderer.bindVBO(this.vboName);
     this.renderer.bindShaderProgram(this.shaderProgramName);

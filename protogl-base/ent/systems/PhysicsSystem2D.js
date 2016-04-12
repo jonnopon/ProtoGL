@@ -7,7 +7,7 @@ var PhysicsSystem2D = function(game) {
         var velocity = validEnts[i].components.transform2D.velocity;
         var deltaVelocity = velocity.clone();
 
-        deltaVelocity.vec2Mult(new Vec2(game.delta / 100, game.delta / 100));
+        deltaVelocity.scalarMult(game.delta / 100);
         position.addVec2(deltaVelocity);
     }
     

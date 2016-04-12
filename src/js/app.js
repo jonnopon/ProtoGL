@@ -65,8 +65,8 @@ var init = function() {
         //nothing to see here
     };
     var menuTick = function(game) {
-        game.textManager.addString("ProtoGL Demo", "center", 45, new Vec2(game.width / 2, game.height - 100), new Vec3(50, 255, 255), degToRad(0));
-        game.textManager.addString("Space to Start", "center", 45, new Vec2(game.width / 2, 100), new Vec3(255, 255, 255), degToRad(0));
+        game.textManager.addString("ProtoGL Demo", "center", 45, new Vec2(game.width / 2, game.height - 100), new Vec4(50, 255, 255, 0.5), degToRad(0));
+        game.textManager.addString("Space to Start", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
 
         if (game.keyDown(KEYS.space)) {
             game.switchToState("game");
@@ -93,26 +93,26 @@ var init = function() {
         var healthCol;
         switch (health) {
             case 1:
-                healthCol = new Vec3(255, 0, 0);
+                healthCol = new Vec4(255, 0, 0, 0.5);
                 break;
             case 2:
-                healthCol = new Vec3(255, 255, 0);
+                healthCol = new Vec4(255, 255, 0, 0.5);
                 break;
             case 3:
-                healthCol = new Vec3(0, 255, 0);
+                healthCol = new Vec4(0, 255, 0, 0.5);
                 break;
             default:
-                healthCol = new Vec3(0, 0, 0);
+                healthCol = new Vec4(0, 0, 0, 0.5);
         }
 
         game.textManager.addString("health: " + health, "left", 25, new Vec2(10, game.height - 25), healthCol, 0);
-        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec3(255, 255, 255), 0);
+        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec4(255, 255, 255, 0.5), 0);
 
         if (player.components.transform2D.velocity.x === 0 && player.components.transform2D.velocity.y === 0) {
-            game.textManager.addString("W", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 + 60), new Vec3(255, 255, 255), 0);
-            game.textManager.addString("A", "center", 25, new Vec2(game.width / 2 - 20, game.height / 2 + 20), new Vec3(255, 255, 255), 0);
-            game.textManager.addString("D", "center", 25, new Vec2(game.width / 2 + 60, game.height / 2 + 20), new Vec3(255, 255, 255), 0);
-            game.textManager.addString("S", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 - 20), new Vec3(255, 255, 255), 0);
+            game.textManager.addString("W", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 + 60), new Vec4(255, 255, 255, 0.5), 0);
+            game.textManager.addString("A", "center", 25, new Vec2(game.width / 2 - 20, game.height / 2 + 20), new Vec4(255, 255, 255, 0.5), 0);
+            game.textManager.addString("D", "center", 25, new Vec2(game.width / 2 + 60, game.height / 2 + 20), new Vec4(255, 255, 255, 0.5), 0);
+            game.textManager.addString("S", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 - 20), new Vec4(255, 255, 255, 0.5), 0);
         }
 
         if (points > 0 && points % 5 == 0) {
@@ -163,22 +163,22 @@ var init = function() {
         var healthCol;
         switch (health) {
             case 1:
-                healthCol = new Vec3(255, 0, 0);
+                healthCol = new Vec4(255, 0, 0, 0.5);
                 break;
             case 2:
-                healthCol = new Vec3(255, 255, 0);
+                healthCol = new Vec4(255, 255, 0, 0.5);
                 break;
             case 3:
-                healthCol = new Vec3(0, 255, 0);
+                healthCol = new Vec4(0, 255, 0, 0.5);
                 break;
             default:
-                healthCol = new Vec3(0, 0, 0);
+                healthCol = new Vec4(0, 0, 0, 0.5);
         }
 
         game.textManager.addString("health: " + health, "left", 25, new Vec2(10, game.height - 25), healthCol, 0);
-        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec3(255, 255, 255), 0);
-        game.textManager.addString("Paused", "center", 45, new Vec2(game.width / 2, game.height - 150), new Vec3(50, 255, 255), degToRad(0));
-        game.textManager.addString("Space to Resume", "center", 45, new Vec2(game.width / 2, 100), new Vec3(255, 255, 255), degToRad(0));
+        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec4(255, 255, 255, 0.5), 0);
+        game.textManager.addString("Paused", "center", 45, new Vec2(game.width / 2, game.height - 150), new Vec4(50, 255, 255, 0.5), degToRad(0));
+        game.textManager.addString("Space to Resume", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
 
         if (game.keyDown(KEYS.space)) {
             game.switchToState("game");
@@ -196,9 +196,9 @@ var init = function() {
         var player = game.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
         var points = player.components.points.value;
 
-        game.textManager.addString("You died!", "center", 45, new Vec2(game.width / 2, game.height - 50), new Vec3(50, 255, 255), degToRad(0));
-        game.textManager.addString("Points: " + points, "center", 55, new Vec2(game.width / 2, game.height / 2), new Vec3(255, 255, 255), 0);
-        game.textManager.addString("Space to Restart", "center", 45, new Vec2(game.width / 2, 100), new Vec3(255, 255, 255), degToRad(0));
+        game.textManager.addString("You died!", "center", 45, new Vec2(game.width / 2, game.height - 50), new Vec4(50, 255, 255, 0.5), degToRad(0));
+        game.textManager.addString("Points: " + points, "center", 55, new Vec2(game.width / 2, game.height / 2), new Vec4(255, 255, 255, 0.5), 0);
+        game.textManager.addString("Space to Restart", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
 
         if (game.keyDown(KEYS.space)) {
             game.reinit();

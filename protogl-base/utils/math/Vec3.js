@@ -17,10 +17,20 @@ Vec3.prototype.subVec3 = function(v) {
     this.y -= v.y;
     this.z -= v.z;
 };
+Vec3.scalarMult = function(s) {
+    this.x *= s;
+    this.y *= s;
+    this.z *= s;
+};
 Vec3.prototype.vec3Mult = function(v) {
     this.x *= v.x;
     this.y *= v.y;
     this.z *= v.z;
+};
+Vec3.prototype.scalarDivide = function(s) {
+    this.x /= s;
+    this.y /= s;
+    this.z /= s;
 };
 Vec3.prototype.vec3Divide = function(v) {
     this.x /= v.x;
@@ -28,6 +38,7 @@ Vec3.prototype.vec3Divide = function(v) {
     this.z /= v.z;
 };
 Vec3.prototype.scale = function(factor) {
+    //TODO this is the same as a scalar multiplication! hmmmmm
     this.x *= factor;
     this.y *= factor;
     this.z *= factor;
@@ -52,7 +63,6 @@ Vec3.prototype.negate = function() {
     this.y = -this.y;
     this.z = -this.z;
 };
-
 Vec3.prototype.invert = function() {
     this.x = 1 / this.x;
     this.y = 1 / this.y;
