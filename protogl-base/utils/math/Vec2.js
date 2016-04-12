@@ -14,15 +14,24 @@ Vec2.prototype.subVec2 = function(v) {
     this.x -= v.x;
     this.y -= v.y;
 };
+Vec2.prototype.scalarMult = function(s) {
+    this.x *= s;
+    this.y *= s;
+};
 Vec2.prototype.vec2Mult = function(v) {
     this.x *= v.x;
     this.y *= v.y;
+};
+Vec2.prototype.scalarDivide = function(s) {
+    this.x /= s;
+    this.y /= s;
 };
 Vec2.prototype.vec2Divide = function(v) {
     this.x /= v.x;
     this.y /= v.y;
 };
 Vec2.prototype.scale = function(factor) {
+    //TODO this is the same as a scalar multiplication! hmmmmm
     this.x *= factor;
     this.y *= factor;
 };

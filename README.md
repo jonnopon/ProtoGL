@@ -25,8 +25,6 @@ Not necessarily a complete list, definitely not in priority order
         - Refine and reduce currently-available library
             - 2D projection matrix (partially complete)
             - 2D matrix(3) usage in general?
-            - Update all involving colour to convert from 0-225 to 0-1 (partially complete)
-            - Transparent colouring shader should be an available option (likely to be useful for UI and such)
 - ***Text***
     - *Rendering/logic*
         - Fix bugs surrounding rotation + alignment when used together
