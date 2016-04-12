@@ -44,123 +44,103 @@ var Game = function(width, height) {
         }
     };
 
-    this.run = function(t) {
-        var game = window.game;
-        game.delta = Date.now() - game.lastLoopTime;
-        game.lastLoopTime = Date.now();
-        game.renderer.clearScreen(game.backgroundColor, false);
-        game.resizeCanvas();
-
-        if (game.displayStats) {
-            game.textManager.addString("FPS: " + Math.round((1000 / game.delta) * 10) / 10, "right", 25, new Vec2(game.width - 10, game.height - 25), new Vec3(255, 255, 255), 0);
-        }
-        game.currentState.tick();
-
-        for (var i = 0; i < game.systems.length; i++) {
-            game.systems[i](game);
-        }
-
-        game.textManager.render();
-
-        requestAnimationFrame(game.run);
-    };
-
-    this.resizeCanvas = function() {
-        this.width = this.canvas.clientWidth;
-        this.height = this.canvas.clientHeight;
-
-        if (this.canvas.width != this.width || this.canvas.height != this.height) {
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-        }
-
-        this.renderer.resize(this.canvas.width, this.canvas.height);
-    };
-
-    this.initManagers = function() {
-        this.renderer = new Renderer(this.canvas); //TODO: might change
-        this.textManager = new TextManager(this);
-        this.soundManager = new SoundManager();
-        this.entityManager = new EntityManager(this);
-    };
-
-    this.addState = function(state) {
-        this.states[state.getName()] = state;
-    };
-    
-    this.switchToState = function(name) {
-        this.currentState = this.states[name];
-        this.currentState.init();
-    };
-
-    this.addSystem = function(system) {
-        this.systems.push(system);
-    };
-
-    this.removeSystem = function(system) {
-        this.systems.splice(this.systems.indexOf(system, 1));
-    };
-
-    this.addEntity = function(e) {
-        this.entityManager.addEntity(e);
-    };
-
-    this.removeEntity = function(e) {
-        this.entityManager.removeEntity(e);
-    };
-
-    this.attach = function(name, value) {
-        this[name] = value;
-    };
-
-    this.loadAttributes = function(data) {
-        for (key in data) {
-            this[key] = data[key];
-        }
-    };
-
-    this.init = function() {
-        this.loadAttributes(this.initData);
-        this.initFunc();
-    };
-
-    this.reinit = function() {
-        this.loadAttributes(this.reinitData);
-        this.reinitFunc();
-    };
-
-    this.start = function() {
-        this.init();
-        this.run();
-    };
-
-    this.keyDown = function(keyCode) {
-        return this.keys.indexOf(keyCode) > -1;
-    };
-
-    this.setBackgroundColor = function(colorVector) {
-        this.backgroundColor = colorVector;
-    };
-
-    this.filterEntitiesByComponent = function(component) {
-        return this.entityManager.getEntsWithComponent(component);
-    };
-
-    this.filterEntitiesByComponentList = function(componentList) {
-        return this.entityManager.getEntsWithComponents(componentList);
-    };
-
-    this.filterEntitiesByTag = function(tag) {
-        return this.entityManager.getEntsWithTag(tag);
-    };
-    
-    this.getAllEntities = function() {
-        return this.entityManager.getAllEntities();    
-    };
-
-    this.clearEntities = function() {
-        this.entityManager.clearAllEntities();
-    };
-
     window.game = this;
+};
+
+Game.prototype.run = function(t) {
+    var game = window.game;
+    game.delta = Date.now() - game.lastLoopTime;
+    game.lastLoopTime = Date.now();
+    game.renderer.clearScreen(game.backgroundColor, false);
+    game.resizeCanvas();
+
+    if (game.displayStats) {
+        game.textManager.addString("FPS: " + Math.round((1000 / game.delta) * 10) / 10, "right", 25, new Vec2(game.width - 10, game.height - 25), new Vec3(255, 255, 255), 0);
+    }
+    game.currentState.tick();
+
+    for (var i = 0; i < game.systems.length; i++) {
+        game.systems[i](game);
+    }
+
+    game.textManager.render();
+
+    requestAnimationFrame(game.run);
+};
+Game.prototype.resizeCanvas = function() {
+    this.width = this.canvas.clientWidth;
+    this.height = this.canvas.clientHeight;
+
+    if (this.canvas.width != this.width || this.canvas.height != this.height) {
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+    }
+
+    this.renderer.resize(this.canvas.width, this.canvas.height);
+};
+Game.prototype.initManagers = function() {
+    this.renderer = new Renderer(this.canvas); //TODO: might change
+    this.textManager = new TextManager(this);
+    this.soundManager = new SoundManager();
+    this.entityManager = new EntityManager(this);
+};
+Game.prototype.addState = function(state) {
+    this.states[state.getName()] = state;
+};
+Game.prototype.switchToState = function(name) {
+    this.currentState = this.states[name];
+    this.currentState.init();
+};
+Game.prototype.addSystem = function(system) {
+    this.systems.push(system);
+};
+Game.prototype.removeSystem = function(system) {
+    this.systems.splice(this.systems.indexOf(system, 1));
+};
+Game.prototype.addEntity = function(e) {
+    this.entityManager.addEntity(e);
+};
+Game.prototype.removeEntity = function(e) {
+    this.entityManager.removeEntity(e);
+};
+Game.prototype.attach = function(name, value) {
+    this[name] = value;
+};
+Game.prototype.loadAttributes = function(data) {
+    for (key in data) {
+        this[key] = data[key];
+    }
+};
+Game.prototype.init = function() {
+    this.loadAttributes(this.initData);
+    this.initFunc();
+};
+Game.prototype.reinit = function() {
+    this.loadAttributes(this.reinitData);
+    this.reinitFunc();
+};
+Game.prototype.start = function() {
+    this.init();
+    this.run();
+};
+Game.prototype.keyDown = function(keyCode) {
+    return this.keys.indexOf(keyCode) > -1;
+};
+Game.prototype.setBackgroundColor = function(colorVector) {
+    this.backgroundColor = colorVector;
+};
+Game.prototype.filterEntitiesByComponent = function(component) {
+    return this.entityManager.getEntsWithComponent(component);
+};
+Game.prototype.filterEntitiesByComponentList = function(componentList) {
+    return this.entityManager.getEntsWithComponents(componentList);
+};
+Game.prototype.filterEntitiesByTag = function(tag) {
+    return this.entityManager.getEntsWithTag(tag);
+};
+Game.prototype.getAllEntities = function() {
+    return this.entityManager.getAllEntities();
+};
+Game.prototype.clearEntities = function() {
+    this.entityManager.clearAllEntities();
 };
