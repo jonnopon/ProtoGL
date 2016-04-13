@@ -14,19 +14,21 @@ var TextManager = function(game) {
     this.renderer.addShaderProgram(this.shaderProgramName, [vert, frag]);
 
     this.renderer.addVBO(this.vboName);
-
-	this.renderSettings = new RendererSettings();
-	this.renderSettings.addAttribute('pos', 2);
-	this.renderSettings.addAttribute('texCoord', 2);
-    this.renderSettings.addAttribute('col', 4);
-	this.renderSettings.addAttribute('angle', 1);
-	this.renderSettings.addAttribute('scale', 1);
-	this.renderSettings.addAttribute('centre', 2);
-	this.renderSettings.addUniform('tex', texPos);
-    this.renderSettings.addUniform('resX', game.resolution.x);
-    this.renderSettings.addUniform('resY', game.resolution.y);
-	this.renderSettings.setTextureName(this.textureName);
-	this.renderSettings.setShape(gl.TRIANGLES);
+    
+    var config = new RenderSettings();
+	config.addAttribute('pos', 2);
+	config.addAttribute('texCoord', 2);
+    config.addAttribute('col', 4);
+	config.addAttribute('angle', 1);
+	config.addAttribute('scale', 1);
+	config.addAttribute('centre', 2);
+	config.addUniform('tex', texPos);
+    config.addUniform('resX', game.resolution.x);
+    config.addUniform('resY', game.resolution.y);
+	config.setTextureName(this.textureName);
+	config.setShape(gl.TRIANGLES);
+    
+    this.renderSettings = config;
 
 	this.uvMap = {};
 	this.strings = [];
@@ -103,7 +105,7 @@ TextManager.prototype.prepareForRendering = function() {
         this.transformedStrings.push(this.convertString(stringObj));
     }
 };
-TextManager.prototype.getVerts = function() {
+TextManager.prototype.constructVerts = function() {
     var verts = [];
     for (var i = 0; i < this.transformedStrings.length; i++) {
         var fontSize = this.strings[i].fontSize;
@@ -165,7 +167,7 @@ TextManager.prototype.render = function() {
     }
 
     this.prepareForRendering();
-    this.renderer.addVerts('textVerts', this.getVerts(), 12);
+    this.renderer.addVerts('textVerts', this.constructVerts(), 12);
     this.renderer.bufferVertsToVBO('textVerts', this.vboName);
     this.renderer.bindVBO(this.vboName);
     this.renderer.bindShaderProgram(this.shaderProgramName);

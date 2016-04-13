@@ -4,7 +4,6 @@ var EntityManager = function(game) {
     this.removeList = [];
     this.addList = [];
     this.verts = [];
-    this.renderSettings = new RendererSettings();
     this.shaderProgramName = "entProgram";
     this.vboName = "entVBO";
     this.textureName = "entTex";
@@ -13,20 +12,24 @@ var EntityManager = function(game) {
 
     var texPos = this.renderer.createTexture(this.textureName, "res/img/ent.png");
 
-    //TODO: temporary - needs to be configurable/adapt to actual entities in the system
     var frag = FRAGSHADERS["textured"];
     var vert = VERTSHADERS2D["transform-textured"];
     this.renderer.addShaderProgram(this.shaderProgramName, [vert, frag]);
-    this.renderSettings.addAttribute("pos", 2);
-    this.renderSettings.addAttribute("texCoord", 2);
-    this.renderSettings.addAttribute("angle", 1);
-    this.renderSettings.addAttribute("scale", 1);
-    this.renderSettings.addAttribute("centre", 2);
-    this.renderSettings.addUniform("tex", texPos);
-    this.renderSettings.addUniform("resX", game.resolution.x);
-    this.renderSettings.addUniform("resY", game.resolution.y);
-    this.renderSettings.setShape(gl.TRIANGLES);
-    this.renderSettings.setTextureName(this.textureName);
+
+    //TODO: temporary - needs to be configurable/adapt to actual entities in the system
+    var config = new RenderSettings();
+    config.addAttribute("pos", 2);
+    config.addAttribute("texCoord", 2);
+    config.addAttribute("angle", 1);
+    config.addAttribute("scale", 1);
+    config.addAttribute("centre", 2);
+    config.addUniform("tex", texPos);
+    config.addUniform("resX", game.resolution.x);
+    config.addUniform("resY", game.resolution.y);
+    config.setShape(gl.TRIANGLES);
+    config.setTextureName(this.textureName);
+
+    this.renderSettings = config;
 };
 
 EntityManager.prototype.addEntity = function(e) {

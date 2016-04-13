@@ -4,9 +4,11 @@ var Game = function(width, height) {
     this.resolution = new Vec2(width, height);
     this.backgroundColor = new Vec3(0, 0, 0);
 
+    //TODO basic abstractions for all user-facing manager functions
     this.entityManager = null;
     this.soundManager = null;
     this.textManager = null;
+    this.userInterfaceManager = null;
     this.renderer = null;
 
     this.states = {};
