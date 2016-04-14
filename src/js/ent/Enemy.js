@@ -34,21 +34,20 @@ var Enemy = function(game) {
     entity.components.transform2D.angle = degToRad(angle);
 
     entity.onUpdate = function() {
-        var pos = this.components.transform2D.position;
-        var dim = this.components.transform2D.dimensions;
+        var transform = this.components.transform2D;
 
-        if (pos.x + dim.x < 0) {
-            pos.x = this.game.width;
+        if (transform.position.x + transform.dimensions.x < 0) {
+            transform.position.x = this.game.width;
         }
-        else if (pos.x > this.game.width) {
-            pos.x = -dim.x;
+        else if (transform.position.x > this.game.width) {
+            transform.position.x = -transform.dimensions.x;
         }
 
-        if (pos.y > this.game.height) {
-            pos.y = -dim.y;
+        if (transform.position.y > this.game.height) {
+            transform.position.y = -transform.dimensions.y;
         }
-        else if (pos.y + dim.y < 0) {
-            pos.y = this.game.height;
+        else if (transform.position.y + transform.dimensions.y < 0) {
+            transform.position.y = this.game.height;
         }
     };
 

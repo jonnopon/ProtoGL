@@ -6,9 +6,12 @@ VERTSHADERS2D["colored"] =
     'attribute vec2 pos;' +
     'attribute vec4 col;' +
     'varying vec4 Col;' +
+    'uniform int resX;' +
+    'uniform int resY;' +
     'void main() {' +
     '   Col = vec4(col.xyz * (1.0 / 255.0), col.w);' +
-    '   gl_Position = vec4(pos, 1.0, 1.0);' +
+    '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
+    '   gl_Position = vec4(cp, 1.0, 1.0);' +
     '}'
 ;
 //TODO move the matrix creation out of the shader duh

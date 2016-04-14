@@ -82,7 +82,7 @@ EntityManager.prototype.render = function() {
 
     var spriteEnts = this.getEntsWithComponents([Sprite, Transform2D]);
 
-    var vertSize = (8 * 48) * spriteEnts.length;
+    var vertSize = (8 * 6) * spriteEnts.length;
     this.verts = new Float32Array(vertSize);
     var off = 0;
 

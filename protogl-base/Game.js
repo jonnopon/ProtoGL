@@ -12,14 +12,14 @@ var Game = function(width, height) {
     this.renderer = null;
 
     this.states = {};
+
     this.currentState = null;
     this.systems = [];
-
     this.displayStats = false;
-    this.keys = [];
-    this.delta = 0;
 
+    this.delta = 0;
     this.lastLoopTime = 0;
+
     this.initData = {};
     this.reinitData = {};
     this.initFunc = null;
@@ -28,23 +28,13 @@ var Game = function(width, height) {
     this.canvas = document.getElementById("gameCanvas");
     this.canvas.width = width;
     this.canvas.height = height;
-    
-    window.onkeydown = function(event) {
-        //TODO allow for queueing similar keys? Debouncing presses rather than just ignoring same-key presses?
-        if (event.which !== KEYS.f5 && event.which !== KEYS.f12) {
-            event.preventDefault();
-            if (window.game.keys.indexOf(event.which) === -1) {
-                window.game.keys.push(event.which);
-            }
-        }
-    };
 
-    window.onkeyup = function(event) {
-        if (event.which !== KEYS.f5 && event.which !== KEYS.f12) {
-            event.preventDefault();
-            window.game.keys.splice(window.game.keys.indexOf(event.which), 1);
-        }
-    };
+    this.inputHandler = new InputHandler(this.canvas);
+    this.keys = [];
+    this.mousePos = new Vec2(0, 0);
+    this.mouseClickedPos = new Vec2(0, 0);
+    this.mouseContextClickedPos = new Vec2(0, 0);
+    this.mouseDblClickedPos = new Vec2(0, 0);
 
     window.game = this;
 };
@@ -65,6 +55,7 @@ Game.prototype.run = function(t) {
         game.systems[i](game);
     }
 
+    game.userInterfaceManager.render();
     game.textManager.render();
 
     requestAnimationFrame(game.run);
@@ -85,6 +76,7 @@ Game.prototype.initManagers = function() {
     this.textManager = new TextManager(this);
     this.soundManager = new SoundManager();
     this.entityManager = new EntityManager(this);
+    this.userInterfaceManager = new UserInterfaceManager(this);
 };
 Game.prototype.addState = function(state) {
     this.states[state.getName()] = state;
@@ -124,9 +116,6 @@ Game.prototype.reinit = function() {
 Game.prototype.start = function() {
     this.init();
     this.run();
-};
-Game.prototype.keyDown = function(keyCode) {
-    return this.keys.indexOf(keyCode) > -1;
 };
 Game.prototype.setBackgroundColor = function(colorVector) {
     this.backgroundColor = colorVector;

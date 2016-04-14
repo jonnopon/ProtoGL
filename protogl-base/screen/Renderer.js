@@ -159,16 +159,12 @@ Renderer.prototype.clearScreen = function(col, depth) {
 
 Renderer.prototype.render2D = function(rebuffer, settings) {
     gl.disable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    if (settings.textureName !== null) {
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
+    if (settings.textureName !== undefined) {
         gl.activeTexture(this.textures[settings.textureName].ident);
         gl.bindTexture(gl.TEXTURE_2D, this.textures[settings.textureName].tex);
-    }
-    else {
-        gl.disable(gl.BLEND);
     }
 
     gl.useProgram(this.activeShaderProgram);
