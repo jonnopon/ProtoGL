@@ -13,9 +13,8 @@ Not necessarily a complete list, definitely not in priority order
 
 ###Pre-Ludum-Dare Prep (priority changes/upgrades)
 - ***(new) UI***
-    - At the moment, either relatively or absolutely positioned elements
-    - Panels, text boxes, buttons will do as a starter for now
-    - *maybe* some kind of layout system?
+    - At the moment, just absolutely positioned/dimensioned elements
+    - ~~Panels~~, text boxes, buttons will do as a starter for now
 - ***Rendering***
     - *Renderer*
         - Stop assuming uniform types!
@@ -31,8 +30,7 @@ Not necessarily a complete list, definitely not in priority order
         - scrolling/animated/moving text?
         - color sequencing per character or per word?
 - ***General***
-    - Input system that handles the recording and management of all input events for polling elsewhere
-        - Click and scroll type events are an important addition to this (useful for UI)
+    - ~~Input system that handles the recording and management of all input events for polling elsewhere~~
 - ***Audio***
     - Allow for muting the game
 - ***Entity***

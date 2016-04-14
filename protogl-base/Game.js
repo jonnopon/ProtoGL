@@ -1,3 +1,4 @@
+var GAME = null; //global Game object reference, accessible from anywhere
 var Game = function(width, height) {
     this.width = width;
     this.height = height;
@@ -36,29 +37,28 @@ var Game = function(width, height) {
     this.mouseContextClickedPos = new Vec2(0, 0);
     this.mouseDblClickedPos = new Vec2(0, 0);
 
-    window.game = this;
+    GAME = this;
 };
 
 Game.prototype.run = function(t) {
-    var game = window.game;
-    game.delta = Date.now() - game.lastLoopTime;
-    game.lastLoopTime = Date.now();
-    game.renderer.clearScreen(game.backgroundColor, false);
-    game.resizeCanvas();
+    GAME.delta = Date.now() - GAME.lastLoopTime;
+    GAME.lastLoopTime = Date.now();
+    GAME.renderer.clearScreen(GAME.backgroundColor, false);
+    GAME.resizeCanvas();
 
-    if (game.displayStats) {
-        game.textManager.addString("FPS: " + Math.round((1000 / game.delta) * 10) / 10, "right", 25, new Vec2(game.width - 10, game.height - 25), new Vec3(255, 255, 255), 0);
+    if (GAME.displayStats) {
+        GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 10, GAME.height - 25), new Vec3(255, 255, 255), 0);
     }
-    game.currentState.tick();
+    GAME.currentState.tick();
 
-    for (var i = 0; i < game.systems.length; i++) {
-        game.systems[i](game);
+    for (var i = 0; i < GAME.systems.length; i++) {
+        GAME.systems[i]();
     }
 
-    game.userInterfaceManager.render();
-    game.textManager.render();
+    GAME.userInterfaceManager.render();
+    GAME.textManager.render();
 
-    requestAnimationFrame(game.run);
+    requestAnimationFrame(GAME.run);
 };
 Game.prototype.resizeCanvas = function() {
     this.width = this.canvas.clientWidth;
@@ -96,9 +96,6 @@ Game.prototype.addEntity = function(e) {
 };
 Game.prototype.removeEntity = function(e) {
     this.entityManager.removeEntity(e);
-};
-Game.prototype.attach = function(name, value) {
-    this[name] = value;
 };
 Game.prototype.loadAttributes = function(data) {
     for (key in data) {

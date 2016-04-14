@@ -18,7 +18,7 @@ var Renderer = function(gameCanvas) {
     this.activeVerts;
     this.activeShaderProgram;
     this.projectionMatrix = new Mat4();
-    this.projectionMatrix.setAsPerspective(Math.PI / 4, game.resolution.x / game.resolution.y, 1, 10);
+    this.projectionMatrix.setAsPerspective(Math.PI / 4, GAME.resolution.x / GAME.resolution.y, 1, 10);
     this.modelMatrix = new Mat4();
     this.viewMatrix = new Mat4();
     this.viewMatrix.translate(new Vec3(0, 0, -4));

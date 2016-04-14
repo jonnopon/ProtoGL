@@ -1,21 +1,15 @@
+//The init function is called on page load, and is where all your game configuration will happen (for now)
 var init = function() {
-    //Construct the Abstract Game object, setting its width and height
+    //Construct the Game object, setting its width and height in pixels
     var game = new Game(800, 600);
     game.setBackgroundColor(new Vec3(0, 0, 0));
 
-    //STEP 1: define game initial attributes in dictionary
-    var gameData = {
+    //STEP 1: attach init data to the game object (loaded upon game initialisation)
+    game.initData = {
         "lastGen": 0
     };
-
-    //STEP 2: define which attributes should reinitialise on game reset
-    var gameReinitData = {
-        "lastGen": 0
-    };
-
-    //STEP 3: define game init function
-    //this refers to game since this method will be injected
-    var initFunc = function() {
+    //STEP 2: attach initialisation function to the game (called during game.start())
+    game.initFunc = function() {
         this.initManagers();
         this.displayStats = true;
 
@@ -24,9 +18,14 @@ var init = function() {
         this.switchToState("menu");
     };
 
-    //STEP 4: define game reinit function
-    //this refers to game since this method will be injected
-    var reinitFunc = function () {
+    //STEP 3: attach reinit data to the game object (loaded upon game re-initialisation)
+    //it may be useful here, for more complex games, to leave some data unchanged on re-initialisation
+    //this is designed to allow flexible control of the game loop
+    game.reinitData = {
+        "lastGen": 0
+    };
+    //STEP 4: attach re-initialisation function to the game (called during game.reinit())
+    game.reinitFunc = function () {
         this.initManagers();
         this.displayStats = true;
 
@@ -35,59 +34,48 @@ var init = function() {
         this.switchToState("game");
     };
 
-    //STEP 6: attach init and reinit data to the Game object
-    game.attach("initData", gameData);
-    game.attach("reinitData", gameReinitData);
-
-    //STEP 7: attach init func and reinit func to Game object
-    game.attach("initFunc", initFunc);
-    game.attach("reinitFunc", reinitFunc);
-
-    //STEP 8: define global utility methods for Game
-    //this refers to game since this method will be injected
-    var genFood = function() {
-        this.addEntity(Food(this));
+    //STEP 5: attach utility functions to game - global game behaviors accessible anywhere
+    game.genFood = function() {
+        this.addEntity(Food());
     };
-    var genEnemy = function(currentPoints) {
+    game.genEnemy = function(currentPoints) {
         if (currentPoints > this.lastGen) {
-            this.addEntity(Enemy(this));
+            this.addEntity(Enemy());
         }
         this.lastGen = currentPoints;
     };
 
-    ///STEP 9: attach utility methods to Game object by name
-    game.attach("genFood", genFood);
-    game.attach("genEnemy", genEnemy);
-
-    //STEP 10: define Game State function bodies describing the initialisation and the frame of each state
-    //a state function takes the game object as its only parameter
-    var menuInit = function(game) {
+    //STEP 6: define the game states
+    //a state is a distinct segment of game functionality - like menu, the game itself, paused, dead
+    //a state has a name, an init function (called when the state is switched to) and a "tick" function (called on every frame of the state's execution)
+    //inside the function bodies, it's best to refer to the global GAME variable rather than the local variable constructed in this script here
+    var menuInit = function() {
         //nothing to see here
     };
-    var menuTick = function(game) {
-        game.textManager.addString("ProtoGL Demo", "center", 45, new Vec2(game.width / 2, game.height - 100), new Vec4(50, 255, 255, 0.5), degToRad(0));
+    var menuTick = function() {
+        GAME.textManager.addString("ProtoGL Demo", "center", 45, new Vec2(GAME.width / 2, GAME.height - 100), new Vec4(50, 255, 255, 0.5), 0);
 
-        game.textManager.addString("Space to Start", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
-        if (game.inputHandler.isKeyDown(KEYCODES.space)) {
-            game.switchToState("game");
+        GAME.textManager.addString("Space to Start", "center", 45, new Vec2(GAME.width / 2, 100), new Vec4(255, 255, 255, 0.5), 0);
+        if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
+            GAME.switchToState("game");
         }
     };
 
-    var gameInit = function(game) {
-        if (game.filterEntitiesByTag("player").length === 0) {
-            game.addEntity(Player(game));
+    var gameInit = function() {
+        if (GAME.filterEntitiesByTag("player").length === 0) {
+            GAME.addEntity(Player());
         }
-        if (game.filterEntitiesByTag("food").length === 0) {
-            game.genFood();
+        if (GAME.filterEntitiesByTag("food").length === 0) {
+            GAME.genFood();
         }
-        game.entityManager.loadEnts(); //just in case
+        GAME.entityManager.loadEnts(); //just in case
 
-        game.addSystem(PhysicsSystem2D);
-        game.addSystem(AABBCollisionSystem);
+        GAME.addSystem(PhysicsSystem2D);
+        GAME.addSystem(AABBCollisionSystem);
 
-        game.userInterfaceManager.addElement(new Panel(new Vec2(0, game.height - 85), new Vec2(250, 85), new Vec4(255, 255, 255, 0.25)));
+        GAME.userInterfaceManager.addElement(new Panel(new Vec2(0, GAME.height - 85), new Vec2(250, 85), new Vec4(255, 255, 255, 0.25)));
     };
-    var gameTick = function(game) {
+    var gameTick = function() {
         var player = game.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
         var health = player.components.health.value;
         var points = player.components.points.value;
@@ -107,40 +95,39 @@ var init = function() {
                 healthCol = new Vec4(0, 0, 0, 0.75);
         }
 
-        game.textManager.addString("health: " + health, "left", 25, new Vec2(10, game.height - 25), healthCol, 0);
-        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec4(255, 255, 255, 0.75), 0);
+        GAME.textManager.addString("health: " + health, "left", 25, new Vec2(10, GAME.height - 25), healthCol, 0);
+        GAME.textManager.addString("Points: " + points, "left", 25, new Vec2(10, GAME.height - 60), new Vec4(255, 255, 255, 0.75), 0);
 
         if (player.components.transform2D.velocity.x === 0 && player.components.transform2D.velocity.y === 0) {
-            game.textManager.addString("W", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 + 60), new Vec4(255, 255, 255, 0.5), 0);
-            game.textManager.addString("A", "center", 25, new Vec2(game.width / 2 - 20, game.height / 2 + 20), new Vec4(255, 255, 255, 0.5), 0);
-            game.textManager.addString("D", "center", 25, new Vec2(game.width / 2 + 60, game.height / 2 + 20), new Vec4(255, 255, 255, 0.5), 0);
-            game.textManager.addString("S", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 - 20), new Vec4(255, 255, 255, 0.5), 0);
+            GAME.textManager.addString("W", "center", 25, new Vec2(GAME.width / 2 + 20, GAME.height / 2 + 60), new Vec4(255, 255, 255, 0.5), 0);
+            GAME.textManager.addString("A", "center", 25, new Vec2(GAME.width / 2 - 20, GAME.height / 2 + 20), new Vec4(255, 255, 255, 0.5), 0);
+            GAME.textManager.addString("D", "center", 25, new Vec2(GAME.width / 2 + 60, GAME.height / 2 + 20), new Vec4(255, 255, 255, 0.5), 0);
+            GAME.textManager.addString("S", "center", 25, new Vec2(GAME.width / 2 + 20, GAME.height / 2 - 20), new Vec4(255, 255, 255, 0.5), 0);
         }
 
-
-        if (game.inputHandler.isKeyDown(KEYCODES.p)) {
-            game.switchToState("paused");
+        if (GAME.inputHandler.isKeyDown(KEYCODES.p)) {
+            GAME.switchToState("paused");
         }
 
         if (points > 0 && points % 5 == 0) {
-            game.genEnemy(points);
+            GAME.genEnemy(points);
         }
-        
+
         if (player.components.health.value <= 0) {
-            game.switchToState("dead");
+            GAME.switchToState("dead");
         }
 
-        game.entityManager.update();
-        game.entityManager.render();
+        GAME.entityManager.update();
+        GAME.entityManager.render();
     };
 
-    var pauseInit = function(game) {
+    var pauseInit = function() {
         //we do this simply to save processing power in states that don't require these features
-        game.removeSystem(PhysicsSystem2D);
-        game.removeSystem(AABBCollisionSystem);
+        GAME.removeSystem(PhysicsSystem2D);
+        GAME.removeSystem(AABBCollisionSystem);
     };
-    var pauseTick = function(game) {
-        var player = game.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
+    var pauseTick = function() {
+        var player = GAME.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
         var health = player.components.health.value;
         var points = player.components.points.value;
 
@@ -159,50 +146,50 @@ var init = function() {
                 healthCol = new Vec4(0, 0, 0, 0.5);
         }
 
-        game.textManager.addString("health: " + health, "left", 25, new Vec2(10, game.height - 25), healthCol, 0);
-        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec4(255, 255, 255, 0.5), 0);
-        game.textManager.addString("Paused", "center", 45, new Vec2(game.width / 2, game.height - 150), new Vec4(50, 255, 255, 0.5), degToRad(0));
-        game.textManager.addString("Space to Resume", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
+        GAME.textManager.addString("health: " + health, "left", 25, new Vec2(10, GAME.height - 25), healthCol, 0);
+        GAME.textManager.addString("Points: " + points, "left", 25, new Vec2(10, GAME.height - 60), new Vec4(255, 255, 255, 0.5), 0);
+        GAME.textManager.addString("Paused", "center", 45, new Vec2(GAME.width / 2, GAME.height - 150), new Vec4(50, 255, 255, 0.5), 0);
+        GAME.textManager.addString("Space to Resume", "center", 45, new Vec2(GAME.width / 2, 100), new Vec4(255, 255, 255, 0.5), 0);
 
-        if (game.inputHandler.isKeyDown(KEYCODES.space)) {
-            game.switchToState("game");
+        if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
+            GAME.switchToState("game");
         }
 
-        game.entityManager.render();
+        GAME.entityManager.render();
     };
 
-    var deadInit = function(game) {
+    var deadInit = function() {
         //we do this simply to save processing power in states that don't require these features
-        game.removeSystem(PhysicsSystem2D);
-        game.removeSystem(AABBCollisionSystem);
+        GAME.removeSystem(PhysicsSystem2D);
+        GAME.removeSystem(AABBCollisionSystem);
 
-        game.userInterfaceManager.clearElements();
+        GAME.userInterfaceManager.clearElements();
     };
-    var deadTick = function(game) {
-        var player = game.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
+    var deadTick = function() {
+        var player = GAME.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
         var points = player.components.points.value;
 
-        game.textManager.addString("You died!", "center", 45, new Vec2(game.width / 2, game.height - 50), new Vec4(50, 255, 255, 0.5), degToRad(0));
-        game.textManager.addString("Points: " + points, "center", 55, new Vec2(game.width / 2, game.height / 2), new Vec4(255, 255, 255, 0.5), 0);
-        game.textManager.addString("Space to Restart", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
+        GAME.textManager.addString("You died!", "center", 45, new Vec2(GAME.width / 2, GAME.height - 50), new Vec4(50, 255, 255, 0.5), 0);
+        GAME.textManager.addString("Points: " + points, "center", 55, new Vec2(GAME.width / 2, GAME.height / 2), new Vec4(255, 255, 255, 0.5), 0);
+        GAME.textManager.addString("Space to Restart", "center", 45, new Vec2(GAME.width / 2, 100), new Vec4(255, 255, 255, 0.5), 0);
 
-        if (game.inputHandler.isKeyDown(KEYCODES.space)) {
-            game.reinit();
+        if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
+            GAME.reinit();
         }
     };
 
-    //STEP 11: construct States with names
-    var menuState = new State("menu", menuInit, menuTick, game);
-    var gameState = new State("game", gameInit, gameTick, game);
-    var pauseState = new State("paused", pauseInit, pauseTick, game);
-    var deadState = new State("dead", deadInit, deadTick, game);
+    //STEP 7: Construct the states, giving them their names and their two functions
+    var menuState = new State("menu", menuInit, menuTick);
+    var gameState = new State("game", gameInit, gameTick);
+    var pauseState = new State("paused", pauseInit, pauseTick);
+    var deadState = new State("dead", deadInit, deadTick);
 
-    //STEP 12: attach States to Game object
+    //STEP 8: add the states to the game itself
     game.addState(menuState);
     game.addState(gameState);
     game.addState(pauseState);
     game.addState(deadState);
 
-    //STEP 14: start the game
+    //STEP 9: start the game!
     game.start();
 };
