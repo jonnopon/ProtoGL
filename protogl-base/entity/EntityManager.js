@@ -10,7 +10,7 @@ var EntityManager = function() {
 
     this.renderer.addVBO(this.vboName);
 
-    var texPos = this.renderer.createTexture(this.textureName, "res/img/ent.png");
+    var texPos = this.renderer.createTexture(this.textureName, "res/img/entity.png");
 
     var frag = FRAGSHADERS["textured"];
     var vert = VERTSHADERS2D["transform-textured"];
