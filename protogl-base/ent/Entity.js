@@ -1,7 +1,6 @@
-var Entity = function(tag, game) {
+var Entity = function(tag) {
     this.id = (+new Date()).toString(16) + (Math.random() * 10000000 | 0).toString(16);
     this.tag = tag;
-    this.game = game;
     this.components = {};
     this.onCollision = null;
     this.onUpdate = null;

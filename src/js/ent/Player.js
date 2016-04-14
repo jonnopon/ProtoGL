@@ -1,7 +1,7 @@
-var Player = function(game) {
-    var entity = new Entity("player", game);
+var Player = function() {
+    var entity = new Entity("player");
     entity.addComponent(new Sprite(0, 0, 0.25, 1));
-    entity.addComponent(new Transform2D(new Vec2(game.width / 2, game.height / 2), new Vec2(40, 40), new Vec2(0, 0)));
+    entity.addComponent(new Transform2D(new Vec2(GAME.width / 2, GAME.height / 2), new Vec2(40, 40), new Vec2(0, 0)));
     entity.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
     entity.addComponent(new Health(3));
     entity.addComponent(new Points());
@@ -15,35 +15,35 @@ var Player = function(game) {
         var collisionBox = this.components.AABBCollisionBox;
 
         //poll global input handler and respond as necessary
-        if (this.game.inputHandler.isKeyDown(KEYCODES.w)) {
+        if (GAME.inputHandler.isKeyDown(KEYCODES.w)) {
             transform.velocity = new Vec2(0, transform.maxVelocity.y);
             transform.angle = degToRad(180);
         }
-        else if (this.game.inputHandler.isKeyDown(KEYCODES.a)) {
+        else if (GAME.inputHandler.isKeyDown(KEYCODES.a)) {
             transform.velocity = new Vec2(-transform.maxVelocity.x, 0);
             transform.angle = degToRad(-90);
         }
-        else if (this.game.inputHandler.isKeyDown(KEYCODES.s)) {
+        else if (GAME.inputHandler.isKeyDown(KEYCODES.s)) {
             transform.velocity = new Vec2(0, -transform.maxVelocity.y);
             transform.angle = 0;
         }
-        else if (this.game.inputHandler.isKeyDown(KEYCODES.d)) {
+        else if (GAME.inputHandler.isKeyDown(KEYCODES.d)) {
             transform.velocity = new Vec2(transform.maxVelocity.x, 0);
             transform.angle = degToRad(90);
         }
 
         if (transform.position.x + transform.dimensions.x < 0) {
-            transform.position.x = this.game.width;
+            transform.position.x = GAME.width;
         }
-        else if (transform.position.x > this.game.width) {
+        else if (transform.position.x > GAME.width) {
             transform.position.x = -transform.dimensions.x;
         }
 
-        if (transform.position.y > this.game.height) {
+        if (transform.position.y > GAME.height) {
             transform.position.y = -transform.dimensions.y;
         }
         else if (transform.position.y + transform.dimensions.y < 0) {
-            transform.position.y = this.game.height;
+            transform.position.y = GAME.height;
         }
 
         if (!collisionBox.active) {
@@ -71,13 +71,13 @@ var Player = function(game) {
     entity.onCollision = function(e) {
         if (e.tag === "food") {
             this.components.points.value++;
-            this.game.soundManager.playSound("point");
+            GAME.soundManager.playSound("point");
         }
         else if (e.tag === "enemy") {
             if (this.components.AABBCollisionBox.active) {
                 this.components.health.value--;
                 this.components.AABBCollisionBox.active = false;
-                this.game.soundManager.playSound("hit");
+                GAME.soundManager.playSound("hit");
             }
         }
     };

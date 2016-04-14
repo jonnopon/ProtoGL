@@ -1,5 +1,5 @@
-var TextManager = function(game) {
-    this.renderer = game.renderer;
+var TextManager = function() {
+    this.renderer = GAME.renderer;
     this.shaderProgramName = 'textProgram';
     this.vboName = 'textVBO';
     this.textureName = 'font';
@@ -23,8 +23,8 @@ var TextManager = function(game) {
 	config.addAttribute('scale', 1);
 	config.addAttribute('centre', 2);
 	config.addUniform('tex', texPos);
-    config.addUniform('resX', game.resolution.x);
-    config.addUniform('resY', game.resolution.y);
+    config.addUniform('resX', GAME.resolution.x);
+    config.addUniform('resY', GAME.resolution.y);
 	config.setTextureName(this.textureName);
 	config.setShape(gl.TRIANGLES);
     

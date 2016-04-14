@@ -1,4 +1,4 @@
-var Enemy = function(game) {
+var Enemy = function() {
     var minVel = 30,
         maxVel = 75;
 
@@ -9,8 +9,8 @@ var Enemy = function(game) {
     var yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
     var vel = new Vec2(xVel, yVel);
 
-    var posX = randomBetween(50, game.width - 50);
-    var posY = randomBetween(50, game.height - 50);
+    var posX = randomBetween(50, GAME.width - 50);
+    var posY = randomBetween(50, GAME.height - 50);
     var pos = new Vec2(posX, posY);
 
     var angle = 180;
@@ -26,7 +26,7 @@ var Enemy = function(game) {
             break;
     }
 
-    var entity = new Entity("enemy", game);
+    var entity = new Entity("enemy", GAME);
     entity.addComponent(new Sprite(0.25, 0, 0.5, 1));
     entity.addComponent(new Transform2D(pos, new Vec2(30, 30), vel));
     entity.addComponent(new AABBCollisionBox(new Vec2(30, 30)));
@@ -37,17 +37,17 @@ var Enemy = function(game) {
         var transform = this.components.transform2D;
 
         if (transform.position.x + transform.dimensions.x < 0) {
-            transform.position.x = this.game.width;
+            transform.position.x = GAME.width;
         }
-        else if (transform.position.x > this.game.width) {
+        else if (transform.position.x > GAME.width) {
             transform.position.x = -transform.dimensions.x;
         }
 
-        if (transform.position.y > this.game.height) {
+        if (transform.position.y > GAME.height) {
             transform.position.y = -transform.dimensions.y;
         }
         else if (transform.position.y + transform.dimensions.y < 0) {
-            transform.position.y = this.game.height;
+            transform.position.y = GAME.height;
         }
     };
 

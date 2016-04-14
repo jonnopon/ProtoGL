@@ -1,5 +1,5 @@
-var PhysicsSystem2D = function(game) {
-    var validEnts = game.filterEntitiesByComponent(Transform2D);
+var PhysicsSystem2D = function() {
+    var validEnts = GAME.filterEntitiesByComponent(Transform2D);
 
     //handle 2D movement
     for (var i = 0; i < validEnts.length; i++) {
@@ -7,7 +7,7 @@ var PhysicsSystem2D = function(game) {
         var velocity = validEnts[i].components.transform2D.velocity;
         var deltaVelocity = velocity.clone();
 
-        deltaVelocity.scalarMult(game.delta / 100);
+        deltaVelocity.scalarMult(GAME.delta / 100);
         position.addVec2(deltaVelocity);
     }
     

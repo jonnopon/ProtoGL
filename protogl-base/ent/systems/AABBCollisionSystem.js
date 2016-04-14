@@ -19,8 +19,8 @@ var collides = function(e1, e2) {
     );
 };
 
-var AABBCollisionSystem = function(game) {
-    var validEnts = game.filterEntitiesByComponentList([Transform2D, AABBCollisionBox]);
+var AABBCollisionSystem = function() {
+    var validEnts = GAME.filterEntitiesByComponentList([Transform2D, AABBCollisionBox]);
     for (var i = 0; i < validEnts.length; i++) {
         for (var j = i + 1; j < validEnts.length; j++) {
 

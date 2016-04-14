@@ -1,5 +1,5 @@
-var UserInterfaceManager = function(game) {
-    this.renderer = game.renderer;
+var UserInterfaceManager = function() {
+    this.renderer = GAME.renderer;
     this.shaderProgramName = "uiProgram";
     this.vboName = "uiVBO";
     this.verts = [];
@@ -13,8 +13,8 @@ var UserInterfaceManager = function(game) {
     var config = new RenderSettings();
     config.addAttribute("pos", 2);
     config.addAttribute("col", 4);
-    config.addUniform("resX", game.resolution.x);
-    config.addUniform("resY", game.resolution.y);
+    config.addUniform("resX", GAME.resolution.x);
+    config.addUniform("resY", GAME.resolution.y);
     config.setShape(gl.TRIANGLES);
     
     this.renderSettings = config;
