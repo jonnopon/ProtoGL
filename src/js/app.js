@@ -66,9 +66,9 @@ var init = function() {
     };
     var menuTick = function(game) {
         game.textManager.addString("ProtoGL Demo", "center", 45, new Vec2(game.width / 2, game.height - 100), new Vec4(50, 255, 255, 0.5), degToRad(0));
-        game.textManager.addString("Space to Start", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
 
-        if (game.keyDown(KEYS.space)) {
+        game.textManager.addString("Space to Start", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
+        if (game.inputHandler.isKeyDown(KEYCODES.space)) {
             game.switchToState("game");
         }
     };
@@ -84,6 +84,8 @@ var init = function() {
 
         game.addSystem(PhysicsSystem2D);
         game.addSystem(AABBCollisionSystem);
+
+        game.userInterfaceManager.addElement(new Panel(new Vec2(0, game.height - 85), new Vec2(250, 85), new Vec4(255, 255, 255, 0.25)));
     };
     var gameTick = function(game) {
         var player = game.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
@@ -93,20 +95,20 @@ var init = function() {
         var healthCol;
         switch (health) {
             case 1:
-                healthCol = new Vec4(255, 0, 0, 0.5);
+                healthCol = new Vec4(255, 0, 0, 0.75);
                 break;
             case 2:
-                healthCol = new Vec4(255, 255, 0, 0.5);
+                healthCol = new Vec4(255, 255, 0, 0.75);
                 break;
             case 3:
-                healthCol = new Vec4(0, 255, 0, 0.5);
+                healthCol = new Vec4(0, 255, 0, 0.75);
                 break;
             default:
-                healthCol = new Vec4(0, 0, 0, 0.5);
+                healthCol = new Vec4(0, 0, 0, 0.75);
         }
 
         game.textManager.addString("health: " + health, "left", 25, new Vec2(10, game.height - 25), healthCol, 0);
-        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec4(255, 255, 255, 0.5), 0);
+        game.textManager.addString("Points: " + points, "left", 25, new Vec2(10, game.height - 60), new Vec4(255, 255, 255, 0.75), 0);
 
         if (player.components.transform2D.velocity.x === 0 && player.components.transform2D.velocity.y === 0) {
             game.textManager.addString("W", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 + 60), new Vec4(255, 255, 255, 0.5), 0);
@@ -115,33 +117,15 @@ var init = function() {
             game.textManager.addString("S", "center", 25, new Vec2(game.width / 2 + 20, game.height / 2 - 20), new Vec4(255, 255, 255, 0.5), 0);
         }
 
-        if (points > 0 && points % 5 == 0) {
-            game.genEnemy(points);
-        }
 
-        var maxVelX = player.components.transform2D.maxVelocity.x;
-        var maxVelY = player.components.transform2D.maxVelocity.y;
-        if (game.keyDown(KEYS.w)) {
-            player.components.transform2D.velocity = new Vec2(0, maxVelY);
-            player.components.transform2D.angle = degToRad(180);
-        }
-        else if (game.keyDown(KEYS.a)) {
-            player.components.transform2D.velocity = new Vec2(-maxVelX, 0);
-            player.components.transform2D.angle = degToRad(-90);
-        }
-        else if (game.keyDown(KEYS.s)) {
-            player.components.transform2D.velocity = new Vec2(0, -maxVelY);
-            player.components.transform2D.angle = 0;
-        }
-        else if (game.keyDown(KEYS.d)) {
-            player.components.transform2D.velocity = new Vec2(maxVelX, 0);
-            player.components.transform2D.angle = degToRad(90);
-        }
-
-        if (game.keyDown(KEYS.p)) {
+        if (game.inputHandler.isKeyDown(KEYCODES.p)) {
             game.switchToState("paused");
         }
 
+        if (points > 0 && points % 5 == 0) {
+            game.genEnemy(points);
+        }
+        
         if (player.components.health.value <= 0) {
             game.switchToState("dead");
         }
@@ -180,7 +164,7 @@ var init = function() {
         game.textManager.addString("Paused", "center", 45, new Vec2(game.width / 2, game.height - 150), new Vec4(50, 255, 255, 0.5), degToRad(0));
         game.textManager.addString("Space to Resume", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
 
-        if (game.keyDown(KEYS.space)) {
+        if (game.inputHandler.isKeyDown(KEYCODES.space)) {
             game.switchToState("game");
         }
 
@@ -191,6 +175,8 @@ var init = function() {
         //we do this simply to save processing power in states that don't require these features
         game.removeSystem(PhysicsSystem2D);
         game.removeSystem(AABBCollisionSystem);
+
+        game.userInterfaceManager.clearElements();
     };
     var deadTick = function(game) {
         var player = game.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
@@ -200,7 +186,7 @@ var init = function() {
         game.textManager.addString("Points: " + points, "center", 55, new Vec2(game.width / 2, game.height / 2), new Vec4(255, 255, 255, 0.5), 0);
         game.textManager.addString("Space to Restart", "center", 45, new Vec2(game.width / 2, 100), new Vec4(255, 255, 255, 0.5), degToRad(0));
 
-        if (game.keyDown(KEYS.space)) {
+        if (game.inputHandler.isKeyDown(KEYCODES.space)) {
             game.reinit();
         }
     };

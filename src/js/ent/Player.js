@@ -5,31 +5,46 @@ var Player = function(game) {
     entity.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
     entity.addComponent(new Health(3));
     entity.addComponent(new Points());
-    // entity.addComponent(new PlayerControlled());
 
     entity.components.transform2D.maxVelocity = new Vec2(75, 75);
     entity.components.transform2D.angle = degToRad(180);
     entity.components.AABBCollisionBox.coolDownTime = 75;
 
     entity.onUpdate = function() {
-        var pos = this.components.transform2D.position;
-        var dim = this.components.transform2D.dimensions;
-        
-        if (pos.x + dim.x < 0) {
-            pos.x = this.game.width;
-        }
-        else if (pos.x > this.game.width) {
-            pos.x = -dim.x;
-        }
-
-        if (pos.y > this.game.height) {
-            pos.y = -dim.y;
-        }
-        else if (pos.y + dim.y < 0) {
-            pos.y = this.game.height;
-        }
-
+        var transform = this.components.transform2D;
         var collisionBox = this.components.AABBCollisionBox;
+
+        //poll global input handler and respond as necessary
+        if (this.game.inputHandler.isKeyDown(KEYCODES.w)) {
+            transform.velocity = new Vec2(0, transform.maxVelocity.y);
+            transform.angle = degToRad(180);
+        }
+        else if (this.game.inputHandler.isKeyDown(KEYCODES.a)) {
+            transform.velocity = new Vec2(-transform.maxVelocity.x, 0);
+            transform.angle = degToRad(-90);
+        }
+        else if (this.game.inputHandler.isKeyDown(KEYCODES.s)) {
+            transform.velocity = new Vec2(0, -transform.maxVelocity.y);
+            transform.angle = 0;
+        }
+        else if (this.game.inputHandler.isKeyDown(KEYCODES.d)) {
+            transform.velocity = new Vec2(transform.maxVelocity.x, 0);
+            transform.angle = degToRad(90);
+        }
+
+        if (transform.position.x + transform.dimensions.x < 0) {
+            transform.position.x = this.game.width;
+        }
+        else if (transform.position.x > this.game.width) {
+            transform.position.x = -transform.dimensions.x;
+        }
+
+        if (transform.position.y > this.game.height) {
+            transform.position.y = -transform.dimensions.y;
+        }
+        else if (transform.position.y + transform.dimensions.y < 0) {
+            transform.position.y = this.game.height;
+        }
 
         if (!collisionBox.active) {
             collisionBox.coolDownTimer++;

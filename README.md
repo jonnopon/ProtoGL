@@ -9,7 +9,7 @@ Also likely where a lot of main Game object changes and Renderer changes will ta
 ----
 
 ##Rough TODO
-Not necessarily a complete list, definitely not in priority order 
+Not necessarily a complete list, definitely not in priority order
 
 ###Pre-Ludum-Dare Prep (priority changes/upgrades)
 - ***(new) UI***

@@ -1,4 +1,4 @@
-var KEYS = {
+var KEYCODES = {
     a: 65,
     b: 66,
     c: 67,
