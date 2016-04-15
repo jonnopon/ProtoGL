@@ -1,24 +1,15 @@
-var State = function(name) {
+var State = function(name, initFunc, tickFunc) {
     this.name = name;
-    this.func = null;
-    this.funcArgs = null;
+    this.initFunc = initFunc;
+    this.tickFunc = tickFunc;
+};
 
-    this.tick = function() {
-        if (this.func == null) {
-            alert("borked");
-            return;
-        }
-
-        this.func.apply(this, this.funcArgs);
-    };
-
-    this.setFunc = function(func) {
-        this.func = func;
-        this.funcArgs = Array.prototype.slice.call(arguments, 1);
-
-    };
-
-    this.getName = function() {
-        return this.name;
-    };
+State.prototype.init = function() {
+    this.initFunc();
+};
+State.prototype.tick = function() {
+    this.tickFunc();
+};
+State.prototype.getName = function() {
+    return this.name;
 };

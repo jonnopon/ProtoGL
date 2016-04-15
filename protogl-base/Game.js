@@ -1,23 +1,27 @@
+var GAME = null; //global Game object reference, accessible from anywhere
 var Game = function(width, height) {
     this.width = width;
     this.height = height;
     this.resolution = new Vec2(width, height);
+    this.backgroundColor = new Vec3(0, 0, 0);
 
-    this.eman = null;
-    this.sman = null;
-    this.renderer = null;
+    //TODO basic abstractions for all user-facing manager functions
+    this.entityManager = null;
+    this.soundManager = null;
     this.textManager = null;
+    this.userInterfaceManager = null;
+    this.renderer = null;
 
     this.states = {};
 
     this.currentState = null;
-    this.keys = [];
-    this.keyCodes = new KeyCodes();
+    this.systems = [];
+    this.displayStats = false;
+
     this.delta = 0;
-
     this.lastLoopTime = 0;
-    this.initData = {};
 
+    this.initData = {};
     this.reinitData = {};
     this.initFunc = null;
     this.reinitFunc = null;
@@ -26,112 +30,105 @@ var Game = function(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
 
-    this.displayStats = false;
+    this.inputHandler = new InputHandler(this.canvas);
+    this.keys = [];
+    this.mousePos = new Vec2(0, 0);
+    this.mouseClickedPos = new Vec2(0, 0);
+    this.mouseContextClickedPos = new Vec2(0, 0);
+    this.mouseDblClickedPos = new Vec2(0, 0);
 
-    window.onkeydown = function(event) {
-        //TODO allow for queueing similar keys? Debouncing presses rather than just ignoring same-key presses?
-        if (event.which !== window.game.keyCodes.f5 && event.which !== window.game.keyCodes.f12) {
-            event.preventDefault();
-            if (window.game.keys.indexOf(event.which) === -1) {
-                window.game.keys.push(event.which);
-            }
-        }
-    };
+    GAME = this;
+};
 
-    window.onkeyup = function(event) {
-        if (event.which !== window.game.keyCodes.f5 && event.which !== window.game.keyCodes.f12) {
-            event.preventDefault();
-            window.game.keys.splice(window.game.keys.indexOf(event.which), 1);
-        }
-    };
+Game.prototype.run = function(t) {
+    GAME.delta = Date.now() - GAME.lastLoopTime;
+    GAME.lastLoopTime = Date.now();
+    GAME.renderer.clearScreen(GAME.backgroundColor, false);
+    GAME.resizeCanvas();
 
-    this.run = function(t) {
-        var game = window.game;
-        game.delta = Date.now() - game.lastLoopTime;
-        game.lastLoopTime = Date.now();
+    if (GAME.displayStats) {
+        GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 10, GAME.height - 25), new Vec3(255, 255, 255), 0);
+    }
+    GAME.currentState.tick();
 
-        if (game.displayStats) {
-            game.textManager.addString("FPS: " + Math.round((1000 / game.delta) * 10) / 10, "right", 25, new Vec2(game.width - 10, game.height - 25), new Vec3(255, 255, 255), 0);
-        }
-
-        game.resizeCanvas();
-
-        if (game.clearScreen) {
-            game.renderer.clearScreen(new Vec3(0, 0, 0), false);
-        }
-        else {
-            game.clearScreen = true;
-        }
-
-        game.currentState.tick();
-
-        requestAnimationFrame(game.run);
-    };
-
-    this.resizeCanvas = function() {
-        this.width = this.canvas.clientWidth;
-        this.height = this.canvas.clientHeight;
-
-        if (this.canvas.width != this.width || this.canvas.height != this.height) {
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-        }
-
-        this.renderer.resize(this.canvas.width, this.canvas.height);
-    };
-
-    this.initManagers = function() {
-        this.renderer = new Renderer(this.canvas);
-        this.textManager = new TextManager(this);
-
-        //TODO can probably just put the bodies of these functions into the constructor since I'm implicitly saying here that they're part of the textUtils' setup process
-
-        this.sman = new SoundManager();
-        this.eman = new EntityManager(this);
+    for (var i = 0; i < GAME.systems.length; i++) {
+        GAME.systems[i]();
     }
 
-    this.addState = function(state) {
-        this.states[state.getName()] = state;
-    };
+    GAME.userInterfaceManager.render();
+    GAME.textManager.render();
 
-    this.activeState = function(name) {
-        this.currentState = this.states[name];
-    };
+    requestAnimationFrame(GAME.run);
+};
+Game.prototype.resizeCanvas = function() {
+    this.width = this.canvas.clientWidth;
+    this.height = this.canvas.clientHeight;
 
-    this.addEnt = function(e) {
-        this.eman.addEnt(e);
+    if (this.canvas.width != this.width || this.canvas.height != this.height) {
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
     }
 
-    this.removeEnt = function(e) {
-        this.eman.removeEnt(e);
-    };
-
-    this.loadAttributes = function(data) {
-        for (key in data) {
-            this[key] = data[key];
-        }
-    };
-
-    this.attach = function(name, value) {
-        this[name] = value;
-    };
-
-    this.init = function() {
-        this.initFunc();
-    };
-
-    this.reinit = function() {
-        this.reinitFunc();
-    };
-
-    this.start = function() {
-        this.init();
-        this.run();
-    };
-
-    this.keyDown = function(keyCode) {
-        return this.keys.indexOf(keyCode) > -1;
-    };
-
-    window.game = this;
+    this.renderer.resize(this.canvas.width, this.canvas.height);
+};
+Game.prototype.initManagers = function() {
+    this.renderer = new Renderer(this.canvas); //TODO: might change
+    this.textManager = new TextManager(this);
+    this.soundManager = new SoundManager();
+    this.entityManager = new EntityManager(this);
+    this.userInterfaceManager = new UserInterfaceManager(this);
+};
+Game.prototype.addState = function(state) {
+    this.states[state.getName()] = state;
+};
+Game.prototype.switchToState = function(name) {
+    this.currentState = this.states[name];
+    this.currentState.init();
+};
+Game.prototype.addSystem = function(system) {
+    this.systems.push(system);
+};
+Game.prototype.removeSystem = function(system) {
+    this.systems.splice(this.systems.indexOf(system, 1));
+};
+Game.prototype.addEntity = function(e) {
+    this.entityManager.addEntity(e);
+};
+Game.prototype.removeEntity = function(e) {
+    this.entityManager.removeEntity(e);
+};
+Game.prototype.loadAttributes = function(data) {
+    for (key in data) {
+        this[key] = data[key];
+    }
+};
+Game.prototype.init = function() {
+    this.loadAttributes(this.initData);
+    this.initFunc();
+};
+Game.prototype.reinit = function() {
+    this.loadAttributes(this.reinitData);
+    this.reinitFunc();
+};
+Game.prototype.start = function() {
+    this.init();
+    this.run();
+};
+Game.prototype.setBackgroundColor = function(colorVector) {
+    this.backgroundColor = colorVector;
+};
+Game.prototype.filterEntitiesByComponent = function(component) {
+    return this.entityManager.getEntsWithComponent(component);
+};
+Game.prototype.filterEntitiesByComponentList = function(componentList) {
+    return this.entityManager.getEntsWithComponents(componentList);
+};
+Game.prototype.filterEntitiesByTag = function(tag) {
+    return this.entityManager.getEntsWithTag(tag);
+};
+Game.prototype.getAllEntities = function() {
+    return this.entityManager.getAllEntities();
+};
+Game.prototype.clearEntities = function() {
+    this.entityManager.clearAllEntities();
 };

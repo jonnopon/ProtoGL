@@ -5,62 +5,53 @@ In active development. API, overall structure, engine capabilities and demo/temp
 ----
 
 ##Rough TODO
-Not necessarily a complete list, definitely not in priority order 
-
+Not necessarily a complete list, definitely not in priority order
+- ***(new) UI***
+    - buttons + textboxes (+ wrapping for Text)
+    - Textured components
+    - events for components
 - ***Rendering***
     - *Renderer*
-        - Stop assuming uniform types!
-        - Split render calls for different kinds of geometry? (future concern?)
-        - Split 2D and 3D rendering completely?
-        - Use. Element. Arrays. (where appropriate if not everywhere)
-    - *RendererSettings*
-        - Add uniform type to uniform definition (see above)
-        - Revise usefulness going forward
+        - stop assuming uniform types
+        - Improve/split out 3D capabilities
+        - Matrices need to become more prevalent
     - *Shaders*
-        - Split 2D and 3D shaders?
-        - Refine and reduce currently-available library
-            - 2D projection matrix (partially complete)
-            - 2D matrix(3) usage in general?
-            - Update all involving colour to convert from 0-225 to 0-1 (partially complete)
-            - Transparent colouring shader should be an available option (likely to be useful for UI and such)
+        - 2D projection matrix
+        - fully matrix based transformations? (knock ons for entities)
+        - 3D...everything
 - ***Text***
-    - *Rendering/logic*
-        - Fix bugs surrounding rotation + alignment when used together
-        - Redefine alignment - doesn't make much sense at the moment
-        - Allow wrapping within a given space (likely a follow-on from UI)
-        - Allow for colour sequencing per character per String?
-        - Allow somehow for scrolling/animated text
-        - Allow for moving text
-    - *Font*
-        - Support for swapping the font
-            - By current workings; would require an override texture in application as well as config of the character set in the app.js
-- ***Game***
-    - Will be updated to adapt to State changes and the component based Entity system (all as knock-ons)
-    - Support for click and scroll type input events
+    - text wrapping
+    - Fix bugs surrounding rotation + alignment when used together
+    - Redefine alignment - doesn't make much sense at the moment
+    - scrolling/animated/moving text?
+        - break the current representation of string to a list of character descriptors, lots becomes possible (color sequencing)
+    - Support for swapping the font
+        - By current workings; would require an override texture in application as well as config of the character set in the app.js
 - ***Audio***
-    - Allow for muting
-    - Potentially (if necessary) switch to using something more advanced than the JS Audio object; giving rise to:
-        - Volume control
-        - Pausing/stopping/looping sounds
+    - allow for muting the game
+    - Switch to OpenAL if possible, else find a way to achieve volume control and pausing/stopping/looping sounds, maybe positioning
 - ***Entity***
-    - Switch to a component based Entity system rather than a messy inheritance structure
-    - This is the biggest change on this list and will have knock-ons all over the place
-- ***(new) Shapes/Geometry***
-    - Define geometry for various useful shapes both 2D and 3D
-    - For use in creating UI elements as well as in defining Entities
-- ***(new) UI***
-    - Flexible system allowing for panels, buttons, text boxes, etc
-    - Basic layout systems built in? (grid/columns/etc?)
-- ***Utilities***
-    - *States*
-        - Adapt to include init and exit data/functions?
-            - Could end up better representing an entire game state; the data it operates on, how it transitions and behaves, etc
-    - *Math*
-        - Quite well fleshed out for now, but will likely require some additions and changes going forward
-            - EG: Vec4 for alpha chanel colours?
-
-
-
+    - 3D basic components
+    - figure out if you want to adapt the input system to utilise a PlayerControlled component
+    - Do some more physics-ey stuff
+    - Upgrade the manager to group entities better and correctly configure renderSettings for as few render calls as is necessary
+    - *Sprite component*
+        - change representation of sprites on an atlas to be indices so u/v coordinates can be calculated
+            - new assumption: spritesheets are a 1D row of same-size sprites - count indices from the left. Easy to fix if desired
+    - *New Animation Component*
+        - represented as alist of sprite indices (counting from left in a 1D sheet of same-size sprites) and calculated u/v coordinates
+            - EG: new Animation("walking", 15, 25) if the animation is in sprites 15 to 25 (inclusive?)
+        - "active" flag
+        - Entities should add an Animation component for every different animation
+        - Add an AnimationSystem
+            - Entities can register an "onAnimate" function that's called for every entity with an Animation system
+                - Can use this function to define animation behavior; "if walking use walking animation, if still use idle animation"
+- New shapes utility
+    - Gets the vertex lists required to build basic 3D and 3D shapes based on input data
+        - EG: *_setGeometry("square", extraAttributesPerVertex);* or *_setGeometry("cube", extraAttributesPerVertex);*
+        - Use this in EntityManager as part of the rendering preparation
+        - send a list of attribute objects; a list of attributes to repeated after the position attributes in the returned list
+              
 
 ----
 ----
