@@ -12,7 +12,7 @@ var GameState = function() {
             GAME.addSystem(PhysicsSystem2D);
             GAME.addSystem(AABBCollisionSystem);
 
-            GAME.userInterfaceManager.addElement(new Panel(new Vec2(0, GAME.height - 85), new Vec2(250, 85), new Vec4(255, 255, 255, 0.25)));
+            GAME.userInterfaceManager.addElement(new Panel(new Vec2(0, GAME.height - 85), new Vec2(275, 85), new Vec4(255, 255, 255, 0.25)));
         },
         function tick() {
             var player = GAME.filterEntitiesByTag("player")[0]; //we know there is only one player because we added it!
