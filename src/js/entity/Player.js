@@ -83,4 +83,4 @@ var Player = function() {
     };
     
     return entity;
-}
+};

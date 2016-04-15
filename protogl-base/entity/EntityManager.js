@@ -157,4 +157,3 @@ EntityManager.prototype.getAllEntities = function() {
 EntityManager.prototype.clearAllEntities = function() {
     this.ents = [];
 };
-//TODO - more utilities? CheckEntCollision might not be necessary...
