@@ -1,35 +1,26 @@
-var fragShaders = {};
-fragShaders['pass-through'] =
+var FRAGSHADERS = {};
+
+FRAGSHADERS["colored"] =
     'precision mediump float;' +
-    'varying vec3 Col;' +
+    'varying vec4 Col;' +
     'void main() {' +
-    '    gl_FragColor = vec4(Col, 1.0);' +
+    '   gl_FragColor = Col;' +
     '}'
 ;
-fragShaders['2d-textured'] =
+FRAGSHADERS["textured"] =
     'precision mediump float;' +
     'varying vec2 TexCoord;' +
     'uniform sampler2D tex;' +
     'void main() {' +
-    '    gl_FragColor = texture2D(tex, TexCoord);' +
+    '   gl_FragColor = texture2D(tex, TexCoord);' +
     '}'
 ;
-
-fragShaders['2d-textured-colored'] =
+FRAGSHADERS["textured-colored"] =
     'precision mediump float;' +
     'varying vec2 TexCoord;' +
-    'varying vec3 Col;' +
+    'varying vec4 Col;' +
     'uniform sampler2D tex;' +
     'void main() {' +
-    '   gl_FragColor = texture2D(tex, TexCoord) * vec4(Col, 1.0);' +
+    '   gl_FragColor = texture2D(tex, TexCoord) * Col;' +
     '}'
 ;
-
-
-var _addFragShader = function(name, src) {
-    fragshaders[name] = src;
-};
-
-var _getFragShader = function(name) {
-    return fragShaders[name];
-};

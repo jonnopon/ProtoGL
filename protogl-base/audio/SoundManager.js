@@ -1,11 +1,10 @@
 var SoundManager = function() {
     this.sounds = {};
+};
 
-    this.playSound = function(name) {
-		new Audio(this.sounds[name]).play();
-	};
-
-	this.addSound = function(name, location) {
-		this.sounds[name] = location;
-	};
+SoundManager.prototype.playSound = function(name) {
+	new Audio(this.sounds[name]).play();
+};
+SoundManager.prototype.addSound = function(name, location) {
+	this.sounds[name] = location;
 };
