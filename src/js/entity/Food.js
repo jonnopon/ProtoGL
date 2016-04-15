@@ -20,4 +20,4 @@ var Food = function() {
     };
 
     return entity;
-}
+};
