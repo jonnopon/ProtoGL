@@ -2,72 +2,56 @@
 A WebGL prototyping "engine" and game template - provides a sizeable, organised bed of boilerplate with a demo application serving as a template for any given project.
 In active development. API, overall structure, engine capabilities and demo/template application are fluid.
 
-##This Branch (Structural Changes)
-The place to safely gut and replace the inheritance-based entity system in favour of a data-driven component-based one.
-Also likely where a lot of main Game object changes and Renderer changes will take place, as well as the knock-ons for how the application itself must be written.
-
 ----
 
 ##Rough TODO
 Not necessarily a complete list, definitely not in priority order
-
-###Pre-Ludum-Dare Prep (priority changes/upgrades)
 - ***(new) UI***
-    - At the moment, just absolutely positioned/dimensioned elements
-    - ~~Panels~~, text boxes, buttons will do as a starter for now
+    - buttons + textboxes (+ wrapping for Text)
+    - Textured components
+    - events for components
 - ***Rendering***
     - *Renderer*
-        - Stop assuming uniform types!
-        - Improve 3D capabilities (partially done here, partially in the entity system)
-    - *RenderSettings*
-        - Add uniform type to uniform definition
+        - stop assuming uniform types
+        - Improve/split out 3D capabilities
+        - Matrices need to become more prevalent
     - *Shaders*
-        - Refine and reduce currently-available library
-            - 2D projection matrix (partially complete) + 2D matrix based transformations??
+        - 2D projection matrix
+        - fully matrix based transformations? (knock ons for entities)
+        - 3D...everything
 - ***Text***
-    - *Rendering/logic*
-        - (as part of UI) text wrapping in a given space
-        - scrolling/animated/moving text?
-        - color sequencing per character or per word?
-- ***General***
-    - ~~Input system that handles the recording and management of all input events for polling elsewhere~~
+    - text wrapping
+    - Fix bugs surrounding rotation + alignment when used together
+    - Redefine alignment - doesn't make much sense at the moment
+    - scrolling/animated/moving text?
+        - break the current representation of string to a list of character descriptors, lots becomes possible (color sequencing)
+    - Support for swapping the font
+        - By current workings; would require an override texture in application as well as config of the character set in the app.js
 - ***Audio***
-    - Allow for muting the game
+    - allow for muting the game
+    - Switch to OpenAL if possible, else find a way to achieve volume control and pausing/stopping/looping sounds, maybe positioning
 - ***Entity***
-    - Work on 3D equivalency for Transform2D and Physics2D?
-        - Will likely necessitate the introduction of some kind of *geometry* generator, starting with cubes
-    - (along with the input changes noted in this list) figure out how the PlayerControlled component is supposed to help/work
-    - Allow for Sprite animation - multiple sprite panels defined per entity?
-        - FIRST: change Sprite to requiring a "sprite slot" or similar rather than explicit u/v coordinates (look at how TextManager does its thing for help)
-        - THEN: allow a Sprite component (or a new Animation component?) to contain a range of "sprite slots"
-            - will likely require some kind of directive for when to change sprite slot and how and how quickly, etc
-            - Not gonna be simple but it needs to be done - dirty will do for now
-
-###Other (low priority/not immediately important)
-- ***Text***
-    - *Rendering/logic*
-        - Fix bugs surrounding rotation + alignment when used together
-        - Redefine alignment - doesn't make much sense at the moment
-    - *Font*
-        - Support for swapping the font
-            - By current workings; would require an override texture in application as well as config of the character set in the app.js
-- ***Audio***
-    - Potentially (if necessary) switch to using something more advanced than the JS Audio object; giving rise to:
-        - Volume control
-        - Pausing/stopping/looping/positioning sounds
-- ***Entity***
-    - Systems
-        - Physics2D
-            - Handle acceleration (to start)
-        - AABBCollisionSystem
-            - Integrate into the physics system? Seems to make sense...
-    - Components
-        - Transform2D
-            - Handle acceleration (to start)
-                - Does this belong in a new component of some kind?
-- ***(new) Shapes/Geometry***
-    - Define geometry for various useful shapes both 2D and 3D
-    - For use in creating UI elements as well as in defining Entity geometry
+    - 3D basic components
+    - figure out if you want to adapt the input system to utilise a PlayerControlled component
+    - Do some more physics-ey stuff
+    - Upgrade the manager to group entities better and correctly configure renderSettings for as few render calls as is necessary
+    - *Sprite component*
+        - change representation of sprites on an atlas to be indices so u/v coordinates can be calculated
+            - new assumption: spritesheets are a 1D row of same-size sprites - count indices from the left. Easy to fix if desired
+    - *New Animation Component*
+        - represented as alist of sprite indices (counting from left in a 1D sheet of same-size sprites) and calculated u/v coordinates
+            - EG: new Animation("walking", 15, 25) if the animation is in sprites 15 to 25 (inclusive?)
+        - "active" flag
+        - Entities should add an Animation component for every different animation
+        - Add an AnimationSystem
+            - Entities can register an "onAnimate" function that's called for every entity with an Animation system
+                - Can use this function to define animation behavior; "if walking use walking animation, if still use idle animation"
+- New shapes utility
+    - Gets the vertex lists required to build basic 3D and 3D shapes based on input data
+        - EG: *_setGeometry("square", extraAttributesPerVertex);* or *_setGeometry("cube", extraAttributesPerVertex);*
+        - Use this in EntityManager as part of the rendering preparation
+        - send a list of attribute objects; a list of attributes to repeated after the position attributes in the returned list
+              
 
 ----
 ----
