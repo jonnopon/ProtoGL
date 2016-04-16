@@ -92,6 +92,9 @@ Vec2.prototype.getDistancefromVec2 = function(v) {
 
     return Math.sqrt(x2 + y2);
 };
+Vec2.prototype.getAngleBetweenVec2 = function(v) {
+    return Math.atan2(v.y - this.y, v.x - this.x);
+};
 Vec2.prototype.str = function() {
     return 'vec3(' + this.x + ', ' + this.y + ', ' + this.z + ')';
 };
