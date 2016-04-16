@@ -5,6 +5,9 @@ var Enemy = function(type) {
     var dimensions = new Vec2();
     var pos = new Vec2();
     var points = 0;
+    var angle = 0;
+    var col = 0;
+    var mult = 0;
 
     //randomise based on type
     if (type === "square") {
@@ -15,16 +18,46 @@ var Enemy = function(type) {
         pos.x = randomBetween(dimensions.x * 2, GAME.width - dimensions.y * 2);
         pos.y = randomBetween(dimensions.y, GAME.height - dimensions.x * 2, GAME.height - dimensions.y * 2);
         points = 100;
+        mult = 0.1;
+
+        col = new Vec4(255, 0, 0, 1);
+    }
+    else if (type === "triangle") {
+        var r = Math.random();
+        var dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
+        //generate a velocity either positive or negative along a single axis only
+        var velMag = randomBetween(30, 75); //magnitude of the entity's velocity
+        var dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
+        var xVel = dir === 1 ? velMag : dir === 3 ? -velMag : 0,
+            yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
+        var velocity = new Vec2(xVel, yVel);
+        vel.x = velocity.x;
+        vel.y = velocity.y;
+
+        //set the rotation of the entity so that it points in the right direction
+        angle = dir === 0 ? 180 : dir === 1 ? 90 : dir === 2 ? 0  : -90;
+
+        //generate an initial position
+        var position = new Vec2(randomBetween(50, GAME.width - 50), randomBetween(50, GAME.height - 50));
+        pos.x = position.x;
+        pos.y = position.y;
+
+        dimensions.x = 25;
+        dimensions.y = 25;
+        points = 250;
+        mult = 0.5;
+
+        col = new Vec4(255, 165, 0, 1);
     }
 
     entity.addComponent(new Transform2D(pos, dimensions, vel));
     entity.addComponent(new AABBCollisionBox(dimensions));
     entity.addComponent(new Shape(type, dimensions, new Vec2(GAME.width / 2, GAME.height / 2)));
-    entity.addComponent(new FlatColor(new Vec4(255, 0, 0, 1)));
+    entity.addComponent(new FlatColor(col));
     entity.addComponent(new Points(points));
-    // multiplier
+    entity.addComponent(new Multiplier(mult));
 
-    entity.addComponent(new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75));
+    entity.components.transform2D.angle = degToRad(angle);
 
     entity.onUpdate = function() {
         var transform = this.components.transform2D;
@@ -32,11 +65,15 @@ var Enemy = function(type) {
         if (transform.position.x - transform.dimensions.x / 2 < 0 || transform.position.x + transform.dimensions.x / 2 > GAME.width) {
             transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
             transform.velocity.x = -transform.velocity.x;
+
+            transform.angle += degToRad(180);
         }
 
         if (transform.position.y - transform.dimensions.y / 2 < 0 || transform.position.y + transform.dimensions.y / 2 > GAME.height) {
             transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
             transform.velocity.y = -transform.velocity.y;
+
+            transform.angle -= degToRad(180);
         }
     };
 
@@ -44,6 +81,7 @@ var Enemy = function(type) {
         if (e.tag === "bullet:player") {
             GAME.removeEntity(this);
             GAME.addPoints(this.components.points.value);
+            GAME.addMultiplier(this.components.multiplier.value);
         }
         if (e.tag === "player") {
             GAME.removeEntity(this);

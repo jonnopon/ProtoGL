@@ -7,6 +7,7 @@ var Player = function() {
     entity.addComponent(new Points(0));
     entity.addComponent(new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
+    entity.addComponent(new Multiplier());
     // multiplier
 
     entity.components.AABBCollisionBox.coolDownTime = 200;
@@ -87,6 +88,7 @@ var Player = function() {
             if (this.components.health.value <= 0) {
                 GAME.switchToState("dead");
             }
+            this.components.multiplier.value = 0;
         }
     };
 

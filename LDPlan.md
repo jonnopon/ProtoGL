@@ -22,15 +22,16 @@
         - ~~direction change (rotation) very fast? (WASD)~~
         - ~~Small acceleration effect?~~
             - play with adding this back (and deceleration)
-    - Stages
-        - ~~background~~ + enemy pool
-        - Background should be a grid
+    - LevelSystem
+        - enemy pool + wave generation + keep track of maxEnemies etc
+        - ~~Background should be a grid~~
+            - (med priority) randomise a colour across the grid in a wave like pattern
             - (low priority) if time, figure out how to make a 3D net and wing it
     - Enemies
         - Square
             - ~~Just hangs around (starter enemy, slow, bounces of walls~~
-        - shoots left to right or top to bottom
-            - bounces off stage walls
+        - Triangle
+            - shoots left to right or top to bottom (med speed, bounces off walls)
         - Pentagon
             - Shoots in some pattern from its points
                 - random 2 spoke every shoot change
