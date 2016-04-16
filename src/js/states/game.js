@@ -10,6 +10,9 @@ var GameState = function() {
             if (GAME.filterEntitiesByTag("player").length === 0) {
                 GAME.addEntity(Player());
             }
+            if (GAME.filterEntitiesByTag("background").length === 0) {
+                GAME.addEntity(Background());
+            }
         },
         function tick() {
             GAME.textManager.addString("Health: ", "left", 25, new Vec2(15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);

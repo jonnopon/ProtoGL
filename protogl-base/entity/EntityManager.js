@@ -80,16 +80,17 @@ EntityManager.prototype.renderFlats = function(flatEnts) {
 
     for (var i = 0; i < Object.keys(grouped).length; i++) {
         var glShape = Object.keys(grouped)[i];
+        // var glShape = Object.keys(grouped)[i].toString();
         verts = [];
 
         for (var j = 0; j < grouped[glShape].length; j++) {
-            var e = flatEnts[j];
+            var e = grouped[glShape][j];
             var color = e.components.flatColor.color;
             var shape = e.components.shape;
             var pos = e.components.transform2D.position;
             var angle = e.components.transform2D.angle;
             var scale = e.components.transform2D.scale.x;
-            var geometryData = _getGeometry(shape.shapeName, pos, shape.dimensions);
+            var geometryData = _getGeometry(shape.shapeName, pos, shape.dimensions, false, null, 50);
             var vertList = geometryData.vertList;
 
             //shader in use - transform-colored
