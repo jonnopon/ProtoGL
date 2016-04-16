@@ -7,8 +7,18 @@ var GameState = function() {
             GAME.addSystem(PhysicsSystem2D);
             GAME.addSystem(AABBCollisionSystem);
 
-            if (GAME.filterEntitiesByTag("Player").length === 0) {
-                GAME.addEntity(Player());
+            if (GAME.filterEntitiesByTag("player").length === 0) {
+                var player1 = Player();
+                player1.removeComponent(FlatColor);
+                player1.addComponent(new Sprite(0, 0, 0.25, 1));
+                player1.components.transform2D.position = new Vec2(GAME.width / 4, GAME.height - 200);
+
+                var player2 = Player();
+
+                GAME.addEntity(player2);
+                GAME.addEntity(player1);
+
+                // GAME.entityManager.loadEnts();
             }
         },
         function tick() {

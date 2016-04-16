@@ -1,12 +1,12 @@
-Theme: Shapeshift
+#Theme: Shapeshift
 
-Game Name: Shapeshift (typical)
+#Game Name: Shapeshift (typical)
 
-Genre: Shooter (Geom Wars-esque)
+##Genre: Shooter (Geom Wars-esque)
 
-Elevator: A top-down shooter based around primary shapes where the player can shapeshift to change playstyle/power up. Neon (hopefully) palette
+##Elevator: A top-down shooter based around primary shapes where the player can shapeshift to change playstyle/power up. Neon (hopefully) palette
 
-Requirements:
+###Requirements:
     - Overall
         - How 2 Neon?
         - Shapes stuff for defining geometry + basic shapes
@@ -26,7 +26,7 @@ Requirements:
             - (low priority) if time, figure out how to make a 3D net and wing it
     - Enemies
         - Triangle
-            - Shoots towards you, bounces off stage walls
+            - Liner motion, bounces off stage walls
         - Square
             - Just hangs around (starter enemy)
         - Pentagon
