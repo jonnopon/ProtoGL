@@ -32,7 +32,7 @@ Not necessarily a complete list, definitely not in priority order
     - scrolling/animated/moving text?
         - break the current representation of string to a list of character descriptors, lots becomes possible (color sequencing)
     - Support for swapping the font
-        - By current workings; would require an override texture in application as well as config of the character set in the app.js
+        - By current workings; would require an override texture in application as well as config of the character set in the OLD.js
 - ***Audio***
     - allow for muting the game
     - Switch to OpenAL if possible, else find a way to achieve volume control and pausing/stopping/looping sounds, maybe positioning
