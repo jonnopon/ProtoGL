@@ -7,6 +7,7 @@ var PhysicsSystem2D = function() {
         var position = e.components.transform2D.position;
         var velocity = e.components.transform2D.velocity;
         var maxVelocity = e.components.transform2D.maxVelocity;
+        var deltaVelocity;
         
         if (e.components.transform2D.acceleration != null) {
             var acceleration = e.components.transform2D.acceleration;
@@ -43,6 +44,9 @@ var PhysicsSystem2D = function() {
         }
         else {
             //linear motion
+            deltaVelocity = velocity.clone();
+            deltaVelocity.scalarMult(GAME.delta / 100);
+
             position.addVec2(deltaVelocity);
         }
 

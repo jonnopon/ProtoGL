@@ -38,10 +38,10 @@
     - ShapeShift ability
         - Shapes:
             - Triangle
-                - Shoot forward (spray pattern)
+                - ~~Shoot toward mouse (spray pattern?)~~
                 - Best speed
             - Square/Rect
-                - Shoot in front and behind
+                - Shoot toward and away from mouse
                 - Moderate speed
             - Pentagon
                 - Shoot out of all 5 of your points
@@ -57,9 +57,9 @@
         - ~~acceleration~~ and deceleration
         - ~~Be represented by a Shape (new component)~~
             - ~~Therefore have to separate them in the EntityManager and assign new rendersettings etc on the fly~~
-        - Change shape - either by staight up swapping or by shrinking one and growing the new?
+        - ~~Change shape - either by staight up swapping~~ or by shrinking one and growing the new?
             - Alternative: find the math way to transform the positions (+ widths) to achieve actual animations)
-        - Shoot in any direction (probably not useful at engine level?)
+        - ~~Shoot in any direction (probably not useful at engine level?)~~
     - Controls:
         - ~~WASD (ALSO ALLOW FOR FOREIGN KEYBOARDS): move~~
         - Space: Fire
