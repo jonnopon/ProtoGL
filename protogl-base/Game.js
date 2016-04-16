@@ -48,6 +48,7 @@ Game.prototype.run = function(t) {
 
     if (GAME.displayStats) {
         GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);
+        GAME.textManager.addString("MousePos:\\n" + GAME.mousePos.str(), "Right", 25, new Vec2(GAME.width - 200, GAME.height - 65), new Vec4(255, 255, 255, 1), 0);
     }
 
     for (var i = 0; i < GAME.systems.length; i++) {

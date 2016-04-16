@@ -1,10 +1,11 @@
 var init = function() {
-    var game = new Game(800, 600);
+    var game = new Game(1024, 768);
     game.setBackgroundColor(new Vec4(0, 0, 0, 1));
 
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {
         "wave": 1,
+        "maxEnemies": 10
     };
     //STEP 2: attach initialisation function to the game (called during game.start())
     game.initFunc = function() {

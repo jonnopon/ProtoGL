@@ -13,10 +13,10 @@ var Bullet = function(owner) {
     // multiplier
 
     entity.components.transform2D.targetForwardVelocity = 100;
-    entity.components.transform2D.acceleration = new Vec2(100, 0);
+    entity.components.transform2D.acceleration = new Vec2(1000, 0);
     entity.components.transform2D.rotationalVelocity = 0;
     entity.components.transform2D.forwardVelocity = 0;
-    entity.components.transform2D.maxVelocity = new Vec2(100, 100);
+    entity.components.transform2D.maxVelocity = new Vec2(1000, 100);
 
     var target = GAME.mousePos || new Vec2(0, 0);
     var angle = target.getAngleBetweenVec2(entity.components.transform2D.position);
