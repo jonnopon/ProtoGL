@@ -49,11 +49,11 @@ Game.prototype.run = function(t) {
     if (GAME.displayStats) {
         GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 10, GAME.height - 25), new Vec3(255, 255, 255), 0);
     }
-    GAME.currentState.tick();
 
     for (var i = 0; i < GAME.systems.length; i++) {
         GAME.systems[i]();
     }
+    GAME.currentState.tick();
 
     GAME.userInterfaceManager.render();
     GAME.textManager.render();

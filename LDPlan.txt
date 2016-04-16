@@ -17,9 +17,9 @@ Requirements:
             - Hexagon?
         - Ability to grow and shrink shapes from an arbitrary centre point...would scaling work?
     - Player control
-        - direction change (rotation) very fast? (WASD)
-        - maybe mouse control?
-        - Small acceleration effect?
+        - ~~direction change (rotation) very fast? (WASD)~~
+        - ~~Small acceleration effect?~~
+            - play with this (and deceleration)
     - Stages
         - background + enemy pool
         - Background should be a grid
@@ -61,7 +61,7 @@ Requirements:
             - Alternative: find the math way to transform the positions (+ widths) to achieve actual animations)
         - Shoot in any direction (probably not useful at engine level?)
     - Controls:
-        - WASD (ALSO ALLOW FOR FOREIGN KEYBOARDS): move
+        - ~~WASD (ALSO ALLOW FOR FOREIGN KEYBOARDS): move~~
         - Space: Fire
         - B: Bomb??
     - Rules:
