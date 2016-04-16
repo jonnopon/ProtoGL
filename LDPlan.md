@@ -65,6 +65,7 @@
         - ~~Shoot in any direction (probably not useful at engine level?)~~
     - Controls:
         - ~~WASD (ALSO ALLOW FOR FOREIGN KEYBOARDS): move~~
+            - Move linearly not angled?
         - Space: Fire
         - B: Bomb??
     - Rules:

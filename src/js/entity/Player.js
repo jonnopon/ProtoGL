@@ -4,10 +4,12 @@ var Player = function() {
     entity.addComponent(new Transform2D(new Vec2(GAME.width / 2, GAME.height / 2), new Vec2(40, 40), new Vec2(0, 0)));
     entity.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
     entity.addComponent(new Health(3));
-    entity.addComponent(new Points());
+    entity.addComponent(new Points(0));
     entity.addComponent(new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
     // multiplier
+
+    entity.components.AABBCollisionBox.coolDownTime = 200;
 
     entity.components.transform2D.maxVelocity = new Vec2(100, 100);
     entity.components.transform2D.acceleration = new Vec2(0, 0);
@@ -21,6 +23,7 @@ var Player = function() {
 
     entity.onUpdate = function() {
         var transform = this.components.transform2D;
+        var collisionBox = this.components.AABBCollisionBox;
         var inputHandler = GAME.inputHandler;
 
         if (inputHandler.isKeyDown(KEYCODES.w)) {
@@ -32,12 +35,7 @@ var Player = function() {
             transform.forwardVelocity = 0; //TODO: deceleration
         }
 
-        if (inputHandler.isKeyDown(KEYCODES.a)) {
-            transform.angle += degToRad(10);
-        }
-        else if (inputHandler.isKeyDown(KEYCODES.d)) {
-            transform.angle -= degToRad(10);
-        }
+        transform.angle = transform.position.getAngleBetweenVec2(GAME.mousePos) + degToRad(90);
 
         if (inputHandler.isKeyDown(KEYCODES.e)) {
             this.components.shape = new Shape("square", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2));
@@ -59,10 +57,37 @@ var Player = function() {
         if (transform.position.y - transform.dimensions.y / 2 < 0 || transform.position.y + transform.dimensions.y / 2 > GAME.height) {
             transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
         }
+
+        if (!collisionBox.active) {
+            collisionBox.coolDownTimer++;
+
+            if (collisionBox.coolDownTimer % 4 === 0) {
+                this.removeComponent(FlatColor);
+            }
+            else {
+                if (!this.hasComponent(FlatColor)) {
+                    this.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
+                }
+            }
+
+            if (collisionBox.coolDownTimer > collisionBox.coolDownTime) {
+                collisionBox.coolDownTimer = 0;
+                collisionBox.active = true;
+                if (!this.hasComponent(FlatColor)) {
+                    this.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
+                }
+            }
+        }
     };
 
     entity.onCollision = function(e) {
-
+        if (e.tag === "enemy") {
+            this.components.AABBCollisionBox.active = false;
+            this.components.health.value--;
+            if (this.components.health.value <= 0) {
+                GAME.switchToState("dead");
+            }
+        }
     };
 
     return entity;
