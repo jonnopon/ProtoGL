@@ -5,7 +5,7 @@ var init = function() {
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {
         "wave": 1,
-        "maxEnemies": 10
+        "maxEnemies": 15
     };
     //STEP 2: attach initialisation function to the game (called during game.start())
     game.initFunc = function() {
@@ -34,12 +34,16 @@ var init = function() {
             g.lastFire = Date.now();
         }
     };
+    game.addPoints = function(p) {
+        var player = GAME.filterEntitiesByTag("player")[0];
+        player.components.points.value += p;
+    }
 
     //STEP 6: add the states to the game
     game.addState(MenuState());
     game.addState(GameState());
     game.addState(PausedState());
-    // game.addState(DeadState());
+    game.addState(DeadState());
 
     //STEP 7: start the game!
     game.start();

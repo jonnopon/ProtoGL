@@ -4,6 +4,7 @@ var Enemy = function(type) {
     var vel = new Vec2();
     var dimensions = new Vec2();
     var pos = new Vec2();
+    var points = 0;
 
     //randomise based on type
     if (type === "square") {
@@ -13,15 +14,15 @@ var Enemy = function(type) {
         dimensions.y = 15;
         pos.x = randomBetween(dimensions.x * 2, GAME.width - dimensions.y * 2);
         pos.y = randomBetween(dimensions.y, GAME.height - dimensions.x * 2, GAME.height - dimensions.y * 2);
+        points = 100;
     }
 
     entity.addComponent(new Transform2D(pos, dimensions, vel));
     entity.addComponent(new AABBCollisionBox(dimensions));
     entity.addComponent(new Shape(type, dimensions, new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(new Vec4(255, 0, 0, 1)));
+    entity.addComponent(new Points(points));
     // multiplier
-
-
 
     entity.addComponent(new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75));
 
@@ -42,7 +43,11 @@ var Enemy = function(type) {
     entity.onCollision = function(e) {
         if (e.tag === "bullet:player") {
             GAME.removeEntity(this);
-        };
+            GAME.addPoints(this.components.points.value);
+        }
+        if (e.tag === "player") {
+            GAME.removeEntity(this);
+        }
     };
 
     return entity;
