@@ -11,7 +11,7 @@ var init = function() {
         this.initManagers();
         this.displayStats = true;
 
-        this.switchToState("menu");
+        this.switchToState("game");
     };
 
     //STEP 3: attach reinit data to the game object (loaded upon game re-initialisation)
@@ -26,7 +26,13 @@ var init = function() {
     };
 
     //STEP 5: attach utility functions to game - global game behaviors accessible anywhere
-    //stuff
+    game.entityShoot = function(e, gun) {
+        var g = gun || e.components.gun;
+        if (Date.now() - g.lastFire > g.fireRate) {
+            game.addEntity(Bullet(e));
+            g.lastFire = Date.now();
+        }
+    };
 
     //STEP 6: add the states to the game
     game.addState(MenuState());

@@ -14,6 +14,14 @@ var InputHandler = function(canvas) {
         }
     };
 
+    canvas.addEventListener("mousedown", function(event) {
+        GAME.mouseDown = true;
+    });
+
+    canvas.addEventListener("mouseup", function(event) {
+        GAME.mouseDown = false;
+    });
+
     canvas.addEventListener("click", function(event) {
         GAME.mouseClickedPos = new Vec2(event.layerX, GAME.height - event.layerY);
 

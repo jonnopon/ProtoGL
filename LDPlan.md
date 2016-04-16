@@ -9,13 +9,13 @@
 ###Requirements:
     - Overall
         - How 2 Neon?
-        - Shapes stuff for defining geometry + basic shapes
-            - Triangle
-            - Square
+        - ~~Shapes stuff for defining geometry + basic shapes~~
+            - ~~Triangle~~
+            - ~~Square~~
             - Pentagon
             - Circle?
             - Hexagon?
-        - Ability to grow and shrink shapes from an arbitrary centre point...would scaling work?
+        - ~~Ability to grow and shrink shapes from an arbitrary centre point...would scaling work?~~
     - Player control
         - ~~direction change (rotation) very fast? (WASD)~~
         - ~~Small acceleration effect?~~
@@ -53,11 +53,11 @@
             - (enemy difficulty and frequency increases with multiplier also)
         - Getting hit reduces multiplier by three quarters to ensure a downgrade
     - Stuff I need entities to be able to do:
-        - Make sure rotation affects velocity vectors it should
-        - acceleration and deceleration
-        - Be represented by a Shape (new component)
-            - Therefore have to separate them in the EntityManager and assign new rendersettings etc on the fly
-        - Change shape could in this case just do an ad-hoc system whereby the current geometry is drawn shrinking and the new expands
+        - ~~Make sure rotation affects velocity vectors it should~~
+        - ~~acceleration~~ and deceleration
+        - ~~Be represented by a Shape (new component)~~
+            - ~~Therefore have to separate them in the EntityManager and assign new rendersettings etc on the fly~~
+        - Change shape - either by staight up swapping or by shrinking one and growing the new?
             - Alternative: find the math way to transform the positions (+ widths) to achieve actual animations)
         - Shoot in any direction (probably not useful at engine level?)
     - Controls:
