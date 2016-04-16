@@ -1,4 +1,4 @@
-var Bullet = function(owner) {
+var Bullet = function(owner, startAngle, target) {
     var entity = new Entity("bullet:" + owner.tag);//can differentiate bullets fired by different types of entity
     // entity.addComponent(new Sprite(0, 0, 0.25, 1)); //TODO: new Shape()
 
@@ -18,9 +18,9 @@ var Bullet = function(owner) {
     entity.components.transform2D.forwardVelocity = 0;
     entity.components.transform2D.maxVelocity = new Vec2(1000, 100);
 
-    var target = GAME.mousePos || new Vec2(0, 0);
-    var angle = target.getAngleBetweenVec2(entity.components.transform2D.position);
-    entity.components.transform2D.angle = angle + degToRad(-90); //TODO: no idea why necessary but it fixes the problem
+    var target = target || GAME.mousePos || new Vec2(0, 0);
+    var angle = target.getAngleBetweenVec2(entity.components.transform2D.position) - degToRad(90) + degToRad(startAngle);
+    entity.components.transform2D.angle = angle; //TODO: no idea why necessary but it fixes the problem
 
     entity.onUpdate = function() {
         var transform = this.components.transform2D;

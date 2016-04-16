@@ -3,14 +3,50 @@ var Player = function() {
     // entity.addComponent(new Sprite(0, 0, 0.25, 1)); //TODO: new Shape()
     entity.addComponent(new Transform2D(new Vec2(GAME.width / 2, GAME.height / 2), new Vec2(40, 40), new Vec2(0, 0)));
     entity.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
-    entity.addComponent(new Health(3));
+    entity.addComponent(new Health(6));
     entity.addComponent(new Points(0));
     entity.addComponent(new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
     entity.addComponent(new Multiplier());
-    // multiplier
 
-    entity.components.AABBCollisionBox.coolDownTime = 200;
+    var shapes = {
+        "0" : {
+            "shape": new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75, [
+                //bullet offsets
+                new Vec2(0, 0)
+            ], [
+                //starting angles
+                0
+            ])
+        },
+        "1" : {
+            "shape": new Shape("square", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 1, [
+                //bullet offsets
+                new Vec2(0, -20),
+                new Vec2(0, 20)
+            ], [
+                //starting angles
+                180, 0
+            ])
+        },
+        // "2" : {
+        //     "shape":
+        //     new Shape("pentagon", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
+        //     ""
+        // }
+
+
+
+        //
+    };
+    var currentShape = 0;
+
+    entity.addComponent(shapes[currentShape]["shape"]);
+    entity.addComponent(shapes[currentShape]["gun"]);
+
+    entity.components.AABBCollisionBox.coolDownTime = 250;
 
     entity.components.transform2D.maxVelocity = new Vec2(100, 100);
     entity.components.transform2D.acceleration = new Vec2(0, 0);
@@ -20,12 +56,18 @@ var Player = function() {
 
     entity.components.transform2D.angle = 0;
 
-    entity.addComponent(new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75));
-
     entity.onUpdate = function() {
         var transform = this.components.transform2D;
         var collisionBox = this.components.AABBCollisionBox;
         var inputHandler = GAME.inputHandler;
+        currentShape = this.components.multiplier.value > 10 ? 1 : 0;
+        var origPos = this.components.shape.center;
+        this.removeComponent(Shape);
+        this.addComponent(shapes[currentShape]["shape"]);
+        this.removeComponent(Gun);
+        this.addComponent(shapes[currentShape]["gun"]);
+
+        this.components.shape.center = origPos;
 
         if (inputHandler.isKeyDown(KEYCODES.w)) {
             transform.targetForwardVelocity = 50;
@@ -88,7 +130,7 @@ var Player = function() {
             if (this.components.health.value <= 0) {
                 GAME.switchToState("dead");
             }
-            this.components.multiplier.value = 0;
+            this.components.multiplier.value /= 4;
         }
     };
 

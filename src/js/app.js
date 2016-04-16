@@ -28,7 +28,17 @@ var init = function() {
     game.entityShoot = function(e, gun) {
         var g = gun || e.components.gun;
         if (Date.now() - g.lastFire > g.fireRate) {
-            game.addEntity(Bullet(e));
+            if (g.bulletList !== null) {
+                var actual = [];
+                for (var i = 0; i < g.bulletList.length; i++) {
+                    var bullet = Bullet(e, g.startingAngles[i]);
+                    game.addEntity(bullet);
+                }
+            }
+            else {
+                //spray somehow
+                game.addEntity(Bullet(e));
+            }
             g.lastFire = Date.now();
         }
     };
