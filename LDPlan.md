@@ -12,25 +12,28 @@
         - ~~Shapes stuff for defining geometry + basic shapes~~
             - ~~Triangle~~
             - ~~Square~~
+            - ~~Gid~~
             - Pentagon
             - Circle?
             - Hexagon?
         - ~~Ability to grow and shrink shapes from an arbitrary centre point...would scaling work?~~
+            - Doesn't work properly...
     - Player control
         - ~~direction change (rotation) very fast? (WASD)~~
         - ~~Small acceleration effect?~~
-            - play with this (and deceleration)
+            - play with adding this back (and deceleration)
     - Stages
-        - background + enemy pool
+        - ~~background~~ + enemy pool
         - Background should be a grid
             - (low priority) if time, figure out how to make a 3D net and wing it
     - Enemies
-        - Triangle
-            - Liner motion, bounces off stage walls
         - Square
-            - Just hangs around (starter enemy)
+            - ~~Just hangs around (starter enemy, slow, bounces of walls~~
+        - shoots left to right or top to bottom
+            - bounces off stage walls
         - Pentagon
             - Shoots in some pattern from its points
+                - random 2 spoke every shoot change
         - Circle?
             - Spawns and heads towards you (but does not follow you)
         - Hexagon?

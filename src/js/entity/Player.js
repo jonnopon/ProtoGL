@@ -52,17 +52,11 @@ var Player = function() {
 
         // transform.scale.x -= 0.005; //TODO: ISN'T WORKING
 
-        if (transform.position.x - transform.dimensions.x / 2 < 0) {
-            transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
-        }
-        else if (transform.position.x + transform.dimensions.x / 2 > GAME.width) {
+        if (transform.position.x - transform.dimensions.x / 2 < 0 || transform.position.x + transform.dimensions.x / 2 > GAME.width) {
             transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
         }
 
-        if (transform.position.y - transform.dimensions.y / 2 < 0) {
-            transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
-        }
-        else if (transform.position.y + transform.dimensions.y / 2 > GAME.height) {
+        if (transform.position.y - transform.dimensions.y / 2 < 0 || transform.position.y + transform.dimensions.y / 2 > GAME.height) {
             transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
         }
     };

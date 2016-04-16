@@ -16,6 +16,20 @@ var InputHandler = function(canvas) {
 
     canvas.addEventListener("mousedown", function(event) {
         GAME.mouseDown = true;
+        if (document.pointerLockElement == null) {
+            this.requestPointerLock();
+            var fullScreenFunc = this.requestFullScreen || this.mozRequestFullScreen || this.webkitRequestFullScreen;
+            // fullScreenFunc();
+            if (GAME.clientX === undefined) {
+                GAME.clientX = event.layerX;
+            }
+            if (GAME.clientY === undefined) {
+                GAME.clientY = event.layerY;
+            }
+
+        } else {
+            // document.exitPointerLock();
+        }
     });
 
     canvas.addEventListener("mouseup", function(event) {
@@ -23,7 +37,22 @@ var InputHandler = function(canvas) {
     });
 
     canvas.addEventListener("click", function(event) {
-        GAME.mouseClickedPos = new Vec2(event.layerX, GAME.height - event.layerY);
+        if (document.pointerLockElement == null) {
+            this.requestPointerLock();
+            var fullScreenFunc = this.requestFullScreen || this.mozRequestFullScreen || this.webkitRequestFullScreen;
+            // fullScreenFunc();
+            if (GAME.clientX === undefined) {
+                GAME.clientX = event.layerX;
+            }
+            if (GAME.clientY === undefined) {
+                GAME.clientY = event.layerY;
+            }
+
+        } else {
+            // document.exitPointerLock();
+        }
+
+        GAME.mouseClickedPos = GAME.mousePos;
 
         //BROADCAST CLICKED MESSAGE?
     });
@@ -36,9 +65,25 @@ var InputHandler = function(canvas) {
     });
 
     canvas.addEventListener("mousemove", function(event) {
-        GAME.mousePos = new Vec2(event.layerX, GAME.height - event.layerY);
+        if (GAME.clientX === undefined) {
+            GAME.clientX = 0;
+        }
+        if (GAME.clientY === undefined) {
+            GAME.clientY = 0;
+        }
 
-        //BROADCAST MOVED MESSAGE?
+        GAME.mousePos = new Vec2(event.layerX, GAME.height - event.layerY);
+        GAME.moveX = event.movementX;
+        GAME.moveY = event.movementY;
+        GAME.layerX = event.layerX;
+        GAME.layerY = event.layerY;
+
+        if (document.pointerLockElement) {
+            GAME.clientX += (event.movementX) || (event.webkitMovementX) || 0;
+            GAME.clientY -= (event.movementY) || (event.webkitMovementY) || 0;
+
+            GAME.mousePos = new Vec2(GAME.clientX, GAME.clientY);
+        }
     });
 
     canvas.addEventListener("dblclick", function(event) {
@@ -46,7 +91,6 @@ var InputHandler = function(canvas) {
 
         //BROADCAST DOUBLE CLICKED MESSAGE?
     });
-
 };
 
 InputHandler.prototype.isKeyDown = function(which) {
