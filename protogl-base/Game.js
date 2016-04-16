@@ -95,6 +95,9 @@ Game.prototype.removeSystem = function(system) {
 Game.prototype.addEntity = function(e) {
     this.entityManager.addEntity(e);
 };
+Game.prototype.addEntityList = function(l) {
+    this.entityManager.addEntityList(l);
+};
 Game.prototype.removeEntity = function(e) {
     this.entityManager.removeEntity(e);
 };

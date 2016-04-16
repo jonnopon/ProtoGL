@@ -1,60 +1,65 @@
 <!doctype html>
 <html>
     <head>
-        <title>ProtoGL Demo</title>
-        <link rel="stylesheet" href="css/style.css">
+        <!doctype html>
+        <html>
+        <head>
+            <title>LD35 - Theme "Shapeshift"</title>
+            <link rel="stylesheet" href="css/style.css">
 
-        <!-- ProtoGL base -->
-        <script type="text/javascript" src="protogl-base/audio/SoundManager.js"></script>
-        <script type="text/javascript" src="protogl-base/screen/shaders/_frag.js"></script>
-        <script type="text/javascript" src="protogl-base/screen/shaders/_vert.js"></script>
-        <script type="text/javascript" src="protogl-base/screen/Renderer.js"></script>
-        <script type="text/javascript" src="protogl-base/screen/RenderSettings.js"></script>
-        <script type="text/javascript" src="protogl-base/text/TextManager.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/game/State.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/game/Geometry.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/input/KeyCodes.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/math/Mat3.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/math/Mat4.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/math/UsefulMath.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/math/Vec2.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/math/Vec3.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/math/Vec4.js"></script>
-        <script type="text/javascript" src="protogl-base/Game.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/AABBCollisionBox.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/Health.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/Shape.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/FlatColor.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/Points.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/Multiplier.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/PlayerControlled.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/Sprite.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/Transform2D.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/components/Gun.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/systems/PhysicsSystem2D.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/systems/AABBCollisionSystem.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/Entity.js"></script>
-        <script type="text/javascript" src="protogl-base/entity/EntityManager.js"></script>
-        <script type="text/javascript" src="protogl-base/ui/UserInterfaceManager.js"></script>
-        <script type="text/javascript" src="protogl-base/ui/Panel.js"></script>
-        <script type="text/javascript" src="protogl-base/utils/input/InputHandler.js"></script>
+            <!-- ProtoGL base -->
+            <script type="text/javascript" src="protogl-base/audio/SoundManager.js"></script>
+            <script type="text/javascript" src="protogl-base/screen/shaders/_frag.js"></script>
+            <script type="text/javascript" src="protogl-base/screen/shaders/_vert.js"></script>
+            <script type="text/javascript" src="protogl-base/screen/Renderer.js"></script>
+            <script type="text/javascript" src="protogl-base/screen/RenderSettings.js"></script>
+            <script type="text/javascript" src="protogl-base/text/TextManager.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/game/State.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/game/Geometry.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/input/KeyCodes.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/math/Mat3.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/math/Mat4.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/math/UsefulMath.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/math/Vec2.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/math/Vec3.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/math/Vec4.js"></script>
+            <script type="text/javascript" src="protogl-base/Game.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/AABBCollisionBox.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/Health.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/Shape.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/FlatColor.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/Points.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/Multiplier.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/PlayerControlled.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/Sprite.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/Transform2D.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/components/Gun.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/systems/PhysicsSystem2D.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/systems/AABBCollisionSystem.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/Entity.js"></script>
+            <script type="text/javascript" src="protogl-base/entity/EntityManager.js"></script>
+            <script type="text/javascript" src="protogl-base/ui/UserInterfaceManager.js"></script>
+            <script type="text/javascript" src="protogl-base/ui/Panel.js"></script>
+            <script type="text/javascript" src="protogl-base/utils/input/InputHandler.js"></script>
 
-        <!-- Application -->
-        <script type="text/javascript" src="js/states/dead.js"></script>
-        <script type="text/javascript" src="js/states/game.js"></script>
-        <script type="text/javascript" src="js/states/menu.js"></script>
-        <script type="text/javascript" src="js/states/paused.js"></script>
+            <!-- Application -->
+            <script type="text/javascript" src="js/states/dead.js"></script>
+            <script type="text/javascript" src="js/states/game.js"></script>
+            <script type="text/javascript" src="js/states/menu.js"></script>
+            <script type="text/javascript" src="js/states/paused.js"></script>
 
-        <script type="text/javascript" src="js/entity/Player.js"></script>
-        <script type="text/javascript" src="js/entity/Enemy.js"></script>
-        <script type="text/javascript" src="js/entity/systems/LevelSystem.js"></script>
-        <script type="text/javascript" src="js/entity/Background.js"></script>
-        <script type="text/javascript" src="js/entity/Bullet.js"></script>
-        <script type="text/javascript" src="js/app.js"></script>
-    </head>
+            <script type="text/javascript" src="js/entity/Player.js"></script>
+            <script type="text/javascript" src="js/entity/Enemy.js"></script>
+            <script type="text/javascript" src="js/entity/systems/LevelSystem.js"></script>
+            <script type="text/javascript" src="js/entity/Background.js"></script>
+            <script type="text/javascript" src="js/entity/Bullet.js"></script>
+
+            <script type="text/javascript" src="js/app.js"></script>
+        </head>
     <body onload="init()">
         <header>
-            <h1>ProtoGL Demo Application</h1>
+            <h1>Ludum Dare #35</h1>
+            <h2>Theme: "Shapeshift"</h2>
         </header>
 
         <main>
@@ -65,7 +70,7 @@
             <h2>@jonnopon3000</h2>
             <small>
                 <strong>
-                    <a href="https://www.github.com/jonnopon3000/protoGL">Github</a>
+                    <a href="https://www.github.com/jonnopon3000/protoGL/tree/ludum-dare-35">Github</a>
                 </strong>
             </small>
         </footer>
