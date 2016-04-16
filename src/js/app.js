@@ -4,15 +4,13 @@ var init = function() {
 
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {
-        "wave": 1,
-        "maxEnemies": 15
     };
     //STEP 2: attach initialisation function to the game (called during game.start())
     game.initFunc = function() {
         this.initManagers();
         this.displayStats = true;
 
-        this.switchToState("game");
+        this.switchToState("menu");
     };
 
     //STEP 3: attach reinit data to the game object (loaded upon game re-initialisation)
@@ -23,7 +21,7 @@ var init = function() {
         this.initManagers();
         this.displayStats = true;
 
-        this.switchToState("game");
+        this.switchToState("menu");
     };
 
     //STEP 5: attach utility functions to game - global game behaviors accessible anywhere
@@ -36,7 +34,16 @@ var init = function() {
     };
     game.addPoints = function(p) {
         var player = GAME.filterEntitiesByTag("player")[0];
-        player.components.points.value += p;
+        player.components.points.value += p * player.components.multiplier.value;
+    };
+    game.addMultiplier = function(m) {
+        var player = GAME.filterEntitiesByTag("player")[0];
+        player.components.multiplier.value += m;
+
+        //shape transformations
+    };
+    game.advanceRound = function(roundNum) {
+        //maybe belongs in LevelSystem
     }
 
     //STEP 6: add the states to the game
