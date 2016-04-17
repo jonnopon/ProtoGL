@@ -9,6 +9,8 @@ var DeadState = function() {
             GAME.entityManager.clearAllEntities();
             GAME.addEntity(new Background());
             GAME.entityManager.loadEnts();
+
+            GAME.textManager.addString("Space to Restart", "center", 45, new Vec2(GAME.width / 2, 70), new Vec4(255, 255, 255, 0), 0, true, true, 150, 35, new Vec4(255, 255, 255, 1), 1);
         },
         function tick() {
             GAME.textManager.addString("You Died!", "center", 60, new Vec2(GAME.width / 2, GAME.height - 100), new Vec4(50, 255, 255, 1), 0);
@@ -16,7 +18,6 @@ var DeadState = function() {
             GAME.textManager.addString("Points: " + this.player.components.points.value, "center", 60, new Vec2(GAME.width / 2, GAME.height / 2 - 100), new Vec4(50, 255, 255, 1), 0);
             GAME.textManager.addString("Wave: " + GAME.wave, "center", 60, new Vec2(GAME.width / 2, GAME.height / 2 + 100), new Vec4(50, 255, 255, 1), 0);
 
-            GAME.textManager.addString("Space to Restart", "center", 45, new Vec2(GAME.width / 2, 65), new Vec4(255, 255, 255, 1), 0);
             if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
                 GAME.reinit();
             }
