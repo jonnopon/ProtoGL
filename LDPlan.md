@@ -8,10 +8,11 @@
 
 ###Requirements Left:
     - Overall
-        - How 2 Neon?
-        - Nicer UI
+        - ~~How 2 Neon?~~
+            - Not achieved with bloom as is necessary, out of scope for ld
+            - chose arcadey colours from a neon palette
+        - ~~Nicer UI~~
         - ~~Shapes stuff for defining geometry + basic shapes~~
-            - Pentagon
             - Hexagon?
             - Circle?
         - ~~Ability to grow and shrink shapes from an arbitrary centre point...would scaling work?~~
@@ -19,32 +20,22 @@
     - Player control
         - play with new ideas maybe; acceleration/linear motion?
     - ~~LevelSystem~~
+        - Milestone waves, replenishing health and weighing up enemy proportions given multiplier + wave
+        - Milestone waves should be designed in some way
         - (med priority) randomise a colour across the grid in a wave like pattern
         - (low priority) if time, figure out how to make a 3D net and wing it
     - Enemies
-        - ~~Pentagon~~
-            - ~~Shoots in some pattern from its points@@
         - Circle?
             - Spawns and heads towards you (but does not follow you)
         - Hexagon?
-            - Bomb? (destroys all enemies)
     - ShapeShift ability
         - Shapes:
             - ~~Triangle~~
-                - ~~Shoot toward mouse (spray pattern?)~~
                 - Best speed
             - ~~Square/Rect~~
-                - ~~Shoot toward and away from mouse~~
                 - Moderate speed
             - ~~Pentagon~~
-                - ~~Shoot out of all 5 of your points~~
-                - ~~Slow speed~~
-            - Circle?
-                - Shoot a shockwave of bullets all around?
-                - "Definitely gonna get hit" speed
-    - Stuff I need entities to be able to do:
-        - ~~acceleration~~ and deceleration
-        - **Alternative**: find the math way to transform the positions (+ widths) to achieve actual geometric animations for shape switching)
+                - Slow speed
     - Controls:
         - ~~WASD (ALSO ALLOW FOR FOREIGN KEYBOARDS): move~~
         - B: Bomb??

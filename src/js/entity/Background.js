@@ -4,7 +4,7 @@ var Background = function() {
     entity.addComponent(new Health(3));
     entity.addComponent(new Points());
     entity.addComponent(new Shape("grid", new Vec2(GAME.width - 10, GAME.height - 10), new Vec2(GAME.width / 2, GAME.height / 2)));
-    entity.addComponent(new FlatColor(new Vec4(255, 255, 255, 1)));
+    entity.addComponent(new FlatColor(new Vec4(77, 77, 255, 1)));
     // multiplier
 
     entity.onUpdate = function() {

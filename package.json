@@ -1,8 +1,8 @@
 {
-    "name": "demo",
+    "name": "sharpshifter",
     "version": "0.1.0",
     "author": "Jonno Allcock",
-    "description": "Ludum Dare game, initial test of build system",
+    "description": "Ludum Dare submission for competition number 35, theme Shapeshift",
     "devDependencies": {
         "grunt": "~0.4.5",
         "grunt-contrib-concat": "*",
