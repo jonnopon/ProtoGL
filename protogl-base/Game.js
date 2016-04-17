@@ -84,6 +84,7 @@ Game.prototype.addState = function(state) {
 };
 Game.prototype.switchToState = function(name) {
     this.currentState = this.states[name];
+    this.textManager.flushPersistentStrings();
     this.currentState.init();
 };
 Game.prototype.addSystem = function(system) {

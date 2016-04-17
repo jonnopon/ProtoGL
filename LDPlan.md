@@ -7,14 +7,10 @@
 ##Elevator: A top-down shooter based around primary shapes where the player can shapeshift to change playstyle/power up. Neon (hopefully) palette
 
 ###Requirements Left:
-    - bugs
-        - waves never end by themselves!?
-        - Fix scaling, it's borked
     - Overall
         - Sound effects
         - change how death works (clear wave reset to center of screen)
         - Even Nicer UI
-            - flashing/scaling text for events like health/mult increase/decrease
             - sub panels
             - move score and mult to top
     - ~~LevelSystem~~
