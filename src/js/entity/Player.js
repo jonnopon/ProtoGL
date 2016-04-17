@@ -3,7 +3,7 @@ var Player = function() {
     // entity.addComponent(new Sprite(0, 0, 0.25, 1)); //TODO: new Shape()
     entity.addComponent(new Transform2D(new Vec2(GAME.width / 2, GAME.height / 2), new Vec2(40, 40), new Vec2(0, 0)));
     entity.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
-    entity.addComponent(new Health(6));
+    entity.addComponent(new Health(4));
     entity.addComponent(new Points(0));
     entity.addComponent(new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(new Vec4(24, 221, 0, 1)));
