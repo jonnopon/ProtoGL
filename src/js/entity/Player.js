@@ -7,7 +7,7 @@ var Player = function() {
     entity.addComponent(new Points(0));
     entity.addComponent(new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
-    entity.addComponent(new Multiplier());
+    entity.addComponent(new Multiplier(1000));
 
     var shapes = {
         "0" : {
@@ -22,7 +22,7 @@ var Player = function() {
         },
         "1" : {
             "shape": new Shape("square", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
-            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 1, [
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 125, [
                 //bullet offsets
                 new Vec2(0, -20),
                 new Vec2(0, 20)
@@ -31,15 +31,19 @@ var Player = function() {
                 180, 0
             ])
         },
-        // "2" : {
-        //     "shape":
-        //     new Shape("pentagon", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
-        //     ""
-        // }
-
-
-
-        //
+        "2" : {
+            "shape":
+            new Shape("pentagon", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 160, [
+                //bullet offsets
+                new Vec2(0, 0),
+                new Vec2(0, 0),
+                new Vec2(0, 0),
+            ], [
+                //starting angles
+                0, -55, 55,
+            ])
+        }
     };
     var currentShape = 0;
 
@@ -60,7 +64,7 @@ var Player = function() {
         var transform = this.components.transform2D;
         var collisionBox = this.components.AABBCollisionBox;
         var inputHandler = GAME.inputHandler;
-        currentShape = this.components.multiplier.value > 10 ? 1 : 0;
+        currentShape = this.components.multiplier.value > 20 ? 2 : this.components.multiplier.value > 10 ? 1 : 0;
         var origPos = this.components.shape.center;
         this.removeComponent(Shape);
         this.addComponent(shapes[currentShape]["shape"]);
@@ -78,7 +82,15 @@ var Player = function() {
             transform.forwardVelocity = 0; //TODO: deceleration
         }
 
-        transform.angle = transform.position.getAngleBetweenVec2(GAME.mousePos) + degToRad(90);
+        transform.angle = transform.position.getAngleBetweenVec2(GAME.mousePos);
+
+        if (this.components.shape.shapeName === "pentagon") {
+            transform.forwardVelocity = -Math.abs(transform.forwardVelocity);
+            transform.angle -= degToRad(90);
+        }
+        else {
+            transform.angle += degToRad(90);
+        }
 
         if (inputHandler.isKeyDown(KEYCODES.e)) {
             this.components.shape = new Shape("square", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2));
@@ -124,7 +136,7 @@ var Player = function() {
     };
 
     entity.onCollision = function(e) {
-        if (e.tag === "enemy") {
+        if (e.tag.indexOf("enemy") > -1) {
             this.components.AABBCollisionBox.active = false;
             this.components.health.value--;
             if (this.components.health.value <= 0) {

@@ -1,4 +1,4 @@
-var Gun = function(ammo, maxAmmo, fireRate, offsetList, startingAngles) {
+var Gun = function(ammo, maxAmmo, fireRate, offsetList, startingAngles, targets) {
     this.ammo = ammo;
     this.maxAmmo = maxAmmo;
     this.fireRate = fireRate;
@@ -7,6 +7,7 @@ var Gun = function(ammo, maxAmmo, fireRate, offsetList, startingAngles) {
     this.sprayY = 0;
     this.bulletList = offsetList || null;
     this.startingAngles = startingAngles || null;
+    this.bulletTargets = targets || null;
 
     this.shoot = GAME.entityShoot;
 };

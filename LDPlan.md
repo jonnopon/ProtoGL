@@ -9,6 +9,7 @@
 ###Requirements Left:
     - Overall
         - How 2 Neon?
+        - Nicer UI
         - ~~Shapes stuff for defining geometry + basic shapes~~
             - Pentagon
             - Hexagon?
@@ -21,9 +22,8 @@
         - (med priority) randomise a colour across the grid in a wave like pattern
         - (low priority) if time, figure out how to make a 3D net and wing it
     - Enemies
-        - Pentagon
-            - Shoots in some pattern from its points
-                - random 2 spoke every shoot change
+        - ~~Pentagon~~
+            - ~~Shoots in some pattern from its points@@
         - Circle?
             - Spawns and heads towards you (but does not follow you)
         - Hexagon?
@@ -36,9 +36,9 @@
             - ~~Square/Rect~~
                 - ~~Shoot toward and away from mouse~~
                 - Moderate speed
-            - Pentagon
-                - Shoot out of all 5 of your points
-                - Slow speed
+            - ~~Pentagon~~
+                - ~~Shoot out of all 5 of your points~~
+                - ~~Slow speed~~
             - Circle?
                 - Shoot a shockwave of bullets all around?
                 - "Definitely gonna get hit" speed

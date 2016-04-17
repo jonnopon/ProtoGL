@@ -31,7 +31,7 @@ var init = function() {
             if (g.bulletList !== null) {
                 var actual = [];
                 for (var i = 0; i < g.bulletList.length; i++) {
-                    var bullet = Bullet(e, g.startingAngles[i]);
+                    var bullet = Bullet(e, g.startingAngles[i], g.bulletTargets !== null ? g.bulletTargets[i] : null);
                     game.addEntity(bullet);
                 }
             }
