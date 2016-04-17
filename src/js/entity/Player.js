@@ -116,12 +116,14 @@ var Player = function() {
         if (!collisionBox.active) {
             collisionBox.coolDownTimer++;
 
-            if (collisionBox.coolDownTimer % 4 === 0) {
+            if (collisionBox.coolDownTimer % 5 === 0 || collisionBox.coolDownTimer % 6 == 0 || collisionBox.coolDownTimer % 7 == 0) {
                 this.removeComponent(FlatColor);
+                // this.removeComponent(AABBCollisionBox);
             }
             else {
                 if (!this.hasComponent(FlatColor)) {
-                    this.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
+                    this.addComponent(new FlatColor(new Vec4(24, 221, 0, 1)));
+                    // this.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
                 }
             }
 
@@ -129,20 +131,23 @@ var Player = function() {
                 collisionBox.coolDownTimer = 0;
                 collisionBox.active = true;
                 if (!this.hasComponent(FlatColor)) {
-                    this.addComponent(new FlatColor(new Vec4(255, 0, 255, 1)));
+                    this.addComponent(new FlatColor(new Vec4(24, 221, 0, 1)));
+                    // this.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
                 }
             }
         }
     };
 
     entity.onCollision = function(e) {
-        if (e.tag.indexOf("enemy") > -1) {
-            this.components.AABBCollisionBox.active = false;
-            this.components.health.value--;
-            if (this.components.health.value <= 0) {
-                GAME.switchToState("dead");
+        if (this.components.AABBCollisionBox.active) {
+            if (e.tag.indexOf("enemy") > -1) {
+                this.components.AABBCollisionBox.active = false;
+                this.components.health.value--;
+                if (this.components.health.value <= 0) {
+                    GAME.switchToState("dead");
+                }
+                this.components.multiplier.value /= 4;
             }
-            this.components.multiplier.value /= 4;
         }
     };
 

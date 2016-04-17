@@ -35,7 +35,7 @@ var Enemy = function(type) {
         vel.y = velocity.y;
 
         //set the rotation of the entity so that it points in the right direction
-        angle = dir === 0 ? 180 : dir === 1 ? 90 : dir === 2 ? 0  : -90;
+        angle = dir === 0 ? 180 : dir === 1 ? 90 : dir === 2 ? 0 : -90;
 
         //generate an initial position
         var position = new Vec2(randomBetween(50, GAME.width - 50), randomBetween(50, GAME.height - 50));
@@ -96,7 +96,7 @@ var Enemy = function(type) {
     entity.addComponent(new Points(points));
     entity.addComponent(new Multiplier(mult));
 
-    // entity.components.transform2D.angle = degToRad(angle);
+    entity.components.transform2D.angle = degToRad(angle);
 
     entity.onUpdate = function() {
         var transform = this.components.transform2D;
@@ -131,7 +131,9 @@ var Enemy = function(type) {
             GAME.addMultiplier(this.components.multiplier.value);
         }
         if (e.tag === "player") {
-            GAME.removeEntity(this);
+            if (e.components.AABBCollisionBox.active) {
+                GAME.removeEntity(this);
+            }
         }
     };
 
