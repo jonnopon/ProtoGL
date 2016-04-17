@@ -54,6 +54,35 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
             ];
         }
     }
+    else if (name === "pentagon") {
+        vertList = [
+            new Vec2(cx, cy + hDim.y), //top
+            new Vec2(cx + hDim.x, cy), //right mid
+            new Vec2(cx, cy), //center
+
+            new Vec2(cx, cy), //center
+            new Vec2(cx + hDim.x, cy), //right mid
+            new Vec2(cx + (hDim.x / 2), cy - hDim.y), //right bottom
+
+            new Vec2(cx, cy), //center
+            new Vec2(cx + (hDim.x / 2), cy - hDim.y), //right bottom
+            new Vec2(cx - (hDim.x / 2), cy - hDim.y), //left bottom
+
+            new Vec2(cx, cy), //center
+            new Vec2(cx - (hDim.x / 2), cy - hDim.y), //left bottom
+            new Vec2(cx - hDim.x, cy), //left mid
+
+            new Vec2(cx, cy), //center
+            new Vec2(cx - hDim.x, cy), //left mid
+            new Vec2(cx, cy + hDim.y), //top
+        ];
+        glShape = gl.TRIANGLES;
+        if (texture && sprite) {
+            texList = [
+                //hmmm
+            ];
+        }
+    }
     else if (name === "grid") {
         //width, height, cellsLeft, cellsRight (or cellSizeHor, cellSizeHor)
         //var cx = pos.x;
