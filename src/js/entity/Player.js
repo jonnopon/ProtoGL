@@ -7,12 +7,12 @@ var Player = function() {
     entity.addComponent(new Points(0));
     entity.addComponent(new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(new Vec4(24, 221, 0, 1)));
-    entity.addComponent(new Multiplier(1));
+    entity.addComponent(new Multiplier(0));
 
     var shapes = {
         "0" : {
             "shape": new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
-            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75, [
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 100, [
                 //bullet offsets
                 new Vec2(0, 0)
             ], [
@@ -34,7 +34,7 @@ var Player = function() {
         "2" : {
             "shape":
             new Shape("pentagon", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
-            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 160, [
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 165, [
                 //bullet offsets
                 new Vec2(0, 0),
                 new Vec2(0, 0),
@@ -64,7 +64,13 @@ var Player = function() {
         var transform = this.components.transform2D;
         var collisionBox = this.components.AABBCollisionBox;
         var inputHandler = GAME.inputHandler;
-        currentShape = this.components.multiplier.value > 20 ? 2 : this.components.multiplier.value > 10 ? 1 : 0;
+
+        var newShape = this.components.multiplier.value > 12.5 ? 2 : this.components.multiplier.value > 7.5 ? 1 : 0;
+        if (newShape !== currentShape) {
+            collisionBox.active = false;
+        }
+        currentShape = newShape;
+
         var origPos = this.components.shape.center;
         this.removeComponent(Shape);
         this.addComponent(shapes[currentShape]["shape"]);
@@ -92,16 +98,14 @@ var Player = function() {
             transform.angle += degToRad(90);
         }
 
-        if (inputHandler.isKeyDown(KEYCODES.e)) {
-            this.components.shape = new Shape("square", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2));
-        }
-        if (inputHandler.isKeyDown(KEYCODES.r)) {
-            this.components.shape = new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2));
+        if (this.components.health.value > this.components.health.maxValue) {
+            this.components.health.value = this.components.health.maxValue;
         }
 
-        if (inputHandler.isKeyDown(KEYCODES.space)) {
-            this.components.gun.shoot(this, this.components.gun);
-        };
+        // if (inputHandler.isKeyDown(KEYCODES.space)) {
+        //     var enemies = GAME.filterEntitiesByTag("enemy");
+        //     GAME.entityManager.removeEntityList(enemies);
+        // }
 
         // transform.scale.x -= 0.005; //TODO: ISN'T WORKING
 

@@ -105,7 +105,7 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
             vertList = vertList.concat(lineVerts);
         }
         
-        //TODO: KEEP THIS FOR POTENTIAL COOL BOMB RIPPLE EFFECT?
+        // //TODO: KEEP THIS FOR POTENTIAL COOL BOMB RIPPLE EFFECT?
         // var cellsHor = dimensions.x / cellSize;
         // glShape = gl.LINES;
         // for (var i = 0; i < dim.x; i += dimensions.x / cellsHor) {
