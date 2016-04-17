@@ -6,35 +6,34 @@ var Enemy = function(type) {
     var pos = new Vec2();
     var points = 0;
     var angle = 0;
-    var col = new Vec4(0, 0, 0, 1)
+    var col = new Vec4(0, 0, 0, 0);
     var mult = 0;
+
+    var init = false;
+    var dir = 0;
+    var r = Math.random();
+
+    var spawnDelay = randomBetween(0, 120);
+    var framesAlive = 0;
+    var spawned = false;
 
     //randomise based on type
     if (type === "square") {
-        vel.x = randomBetween(-25, 25);
-        vel.y = randomBetween(-25, 25);
+        dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
+
         dimensions.x = 15;
         dimensions.y = 15;
-        pos.x = randomBetween(dimensions.x * 2, GAME.width - dimensions.y * 2);
-        pos.y = randomBetween(dimensions.y, GAME.height - dimensions.x * 2, GAME.height - dimensions.y * 2);
+        var position = new Vec2(randomBetween(50, GAME.width - 50), randomBetween(50, GAME.height - 50));
+        pos.x = position.x;
+        pos.y = position.y;
+
         points = 100;
         mult = 0.1;
 
-        col = new Vec4(252, 130, 195, 1);
+        col = new Vec4(252, 130, 195, 0);
     }
     else if (type === "triangle") {
-        var r = Math.random();
-        var dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
-        //generate a velocity either positive or negative along a single axis only
-        var velMag = randomBetween(30, 75); //magnitude of the entity's velocity
-        var dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
-        var xVel = dir === 1 ? velMag : dir === 3 ? -velMag : 0,
-            yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
-        var velocity = new Vec2(xVel, yVel);
-        vel.x = velocity.x;
-        vel.y = velocity.y;
-
-        //set the rotation of the entity so that it points in the right direction
+        dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
         angle = dir === 0 ? 180 : dir === 1 ? 90 : dir === 2 ? 0 : -90;
 
         //generate an initial position
@@ -47,20 +46,9 @@ var Enemy = function(type) {
         points = 250;
         mult = 0.5;
 
-        col = new Vec4(225, 200, 41, 1);
+        col = new Vec4(225, 200, 41, 0);
     }
     else if (type === "pentagon") {
-        var r = Math.random();
-        var dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
-        //generate a velocity either positive or negative along a single axis only
-        var velMag = randomBetween(30, 75); //magnitude of the entity's velocity
-        var dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
-        var xVel = dir === 1 ? velMag : dir === 3 ? -velMag : 0,
-            yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
-        var velocity = new Vec2(xVel, yVel);
-        vel.x = 0;
-        vel.y = 0;
-
         //generate an initial position
         var position = new Vec2(randomBetween(50, GAME.width - 50), randomBetween(50, GAME.height - 50));
         pos.x = position.x;
@@ -71,7 +59,7 @@ var Enemy = function(type) {
         points = 250;
         mult = 0.5;
 
-        col = new Vec4(47, 181, 243, 1);
+        col = new Vec4(47, 181, 243, 0);
 
         entity.addComponent(new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 625, [
             //bullet offsets
@@ -90,7 +78,6 @@ var Enemy = function(type) {
     };
 
     entity.addComponent(new Transform2D(pos, dimensions, vel));
-    entity.addComponent(new AABBCollisionBox(dimensions));
     entity.addComponent(new Shape(type, dimensions, pos));
     entity.addComponent(new FlatColor(col));
     entity.addComponent(new Points(points));
@@ -101,27 +88,64 @@ var Enemy = function(type) {
     entity.onUpdate = function() {
         var transform = this.components.transform2D;
 
-        if (transform.position.x - transform.dimensions.x / 2 < 0 || transform.position.x + transform.dimensions.x / 2 > GAME.width) {
-            transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
-            transform.velocity.x = -transform.velocity.x;
-
-            transform.angle += degToRad(180);
+        if (framesAlive < spawnDelay) {
+            framesAlive++;
+            return;
         }
-
-        if (transform.position.y - transform.dimensions.y / 2 < 0 || transform.position.y + transform.dimensions.y / 2 > GAME.height) {
-            transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
-            transform.velocity.y = -transform.velocity.y;
-
-            transform.angle -= degToRad(180);
-        }
-
-        if (type === "pentagon") {
-            this.components.transform2D.angle += degToRad(1);
-            for (var i = 0; i < this.components.gun.startingAngles.length; i++) {
-                this.components.gun.startingAngles[i] += 1;
+        else {
+            var color = this.components.flatColor.color;
+            if (color.w < 1) {
+                color.w += 0.02;
             }
-            this.components.gun.shoot(this, this.components.gun);
-        };
+            else {
+                if (!init) {
+                    init = true;
+
+                    if (type === "triangle") {
+                        var velMag = randomBetween(30, 75);
+                        var xVel = dir === 1 ? velMag : dir === 3 ? -velMag : 0,
+                            yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
+                        var velocity = new Vec2(xVel, yVel);
+                        vel.x = velocity.x;
+                        vel.y = velocity.y;
+                    }
+                    else if (type === "square") {
+                        vel.x = randomBetween(-25, 25);
+                        vel.y = randomBetween(-25, 25);
+                        points = 100;
+                        mult = 0.1;
+                    }
+                }
+
+                color.w = 1;
+                if (!this.components.AABBCollisionBox) {
+                    this.addComponent(new AABBCollisionBox(transform.dimensions));
+                }
+
+                if (transform.position.x - transform.dimensions.x / 2 < 0 || transform.position.x + transform.dimensions.x / 2 > GAME.width) {
+                    transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
+                    transform.velocity.x = -transform.velocity.x;
+
+                    transform.angle += degToRad(180);
+                }
+
+                if (transform.position.y - transform.dimensions.y / 2 < 0 || transform.position.y + transform.dimensions.y / 2 > GAME.height) {
+                    transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
+                    transform.velocity.y = -transform.velocity.y;
+
+                    transform.angle -= degToRad(180);
+                }
+
+                if (type === "pentagon") {
+                    this.components.transform2D.angle += degToRad(1);
+                    for (var i = 0; i < this.components.gun.startingAngles.length; i++) {
+                        this.components.gun.startingAngles[i] += 1;
+                    }
+                    this.components.gun.shoot(this, this.components.gun);
+                }
+                ;
+            }
+        }
     };
 
     entity.onCollision = function(e) {

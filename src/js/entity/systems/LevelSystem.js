@@ -15,15 +15,11 @@ var LevelSystem = function() {
         for (var i = 0; i < GAME.maxEnemies; i++) {
             var squareChance = 0.95, triangleChance = 0.05, pentagonChance = 0;
 
-            squareChance -= 0.195;
-            if (squareChance < 0.45) {
-                squareChance = 0.45;
+            triangleChance += 0.05;
+            if (triangleChance > 0.35) {
+                triangleChance = 0.35;
             }
-            triangleChance += 0.195;
-            if (triangleChance > 0.4) {
-                triangleChance = 0.4;
-            }
-            pentagonChance += 0.01;
+            pentagonChance += 0.005;
             if (pentagonChance > 0.2) {
                 pentagonChance = 0.2;
             }
@@ -54,22 +50,20 @@ var LevelSystem = function() {
 
             var r = Math.random();
 
-            var shape = "";
+            var shape = "square";
             if (r < pentagonChance) {
                 shape = "pentagon";
             }
             else if (r < triangleChance) {
                 shape = "triangle";
             }
-            else if (r < squareChance) {
-                shape = "square"
+
+            if (shape == "square") {
+                zz = 1000
             }
 
             GAME.addEntity(Enemy(shape));
         }
-        //special milestone rounds
-        //hand crafted, not random
-        //extra max life every 10 rounds
         //delayed and telegraphed spawning for procedural waves (randomised per entity)
     }
 };
