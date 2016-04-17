@@ -15,6 +15,19 @@ var LevelSystem = function() {
         for (var i = 0; i < GAME.maxEnemies; i++) {
             var squareChance = 0.95, triangleChance = 0.05, pentagonChance = 0;
 
+            squareChance -= 0.195;
+            if (squareChance < 0.45) {
+                squareChance = 0.45;
+            }
+            triangleChance += 0.195;
+            if (triangleChance > 0.4) {
+                triangleChance = 0.4;
+            }
+            pentagonChance += 0.01;
+            if (pentagonChance > 0.2) {
+                pentagonChance = 0.2;
+            }
+
             var fives = GAME.wave % 5;
             var tens = GAME.wave % 10;
 
@@ -24,10 +37,7 @@ var LevelSystem = function() {
                     this.player = GAME.filterEntitiesByTag("player")[0];
 
                     this.player.components.health.maxValue++;
-                    this.player.components.health.value = this.player.components.health.maxValue;
-                    squareChance -= 0.15;
-                    triangleChance += 0.145;
-                    pentagonChance += 0.005;
+                    this.player.components.health.value = this.player.components.health.maxValue
                 }
             }
             else if (fives === 0) {
@@ -36,9 +46,6 @@ var LevelSystem = function() {
                     this.player = GAME.filterEntitiesByTag("player")[0];
 
                     this.player.components.health.value++;
-                    squareChance -= 0.15;
-                    triangleChance += 0.145;
-                    pentagonChance += 0.005;
                 }
             }
             else {
@@ -46,13 +53,19 @@ var LevelSystem = function() {
             }
 
             var r = Math.random();
-            // var chances = sort();
-            // if (r < spareChance) {
-            //
-            // }
-            var chances = [squareChance, triangleChance, pentagonChance].sort();
-            // for (var i = 0; i < )
-            GAME.addEntity(Enemy(r < pentagonChance ? "pentagon" : r < triangleChance ? "triangle" : "square"));
+
+            var shape = "";
+            if (r < pentagonChance) {
+                shape = "pentagon";
+            }
+            else if (r < triangleChance) {
+                shape = "triangle";
+            }
+            else if (r < squareChance) {
+                shape = "square"
+            }
+
+            GAME.addEntity(Enemy(shape));
         }
         //special milestone rounds
         //hand crafted, not random

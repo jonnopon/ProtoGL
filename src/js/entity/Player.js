@@ -102,10 +102,10 @@ var Player = function() {
             this.components.health.value = this.components.health.maxValue;
         }
 
-        // if (inputHandler.isKeyDown(KEYCODES.space)) {
-        //     var enemies = GAME.filterEntitiesByTag("enemy");
-        //     GAME.entityManager.removeEntityList(enemies);
-        // }
+        if (inputHandler.isKeyDown(KEYCODES.space)) {
+            var enemies = GAME.filterEntitiesByTag("enemy");
+            GAME.entityManager.removeEntityList(enemies);
+        }
 
         // transform.scale.x -= 0.005; //TODO: ISN'T WORKING
 

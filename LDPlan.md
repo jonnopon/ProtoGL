@@ -1,8 +1,8 @@
 #Theme: Shapeshift
 
-#Game Name: Shapeshift (typical)
+#Game Name: Sharpshifter
 
-##Genre: Shooter (Geom Wars-esque)
+##Genre: Shooter
 
 ##Elevator: A top-down shooter based around primary shapes where the player can shapeshift to change playstyle/power up. Neon (hopefully) palette
 
