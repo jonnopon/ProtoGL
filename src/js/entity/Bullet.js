@@ -1,6 +1,10 @@
 var Bullet = function(owner, startAngle, target) {
     var entity = new Entity("bullet:" + owner.tag);//can differentiate bullets fired by different types of entity
     // entity.addComponent(new Sprite(0, 0, 0.25, 1)); //TODO: new Shape()
+    var col = new Vec4(255, 255, 255, 1);
+    if (owner.tag.indexOf("enemy") > -1) {
+        col = new Vec4(255, 0, 102, 1);
+    }
 
     var dimensions = new Vec2(10, 35);
     entity.addComponent(new Transform2D(owner.components.transform2D.position.clone(), dimensions, new Vec2(0, 0)));
@@ -9,7 +13,7 @@ var Bullet = function(owner, startAngle, target) {
     entity.addComponent(new Health(3));
     entity.addComponent(new Points());
     entity.addComponent(new Shape("square", dimensions, new Vec2(GAME.width / 2, GAME.height / 2)));
-    entity.addComponent(new FlatColor(new Vec4(255, 255, 255, 1)));
+    entity.addComponent(new FlatColor(col));
     // multiplier
 
     entity.components.transform2D.targetForwardVelocity = 100;

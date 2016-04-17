@@ -1,15 +1,27 @@
 var MenuState = function() {
     return new State("menu",
         function init() {
-            //nothing to see here
+            GAME.addEntity(Background());
+            GAME.addEntity(Player());
+            GAME.entityManager.loadEnts();
+
+            GAME.userInterfaceManager.clearElements();
+            GAME.userInterfaceManager.addElement(new Panel(new Vec2(0, 0), new Vec2(GAME.width, 125), new Vec4(100, 100, 100, 0.25)));
         },
         function tick() {
-            GAME.textManager.addString("Shapeshift", "center", 60, new Vec2(GAME.width / 2, GAME.height / 2 + 100), new Vec4(50, 255, 255, 0.5), 0);
+            GAME.textManager.addString("SharpShifter", "center", 60, new Vec2(GAME.width / 2, GAME.height - 100), new Vec4(50, 255, 255, 1), 0);
+            GAME.textManager.addString("For Ludum Dare #35", "center", 25, new Vec2(GAME.width / 2, GAME.height / 2- 100), new Vec4(50, 255, 255, 1), 0);
+            GAME.textManager.addString("Theme: Shapeshift", "center", 25, new Vec2(GAME.width / 2, GAME.height / 2 - 150), new Vec4(50, 255, 255, 1), 0);
+            GAME.textManager.addString("By jonnopon3000", "center", 25, new Vec2(GAME.width / 2, GAME.height / 2 - 200), new Vec4(50, 255, 255, 1), 0);
 
-            GAME.textManager.addString("Space to Start", "center", 45, new Vec2(GAME.width / 2, 100), new Vec4(255, 255, 255, 0.5), 0);
+
+            GAME.textManager.addString("Space to Start", "center", 45, new Vec2(GAME.width / 2, 70), new Vec4(255, 255, 255, 1), 0);
             if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
                 GAME.switchToState("game");
             }
+
+            GAME.entityManager.update();
+            GAME.entityManager.render();
         }
     );
 };

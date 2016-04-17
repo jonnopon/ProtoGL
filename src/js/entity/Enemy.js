@@ -6,7 +6,7 @@ var Enemy = function(type) {
     var pos = new Vec2();
     var points = 0;
     var angle = 0;
-    var col = 0;
+    var col = new Vec4(0, 0, 0, 1)
     var mult = 0;
 
     //randomise based on type
@@ -20,7 +20,7 @@ var Enemy = function(type) {
         points = 100;
         mult = 0.1;
 
-        col = new Vec4(255, 0, 0, 1);
+        col = new Vec4(252, 130, 195, 1);
     }
     else if (type === "triangle") {
         var r = Math.random();
@@ -47,7 +47,7 @@ var Enemy = function(type) {
         points = 250;
         mult = 0.5;
 
-        col = new Vec4(255, 165, 0, 1);
+        col = new Vec4(225, 200, 41, 1);
     }
     else if (type === "pentagon") {
         var r = Math.random();
@@ -71,7 +71,7 @@ var Enemy = function(type) {
         points = 250;
         mult = 0.5;
 
-        col = new Vec4(150, 100, 175, 1);
+        col = new Vec4(47, 181, 243, 1);
 
         entity.addComponent(new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 625, [
             //bullet offsets

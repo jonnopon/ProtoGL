@@ -8,7 +8,7 @@ var init = function() {
     //STEP 2: attach initialisation function to the game (called during game.start())
     game.initFunc = function() {
         this.initManagers();
-        this.displayStats = true;
+        this.displayStats = false;
 
         this.switchToState("menu");
     };
@@ -19,7 +19,7 @@ var init = function() {
     //STEP 4: attach re-initialisation function to the game (called during game.reinit())
     game.reinitFunc = function() {
         this.initManagers();
-        this.displayStats = true;
+        this.displayStats = false;
 
         this.switchToState("menu");
     };
