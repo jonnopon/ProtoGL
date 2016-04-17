@@ -27,8 +27,6 @@ var InputHandler = function(canvas) {
                 GAME.clientY = event.layerY;
             }
 
-        } else {
-            // document.exitPointerLock();
         }
     });
 
@@ -48,10 +46,7 @@ var InputHandler = function(canvas) {
                 GAME.clientY = event.layerY;
             }
 
-        } else {
-            // document.exitPointerLock();
         }
-
         GAME.mouseClickedPos = GAME.mousePos;
 
         //BROADCAST CLICKED MESSAGE?
@@ -60,7 +55,6 @@ var InputHandler = function(canvas) {
     canvas.addEventListener("contextmenu", function(event) {
         event.preventDefault();
         GAME.mouseContextClickedPos = new Vec2(event.layerX, GAME.height - event.layerY);
-
         //BROADCAST CLICKED MESSAGE?
     });
 
