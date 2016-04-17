@@ -28,9 +28,6 @@ var GameState = function() {
             
             GAME.textManager.addString("mouse" + GAME.wave, "center", 10,  GAME.mousePos, new Vec4(255, 255, 255, 1), 0);
 
-
-
-
             if (GAME.inputHandler.isKeyDown(KEYCODES.p)) {
                 GAME.switchToState("paused");
             }

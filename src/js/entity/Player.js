@@ -80,8 +80,8 @@ var Player = function() {
         this.components.shape.center = origPos;
 
         if (inputHandler.isKeyDown(KEYCODES.w)) {
-            transform.targetForwardVelocity = 50;
-            transform.acceleration = new Vec2(50, 0);
+            transform.targetForwardVelocity = 35;
+            transform.acceleration = new Vec2(35, 0);
         }
         else {
             transform.targetForwardVelocity = 0;
@@ -103,8 +103,7 @@ var Player = function() {
         }
 
         if (inputHandler.isKeyDown(KEYCODES.space)) {
-            var enemies = GAME.filterEntitiesByTag("enemy");
-            GAME.entityManager.removeEntityList(enemies);
+
         }
 
         // transform.scale.x -= 0.005; //TODO: ISN'T WORKING
@@ -151,6 +150,7 @@ var Player = function() {
                     GAME.switchToState("dead");
                 }
                 this.components.multiplier.value /= 4;
+                this.components.transform2D.position = new Vec2(GAME.width / 2, GAME.height / 2);
             }
         }
     };
