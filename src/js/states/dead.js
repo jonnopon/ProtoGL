@@ -10,6 +10,8 @@ var DeadState = function() {
             GAME.addEntity(new Background());
             GAME.entityManager.loadEnts();
 
+            GAME.userInterfaceManager.clearElements();
+
             GAME.textManager.addString("Space to Restart", "center", 45, new Vec2(GAME.width / 2, 70), new Vec4(255, 255, 255, 0), 0, true, true, 150, 35, new Vec4(255, 255, 255, 1), 1);
         },
         function tick() {
