@@ -10,6 +10,11 @@ var init = function() {
         this.initManagers();
         this.displayStats = false;
 
+        this.soundManager.addSound("hit", "res/snd/hit.wav");
+        this.soundManager.addSound("shoot", "res/snd/shoot.wav");
+        this.soundManager.addSound("bonus", "res/snd/collect.wav");
+        this.soundManager.addSound("powerup", "res/snd/powerup.wav");
+        this.soundManager.addSound("enemydie", "res/snd/enemyhit.wav");
         this.switchToState("menu");
     };
 
@@ -21,7 +26,13 @@ var init = function() {
         this.initManagers();
         this.displayStats = false;
 
-        this.switchToState("menu");
+        this.soundManager.addSound("hit", "res/snd/hit.wav");
+        this.soundManager.addSound("shoot", "res/snd/shoot.wav");
+        this.soundManager.addSound("bonus", "res/snd/collect.wav");
+        this.soundManager.addSound("powerup", "res/snd/powerup.wav");
+        this.soundManager.addSound("enemydie", "res/snd/enemyhit.wav");
+        
+        this.switchToState("game");
     };
 
     //STEP 5: attach utility functions to game - global game behaviors accessible anywhere
@@ -40,6 +51,8 @@ var init = function() {
                 game.addEntity(Bullet(e));
             }
             g.lastFire = Date.now();
+
+            GAME.soundManager.playSound("shoot");
         }
     };
     game.addPoints = function(p) {

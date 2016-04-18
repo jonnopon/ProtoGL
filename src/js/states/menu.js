@@ -20,6 +20,7 @@ var MenuState = function() {
 
             if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
                 GAME.switchToState("game");
+                GAME.soundManager.playSound("bonus");
             }
 
             GAME.entityManager.update();

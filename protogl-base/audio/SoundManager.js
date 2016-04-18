@@ -3,7 +3,9 @@ var SoundManager = function() {
 };
 
 SoundManager.prototype.playSound = function(name) {
-	new Audio(this.sounds[name]).play();
+	var sound = new Audio(this.sounds[name]);
+    sound.volume = 0.05;
+	sound.play();
 };
 SoundManager.prototype.addSound = function(name, location) {
 	this.sounds[name] = location;

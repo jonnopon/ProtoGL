@@ -27,8 +27,8 @@ var Enemy = function(type) {
         pos.x = position.x;
         pos.y = position.y;
 
-        points = 100;
-        mult = 0.1;
+        points = 5;
+        mult = 0.2;
 
         col = new Vec4(252, 130, 195, 0);
     }
@@ -43,7 +43,7 @@ var Enemy = function(type) {
 
         dimensions.x = 25;
         dimensions.y = 25;
-        points = 250;
+        points = 25;
         mult = 0.5;
 
         col = new Vec4(225, 200, 41, 0);
@@ -56,8 +56,8 @@ var Enemy = function(type) {
 
         dimensions.x = 35 ;
         dimensions.y = 35;
-        points = 250;
-        mult = 0.5;
+        points = 50;
+        mult = 0.75;
 
         col = new Vec4(47, 181, 243, 0);
 
@@ -151,12 +151,14 @@ var Enemy = function(type) {
     entity.onCollision = function(e) {
         if (e.tag === "bullet:player") {
             GAME.removeEntity(this);
+            GAME.soundManager.playSound("enemydie");
             GAME.addPoints(this.components.points.value);
             GAME.addMultiplier(this.components.multiplier.value);
         }
         if (e.tag === "player") {
             if (e.components.AABBCollisionBox.active) {
                 GAME.removeEntity(this);
+                GAME.soundManager.playSound("enemydie");
             }
         }
     };

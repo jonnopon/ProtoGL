@@ -12,7 +12,7 @@ var Player = function() {
     var shapes = {
         "0" : {
             "shape": new Shape("triangle", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
-            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 100, [
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75, [
                 //bullet offsets
                 new Vec2(0, 0)
             ], [
@@ -22,7 +22,7 @@ var Player = function() {
         },
         "1" : {
             "shape": new Shape("square", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
-            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 125, [
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 100, [
                 //bullet offsets
                 new Vec2(0, -20),
                 new Vec2(0, 20)
@@ -34,7 +34,7 @@ var Player = function() {
         "2" : {
             "shape":
             new Shape("pentagon", new Vec2(40, 40), new Vec2(GAME.width / 2, GAME.height / 2)),
-            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 165, [
+            "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 150, [
                 //bullet offsets
                 new Vec2(0, 0),
                 new Vec2(0, 0),
@@ -50,7 +50,7 @@ var Player = function() {
     entity.addComponent(shapes[currentShape]["shape"]);
     entity.addComponent(shapes[currentShape]["gun"]);
 
-    entity.components.AABBCollisionBox.coolDownTime = 250;
+    entity.components.AABBCollisionBox.coolDownTime = 200;
 
     entity.components.transform2D.maxVelocity = new Vec2(100, 100);
     entity.components.transform2D.acceleration = new Vec2(0, 0);
@@ -65,9 +65,10 @@ var Player = function() {
         var collisionBox = this.components.AABBCollisionBox;
         var inputHandler = GAME.inputHandler;
 
-        var newShape = this.components.multiplier.value > 12.5 ? 2 : this.components.multiplier.value > 7.5 ? 1 : 0;
+        var newShape = this.components.multiplier.value > 15 ? 2 : this.components.multiplier.value > 7.5 ? 1 : 0;
         if (newShape !== currentShape) {
             collisionBox.active = false;
+            GAME.soundManager.playSound("powerup");
         }
         currentShape = newShape;
 
@@ -80,8 +81,8 @@ var Player = function() {
         this.components.shape.center = origPos;
 
         if (inputHandler.isKeyDown(KEYCODES.w)) {
-            transform.targetForwardVelocity = 35;
-            transform.acceleration = new Vec2(35, 0);
+            transform.targetForwardVelocity = 45;
+            transform.acceleration = new Vec2(45, 0);
         }
         else {
             transform.targetForwardVelocity = 0;
@@ -102,12 +103,6 @@ var Player = function() {
             this.components.health.value = this.components.health.maxValue;
         }
 
-        if (inputHandler.isKeyDown(KEYCODES.space)) {
-
-        }
-
-        // transform.scale.x -= 0.005; //TODO: ISN'T WORKING
-
         if (transform.position.x - transform.dimensions.x / 2 < 0 || transform.position.x + transform.dimensions.x / 2 > GAME.width) {
             transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
         }
@@ -121,12 +116,10 @@ var Player = function() {
 
             if (collisionBox.coolDownTimer % 5 === 0 || collisionBox.coolDownTimer % 6 == 0 || collisionBox.coolDownTimer % 7 == 0) {
                 this.removeComponent(FlatColor);
-                // this.removeComponent(AABBCollisionBox);
             }
             else {
                 if (!this.hasComponent(FlatColor)) {
                     this.addComponent(new FlatColor(new Vec4(24, 221, 0, 1)));
-                    // this.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
                 }
             }
 
@@ -135,7 +128,6 @@ var Player = function() {
                 collisionBox.active = true;
                 if (!this.hasComponent(FlatColor)) {
                     this.addComponent(new FlatColor(new Vec4(24, 221, 0, 1)));
-                    // this.addComponent(new AABBCollisionBox(new Vec2(40, 40)));
                 }
             }
         }
@@ -149,8 +141,9 @@ var Player = function() {
                 if (this.components.health.value <= 0) {
                     GAME.switchToState("dead");
                 }
-                this.components.multiplier.value /= 4;
-                this.components.transform2D.position = new Vec2(GAME.width / 2, GAME.height / 2);
+                this.components.multiplier.value /= 2;
+
+                GAME.soundManager.playSound("hit");
             }
         }
     };
