@@ -14,7 +14,7 @@ var PausedState = function() {
             GAME.textManager.addString("Paused", "center", 35, new Vec2(GAME.width / 2, GAME.width / 2), new Vec4(255, 255, 255, 1), 0);
 
             var player = GAME.filterEntitiesByTag("player")[0];
-            if (player) {
+            if (player !== undefined && player !== null) {
                 GAME.textManager.addString("Health:" + player.components.health.value, "left", 25, new Vec2(25, GAME.height - 40), new Vec4(255, 255, 255, 1), 0);
                 GAME.textManager.addString("Points:" + Math.round(player.components.points.value) + "\\n\\nMult:" + Math.round(player.components.multiplier.value * 10) / 10, "center", 25, new Vec2(GAME.width / 2, GAME.height - 35), new Vec4(255, 255, 255, 1), 0);
             }
