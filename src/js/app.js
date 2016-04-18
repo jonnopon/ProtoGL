@@ -4,6 +4,7 @@ var init = function() {
 
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {
+        "wave": 0
     };
     //STEP 2: attach initialisation function to the game (called during game.start())
     game.initFunc = function() {

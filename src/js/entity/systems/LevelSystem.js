@@ -3,7 +3,6 @@ var LevelSystem = function() {
     var currentEnemies = GAME.filterEntitiesByTag("enemy");
 
     GAME.maxEnemies = GAME.maxEnemies || 10;
-    GAME.wave = GAME.wave || 0;
 
     if (currentEnemies.length === 0) {
         GAME.wave++;
@@ -31,21 +30,23 @@ var LevelSystem = function() {
                 //this round is a multiple of ten - give maxhealth and override next round as hand-crafted
                 if (this.player === null) {
                     this.player = GAME.filterEntitiesByTag("player")[0];
+                    if (this.player) {
+                        this.player.components.health.maxValue++;
+                        this.player.components.health.value = this.player.components.health.maxValue
 
-                    this.player.components.health.maxValue++;
-                    this.player.components.health.value = this.player.components.health.maxValue
-
-                    GAME.soundManager.playSound("bonus");
+                        GAME.soundManager.playSound("bonus");
+                    }
                 }
             }
             else if (fives === 0) {
                 //this round is a multiple of five - give health and adjust weights
                 if (this.player === null) {
                     this.player = GAME.filterEntitiesByTag("player")[0];
+                    if (this.player) {
+                        this.player.components.health.value++;
 
-                    this.player.components.health.value++;
-
-                    GAME.soundManager.playSound("bonus");
+                        GAME.soundManager.playSound("bonus");
+                    }
                 }
             }
             else {
