@@ -15,10 +15,10 @@ var PausedState = function() {
 
             var player = GAME.filterEntitiesByTag("player")[0];
             if (player) {
-                GAME.textManager.addString("Health: " + player.components.health.value, "left", 20, new Vec2(30, GAME.height - 40), new Vec4(255, 255, 255, 1), 0);
-                GAME.textManager.addString("Points: " + Math.round(player.components.points.value) + "\\n\\nMult: " + Math.round(player.components.multiplier.value * 10) / 10, "center", 20, new Vec2(GAME.width / 2, GAME.height - 35), new Vec4(255, 255, 255, 1), 0);
+                GAME.textManager.addString("Health:" + player.components.health.value, "left", 25, new Vec2(25, GAME.height - 40), new Vec4(255, 255, 255, 1), 0);
+                GAME.textManager.addString("Points:" + Math.round(player.components.points.value) + "\\n\\nMult:" + Math.round(player.components.multiplier.value * 10) / 10, "center", 25, new Vec2(GAME.width / 2, GAME.height - 35), new Vec4(255, 255, 255, 1), 0);
             }
-            GAME.textManager.addString("wave: " + GAME.wave, "right", 20, new Vec2(GAME.width - 65, GAME.height - 40), new Vec4(255, 255, 255, 1), 0);
+            GAME.textManager.addString("wave:" + GAME.wave, "right", 25, new Vec2(GAME.width - 65, GAME.height - 40), new Vec4(255, 255, 255, 1), 0);
 
             if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
                 GAME.switchToState("game");

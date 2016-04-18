@@ -14,17 +14,16 @@ var Bullet = function(owner, startAngle, target) {
     entity.addComponent(new Points());
     entity.addComponent(new Shape("square", dimensions, new Vec2(GAME.width / 2, GAME.height / 2)));
     entity.addComponent(new FlatColor(col));
-    // multiplier
 
-    entity.components.transform2D.targetForwardVelocity = 100;
-    entity.components.transform2D.acceleration = new Vec2(1000, 0);
+    entity.components.transform2D.targetForwardVelocity = 150;
+    entity.components.transform2D.acceleration = new Vec2(1000, 1000);
     entity.components.transform2D.rotationalVelocity = 0;
     entity.components.transform2D.forwardVelocity = 0;
-    entity.components.transform2D.maxVelocity = new Vec2(1000, 100);
+    entity.components.transform2D.maxVelocity = new Vec2(1000, 1000);
 
     var target = target || GAME.mousePos || new Vec2(0, 0);
     var angle = target.getAngleBetweenVec2(entity.components.transform2D.position) - degToRad(90) + degToRad(startAngle);
-    entity.components.transform2D.angle = angle; //TODO: no idea why necessary but it fixes the problem
+    entity.components.transform2D.angle = angle;
 
     entity.onUpdate = function() {
         var transform = this.components.transform2D;
@@ -36,16 +35,6 @@ var Bullet = function(owner, startAngle, target) {
         ) {
             GAME.removeEntity(this);
         }
-        // else if () {
-        //     transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
-        // }
-        //
-        // if () {
-        //     transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
-        // }
-        // else if () {
-        //     transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
-        // }
     };
 
     entity.onCollision = function(e) {

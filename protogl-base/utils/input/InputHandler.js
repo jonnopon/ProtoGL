@@ -37,15 +37,6 @@ var InputHandler = function(canvas) {
     canvas.addEventListener("click", function(event) {
         if (document.pointerLockElement == null) {
             this.requestPointerLock();
-            var fullScreenFunc = this.requestFullScreen || this.mozRequestFullScreen || this.webkitRequestFullScreen;
-            // fullScreenFunc();
-            if (GAME.clientX === undefined) {
-                GAME.clientX = event.layerX;
-            }
-            if (GAME.clientY === undefined) {
-                GAME.clientY = event.layerY;
-            }
-
         }
         GAME.mouseClickedPos = GAME.mousePos;
 

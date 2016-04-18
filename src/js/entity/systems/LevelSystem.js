@@ -34,6 +34,8 @@ var LevelSystem = function() {
 
                     this.player.components.health.maxValue++;
                     this.player.components.health.value = this.player.components.health.maxValue
+
+                    GAME.soundManager.playSound("bonus");
                 }
             }
             else if (fives === 0) {
@@ -42,6 +44,8 @@ var LevelSystem = function() {
                     this.player = GAME.filterEntitiesByTag("player")[0];
 
                     this.player.components.health.value++;
+
+                    GAME.soundManager.playSound("bonus");
                 }
             }
             else {
