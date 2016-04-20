@@ -1,7 +1,6 @@
 var Enemy = function(type) {
     var entity = new Entity("enemy");
 
-    var vel = new Vec2();
     var dimensions = new Vec2();
     var pos = new Vec2();
     var points = 0;
@@ -23,10 +22,8 @@ var Enemy = function(type) {
 
         dimensions.x = 15;
         dimensions.y = 15;
-        var position = new Vec2(randomBetween(50, GAME.width - 50), randomBetween(50, GAME.height - 50));
-        pos.x = position.x;
-        pos.y = position.y;
-
+        pos.x = randomBetween(50, GAME.width - 50);
+        pos.y = randomBetween(50, GAME.height - 50);
         points = 5;
         mult = 0.2;
 
@@ -36,26 +33,22 @@ var Enemy = function(type) {
         dir = r < 0.25 ? 0 : r < 0.5 ? 1 : r < 0.75 ? 2 : 3;
         angle = dir === 0 ? 180 : dir === 1 ? 90 : dir === 2 ? 0 : -90;
 
-        //generate an initial position
-        var position = new Vec2(randomBetween(50, GAME.width - 50), randomBetween(50, GAME.height - 50));
-        pos.x = position.x;
-        pos.y = position.y;
-
         dimensions.x = 25;
         dimensions.y = 25;
+        pos.x = randomBetween(50, GAME.width - 50);
+        pos.y = randomBetween(50, GAME.height - 50);
+
         points = 25;
         mult = 0.5;
 
         col = new Vec4(225, 200, 41, 0);
     }
     else if (type === "pentagon") {
-        //generate an initial position
-        var position = new Vec2(randomBetween(50, GAME.width - 50), randomBetween(50, GAME.height - 50));
-        pos.x = position.x;
-        pos.y = position.y;
-
-        dimensions.x = 35 ;
+        dimensions.x = 35;
         dimensions.y = 35;
+        pos.x = randomBetween(50, GAME.width - 50);
+        pos.y = randomBetween(50, GAME.height - 50);
+
         points = 50;
         mult = 0.75;
 
@@ -77,7 +70,7 @@ var Enemy = function(type) {
         ]));
     };
 
-    entity.addComponent(new Transform2D(pos, dimensions, vel));
+    entity.addComponent(new Transform2D(pos, dimensions, new Vec2()));
     entity.addComponent(new Shape(type, dimensions, pos));
     entity.addComponent(new FlatColor(col));
     entity.addComponent(new Points(points));
@@ -86,64 +79,58 @@ var Enemy = function(type) {
     entity.components.transform2D.angle = degToRad(angle);
 
     entity.onUpdate = function() {
-        var transform = this.components.transform2D;
-
         if (framesAlive < spawnDelay) {
             framesAlive++;
             return;
         }
+
+        var transform = this.components.transform2D;
+        var color = this.components.flatColor.color;
+
+        if (color.w < 1) {
+            color.w += 0.02;
+        }
         else {
-            var color = this.components.flatColor.color;
-            if (color.w < 1) {
-                color.w += 0.02;
+            color.w = 1;
+            if (!init) {
+                init = true;
+
+                //initialise the velocity of the entity, if applicable
+                if (type === "triangle") {
+                    var velMag = randomBetween(30, 75);
+                    var xVel = dir === 1 ? velMag : dir === 3 ? -velMag : 0,
+                        yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
+                    transform.velocity.x = xVel;
+                    transform.velocity.y = yVel;
+                }
+                else if (type === "square") {
+                    transform.velocity.x = randomBetween(-25, 25);
+                    transform.velocity.y = randomBetween(-25, 25);
+                }
+
+                this.addComponent(new AABBCollisionBox(dimensions));
             }
-            else {
-                if (!init) {
-                    init = true;
 
-                    if (type === "triangle") {
-                        var velMag = randomBetween(30, 75);
-                        var xVel = dir === 1 ? velMag : dir === 3 ? -velMag : 0,
-                            yVel = dir === 0 ? velMag : dir === 2 ? -velMag : 0;
-                        var velocity = new Vec2(xVel, yVel);
-                        vel.x = velocity.x;
-                        vel.y = velocity.y;
-                    }
-                    else if (type === "square") {
-                        vel.x = randomBetween(-25, 25);
-                        vel.y = randomBetween(-25, 25);
-                        points = 100;
-                        mult = 0.1;
-                    }
+            if (transform.position.x - transform.dimensions.x / 2 < 0 || transform.position.x + transform.dimensions.x / 2 > GAME.width) {
+                transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
+                transform.velocity.x = -transform.velocity.x;
+
+                transform.angle += degToRad(180);
+            }
+
+            if (transform.position.y - transform.dimensions.y / 2 < 0 || transform.position.y + transform.dimensions.y / 2 > GAME.height) {
+                transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
+                transform.velocity.y = -transform.velocity.y;
+
+                transform.angle -= degToRad(180);
+            }
+
+            if (type === "pentagon") {
+                this.components.transform2D.angle += degToRad(1);
+                for (var i = 0; i < this.components.gun.startingAngles.length; i++) {
+                    this.components.gun.startingAngles[i] += 1;
                 }
-
-                color.w = 1;
-                if (!this.components.AABBCollisionBox) {
-                    this.addComponent(new AABBCollisionBox(transform.dimensions));
-                }
-
-                if (transform.position.x - transform.dimensions.x / 2 < 0 || transform.position.x + transform.dimensions.x / 2 > GAME.width) {
-                    transform.position.x -= transform.lastMoveDelta.x || transform.lastMoveDelta;
-                    transform.velocity.x = -transform.velocity.x;
-
-                    transform.angle += degToRad(180);
-                }
-
-                if (transform.position.y - transform.dimensions.y / 2 < 0 || transform.position.y + transform.dimensions.y / 2 > GAME.height) {
-                    transform.position.y -= transform.lastMoveDelta.y || transform.lastMoveDelta;
-                    transform.velocity.y = -transform.velocity.y;
-
-                    transform.angle -= degToRad(180);
-                }
-
-                if (type === "pentagon") {
-                    this.components.transform2D.angle += degToRad(1);
-                    for (var i = 0; i < this.components.gun.startingAngles.length; i++) {
-                        this.components.gun.startingAngles[i] += 1;
-                    }
-                    this.components.gun.shoot(this, this.components.gun);
-                }
-                ;
+                this.components.gun.shoot(this, this.components.gun);
             }
         }
     };
