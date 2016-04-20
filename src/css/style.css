@@ -1,1 +1,10 @@
 /* style the web page that contains this application */
+
+body {
+    background: lightblue;
+    text-align: center;
+    font-family: monospace;
+}
+a {
+    font-size: 25pt;
+}

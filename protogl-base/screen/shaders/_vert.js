@@ -14,6 +14,7 @@ VERTSHADERS2D["colored"] =
     '   gl_Position = vec4(cp, 1.0, 1.0);' +
     '}'
 ;
+        
 //TODO move the matrix creation out of the shader duh
 VERTSHADERS2D["transform-colored"] =
     'attribute vec2 pos;' +
@@ -21,13 +22,17 @@ VERTSHADERS2D["transform-colored"] =
     'attribute float angle;' +
     'attribute float scale;' +
     'attribute vec2 centre;' +
+    'uniform int resX;' +
+    'uniform int resY;' +
     'varying vec4 Col;' +
     'void main() {' +
+    '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
+    '   vec2 ccp = ((centre / vec2(resX, resY)) * 2.0) - 1.0;' +
     '   Col = vec4(col.xyz * (1.0 / 255.0), col.w);' +
     '	mat4 rot = mat4(cos(angle) * scale, -sin(angle), 0.0, 0.0, sin(angle), cos(angle) * scale, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '	mat4 tr = mat4(1.0, 0.0, 0.0, centre.x, 0.0, 1.0, 0.0, centre.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -centre.x, 0.0, 1.0, 0.0, -centre.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   gl_Position = vec4(pos, 1.0, 1.0) * tr1 * rot * tr;' +
+    '	mat4 tr = mat4(1.0, 0.0, 0.0, ccp.x, 0.0, 1.0, 0.0, ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+    '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -ccp.x, 0.0, 1.0, 0.0, -ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+    '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
     '}'
 ;
 //TODO move the matrix creation out of the shader duh
