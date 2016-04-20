@@ -12,7 +12,7 @@ var Bullet = function(owner, startAngle, target) {
     entity.addComponent(new AABBCollisionBox(dimensions));
     entity.addComponent(new Health(3));
     entity.addComponent(new Points());
-    entity.addComponent(new Shape("square", dimensions, center));
+    entity.addComponent(new Shape("rect", dimensions, center));
     entity.addComponent(new FlatColor(col));
 
     entity.components.transform2D.targetForwardVelocity = 150;

@@ -52,7 +52,7 @@ var LevelSystem = function() {
 
             var r = Math.random();
 
-            var shape = "square";
+            var shape = "rect";
             if (r < GAME.pentagonChance) {
                 shape = "pentagon";
             }
@@ -60,7 +60,7 @@ var LevelSystem = function() {
                 shape = "triangle";
             }
 
-            GAME.addEntity(Enemy(shape));
+            GAME.addEntity(Enemy("circle"));
         }
     }
 };

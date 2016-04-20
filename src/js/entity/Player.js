@@ -11,7 +11,7 @@ var Player = function() {
 
     var shapes = {
         "0" : {
-            "shape": new Shape("triangle", dimensions, center),
+            "shape": new Shape("circle", dimensions, center),
             "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75, [
                 //bullet offsets
                 new Vec2(0, 0)
@@ -21,7 +21,7 @@ var Player = function() {
             ])
         },
         "1" : {
-            "shape": new Shape("square", dimensions, center),
+            "shape": new Shape("rect", dimensions, center),
             "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 100, [
                 //bullet offsets
                 new Vec2(0, -20),
