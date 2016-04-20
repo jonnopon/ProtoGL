@@ -15,8 +15,9 @@ Entity.prototype.removeComponent = function(component) {
 
     delete this.components[name];
 };
-Entity.prototype.hasComponent = function(componentName) {
-    return Object.keys(this.components).indexOf(componentName) > -1;
+Entity.prototype.hasComponent = function(component) {
+    var name = typeof component === 'function' ? component.prototype.name : component;
+    return Object.keys(this.components).indexOf(name) > -1;
 };
 Entity.prototype.hasComponents = function(componentNameList) {
     var has = false;

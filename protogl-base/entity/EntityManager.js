@@ -3,33 +3,25 @@ var EntityManager = function() {
     this.ents = [];
     this.removeList = [];
     this.addList = [];
-    this.verts = [];
-    this.shaderProgramName = "entProgram";
-    this.vboName = "entVBO";
+    // this.verts = [];
+    this.flatShaderProgram = "flatShaderProgram";
+    this.spriteShaderProgram = "spriteShaderProgram";
+    this.flatVBOName = "flatVBO";
+    this.spriteVBOName = "spriteVBO";
     this.textureName = "entTex";
 
-    this.renderer.addVBO(this.vboName);
+    this.renderer.addVBO(this.flatVBOName);
+    this.renderer.addVBO(this.spriteVBOName);
 
-    var texPos = this.renderer.createTexture(this.textureName, "res/img/entity.png");
+    this.texPos = this.renderer.createTexture(this.textureName, "res/img/entity.png");
 
-    var frag = FRAGSHADERS["textured"];
-    var vert = VERTSHADERS2D["transform-textured"];
-    this.renderer.addShaderProgram(this.shaderProgramName, [vert, frag]);
+    var vert = VERTSHADERS2D["transform-colored"];
+    var frag = FRAGSHADERS["colored"];
+    this.renderer.addShaderProgram(this.flatShaderProgram, [vert, frag]);
 
-    //TODO: temporary - needs to be configurable/adapt to actual entities in the system
-    var config = new RenderSettings();
-    config.addAttribute("pos", 2);
-    config.addAttribute("texCoord", 2);
-    config.addAttribute("angle", 1);
-    config.addAttribute("scale", 1);
-    config.addAttribute("centre", 2);
-    config.addUniform("tex", texPos);
-    config.addUniform("resX", GAME.resolution.x);
-    config.addUniform("resY", GAME.resolution.y);
-    config.setShape(gl.TRIANGLES);
-    config.setTextureName(this.textureName);
-
-    this.renderSettings = config;
+    vert = VERTSHADERS2D["transform-textured"];
+    frag = FRAGSHADERS["textured"];
+    this.renderer.addShaderProgram(this.spriteShaderProgram, [vert, frag]);
 };
 
 EntityManager.prototype.addEntity = function(e) {
@@ -75,46 +67,125 @@ EntityManager.prototype.update = function() {
     }
 };
 EntityManager.prototype.render = function() {
-    //TODO: group entities and make multiple render calls changing renderSettings as necessary!
-    //TODO: for now, only deals with entities that have a 2D transform component and a sprite
-
     var renderer = this.renderer;
 
-    var spriteEnts = this.getEntsWithComponents([Sprite, Transform2D]);
+    this.renderFlats(this.getEntsWithComponents([FlatColor, Transform2D]));
+    this.renderSprites(this.getEntsWithComponents([Sprite, Transform2D]));
+};
+EntityManager.prototype.renderFlats = function(flatEnts) {
+    var renderer = this.renderer;
+    var dataPerVert = 0;
+    var verts = [];
+    var grouped = this.groupEntsByShape(flatEnts);
 
-    var vertSize = (8 * 6) * spriteEnts.length;
-    this.verts = new Float32Array(vertSize);
-    var off = 0;
+    for (var i = 0; i < Object.keys(grouped).length; i++) {
+        var glShape = Object.keys(grouped)[i];
+        // var glShape = Object.keys(grouped)[i].toString();
+        verts = [];
 
-    for (var i = 0; i < spriteEnts.length; i++) {
-        var pos = spriteEnts[i].components.transform2D.position;
-        var dim = spriteEnts[i].components.transform2D.dimensions;
-        var angle = spriteEnts[i].components.transform2D.angle;
-        var scale = spriteEnts[i].components.transform2D.scale.x; //TODO: scale needs to be a vec2 not an int/float
-        var center = new Vec2((pos.x + (pos.x + dim.x)) / 2, (pos.y + (pos.y + dim.y)) / 2);
-        var spriteTL = spriteEnts[i].components.sprite.topLeft;
-        var spriteBR = spriteEnts[i].components.sprite.bottomRight;
+        for (var j = 0; j < grouped[glShape].length; j++) {
+            var e = grouped[glShape][j];
+            var color = e.components.flatColor.color;
+            var shape = e.components.shape;
+            var pos = e.components.transform2D.position;
+            var angle = e.components.transform2D.angle;
+            var scale = e.components.transform2D.scale.x;
+            var geometryData = _getGeometry(shape.shapeName, pos, shape.dimensions, false, null, 50);
+            var vertList = geometryData.vertList;
 
-        var tempVerts = [
-            pos.x, pos.y, spriteTL.x, spriteTL.y, angle, scale, center.x, center.y,
-            pos.x + dim.x, pos.y, spriteBR.x, spriteTL.y, angle, scale, center.x, center.y,
-            pos.x + dim.x, pos.y + dim.y, spriteBR.x, spriteBR.y, angle, scale, center.x, center.y,
+            //shader in use - transform-colored
+            //attributes: vec 2 pos, vec4 col, float angle, float scale, vec2 centre
+            //uniforms: resX resY
+            var off = 0;
+            for (var k = 0; k < vertList.length; k++) {
+                var list = [vertList[k].x, vertList[k].y, color.x, color.y, color.z, color.w, angle, scale, pos.x, pos.y]
+                verts = verts.concat(list);
+                dataPerVert = list.length;
+            }
+        }
 
-            pos.x + dim.x, pos.y + dim.y, spriteBR.x, spriteBR.y, angle, scale, center.x, center.y,
-            pos.x, pos.y + dim.y, spriteTL.x, spriteBR.y, angle, scale, center.x, center.y,
-            pos.x, pos.y, spriteTL.x, spriteTL.y, angle, scale, center.x, center.y
-        ];
+        var config = new RenderSettings();
+        config.addAttribute("pos", 2);
+        config.addAttribute("col", 4);
+        config.addAttribute("angle", 1);
+        config.addAttribute("scale", 1);
+        config.addAttribute("centre", 2);
+        config.addUniform("resX", GAME.resolution.x);
+        config.addUniform("resY", GAME.resolution.y);
+        config.setShape(glShape);
 
-        this.verts.set(tempVerts, off);
-        off += tempVerts.length;
+        var vertsToSend = new Float32Array(verts.length);
+        vertsToSend.set(verts, 0);
+        renderer.addVerts("flatVerts", vertsToSend, dataPerVert);
+        renderer.bufferVertsToVBO("flatVerts", this.flatVBOName);
+        renderer.bindVBO(this.flatVBOName);
+        renderer.bindVerts("flatVerts");
+        renderer.bindShaderProgram(this.flatShaderProgram);
+        renderer.render2D(true, config);
     }
+};
+EntityManager.prototype.renderSprites = function(spriteEnts) {
+    var renderer = this.renderer;
+    var dataPerVert = 0;
+    var verts = [];
+    var grouped = this.groupEntsByShape(spriteEnts);
 
-    renderer.addVerts("entVerts", this.verts, 8);
-    renderer.bufferVertsToVBO("entVerts", this.vboName);
-    renderer.bindVBO(this.vboName);
-    renderer.bindVerts("entVerts");
-    renderer.bindShaderProgram(this.shaderProgramName);
-    renderer.render2D(true, this.renderSettings);
+    for (var i = 0; i < Object.keys(grouped).length; i++) {
+        var glShape = Object.keys(grouped)[i];
+        verts = [];
+
+        for (var j = 0; j < grouped[glShape].length; j++) {
+            var e = spriteEnts[j];
+            var pos = e.components.transform2D.position;
+            var shape = e.components.shape;
+            var angle = e.components.transform2D.angle;
+            var scale = e.components.transform2D.scale.x; //TODO: scale needs to be a vec2 not an int/float
+            var geometryData = _getGeometry(shape.shapeName, pos, shape.dimensions, true, e.components.sprite)
+            var vertList = geometryData.vertList;
+            var texList = geometryData.texList;
+
+            //shader in use - transform-textured
+            //attributes: vec2 pos, vec2 tex, float angle, float scale, vec2 centre
+            //uniforms: resX resY
+            var off = 0;
+            for (var k = 0; k < vertList.length; k++) {
+                var list = [vertList[k].x, vertList[k].y, texList[k].x, texList[k].y, angle, scale, pos.x, pos.y]
+                verts = verts.concat(list);
+                dataPerVert = list.length;
+            }
+        }
+
+        var config = new RenderSettings();
+        config.addAttribute("pos", 2);
+        config.addAttribute("texCoord", 2);
+        config.addAttribute("angle", 1);
+        config.addAttribute("scale", 1);
+        config.addAttribute("centre", 2);
+        config.addUniform("tex", this.texPos);
+        config.addUniform("resX", GAME.resolution.x);
+        config.addUniform("resY", GAME.resolution.y);
+        config.setShape(gl.TRIANGLES);
+        config.setTextureName(this.textureName);
+
+        var vertsToSend = new Float32Array(verts.length);
+        vertsToSend.set(verts, 0);
+        renderer.addVerts("spriteVerts", verts, dataPerVert);
+        renderer.bufferVertsToVBO("spriteVerts", this.spriteVBOName);
+        renderer.bindVBO(this.spriteVBOName);
+        renderer.bindVerts("spriteVerts");
+        renderer.bindShaderProgram(this.spriteShaderProgram);
+        renderer.render2D(true, config);
+    }
+};
+EntityManager.prototype.groupEntsByShape = function(ents) {
+    groupedEnts = {};
+    for (var i = 0; i < ents.length; i++) {
+        if (!groupedEnts[ents[i].components.shape.glShape]) {
+            groupedEnts[ents[i].components.shape.glShape] = [];
+        }
+        groupedEnts[ents[i].components.shape.glShape].push(ents[i]);
+    }
+    return groupedEnts;
 };
 EntityManager.prototype.getEntsWithComponent = function(component) {
     var matching = [];
@@ -157,4 +228,3 @@ EntityManager.prototype.getAllEntities = function() {
 EntityManager.prototype.clearAllEntities = function() {
     this.ents = [];
 };
-//TODO - more utilities? CheckEntCollision might not be necessary...

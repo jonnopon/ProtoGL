@@ -3,6 +3,7 @@ var TextManager = function() {
     this.shaderProgramName = 'textProgram';
     this.vboName = 'textVBO';
     this.textureName = 'font';
+    this.counter = 0;
 
    	var texPos = -1;
     while (texPos < 0) {
@@ -46,7 +47,7 @@ var TextManager = function() {
 	}
 };
 
-TextManager.prototype.addString = function(text, align, size, pos, col, angle) {
+TextManager.prototype.addString = function(text, align, size, pos, col, angle, persist, flashing, flashDelay, flashLength, flashCol, flashScale) {
     var alignInt = null;
     if (angle !== 0) {
         //override if you're rotating text I want to cancel the orientation because the startPos is also rotated
@@ -72,23 +73,45 @@ TextManager.prototype.addString = function(text, align, size, pos, col, angle) {
 
     var lines = text.split("\\n");
     for (var i = 0; i < lines.length; i++) {
-        this.strings.push(
-            {
-                text: lines[i],
-                align: alignInt,
-                fontSize: size,
-                x: pos.x,
-                y: pos.y - (i * size * 1.1),
-                r: col.x,
-                g: col.y,
-                b: col.z,
-                a: col.w,
-                angle: angle
-            }
-        );
+        var str = {
+            text: lines[i],
+            align: alignInt,
+            fontSize: size,
+            x: pos.x,
+            y: pos.y - (i * size * 1.1),
+            r: col.x,
+            g: col.y,
+            b: col.z,
+            a: col.w,
+            angle: angle,
+            persist: persist
+            
+        }
+        if (flashing) {
+            str.flash= flashing,
+            str.flashDelay = flashDelay,
+            str.flashLength = flashLength,
+            str.lastFlash = 0,
+            str.flashR = flashCol.x,
+            str.flashG = flashCol.y,
+            str.flashB = flashCol.z,
+            str.flashA = flashCol.w,
+            str.flashScale = flashScale;
+        }
+        
+        this.strings.push(str);
     }
 };
 TextManager.prototype.flushStrings = function() {
+    newStrings = [];
+    for (var i = 0; i < this.strings.length; i++) {
+        if (this.strings[i].persist) {
+            newStrings.push(this.strings[i]);
+        }
+    }
+    this.strings = newStrings;
+};
+TextManager.prototype.flushPersistentStrings = function() {
     this.strings = [];
 };
 TextManager.prototype.convertString = function(stringObj) {
@@ -108,30 +131,52 @@ TextManager.prototype.prepareForRendering = function() {
 TextManager.prototype.constructVerts = function() {
     var verts = [];
     for (var i = 0; i < this.transformedStrings.length; i++) {
-        var fontSize = this.strings[i].fontSize;
-        var stringWidth = this.strings[i].text.length * fontSize;
+        var s = this.strings[i];
+        var flashes = s.flash || false;
 
-        var startPoint = null;
-        var stringCenter = null;
-        switch (this.strings[i].align) {
-            case -1:
-                startPoint = new Vec2(this.strings[i].x, this.strings[i].y - (fontSize / 2));
-                stringCenter = new Vec2(this.strings[i].x + (stringWidth / 2), this.strings[i].y + (fontSize / 2))
-                break;
-            case 0:
-                startPoint = new Vec2(this.strings[i].x - (stringWidth / 2), this.strings[i].y - (fontSize / 2));
-                stringCenter = new Vec2(this.strings[i].x, this.strings[i].y + (fontSize / 2))
-                break;
-            case 1:
-                startPoint = new Vec2(this.strings[i].x - stringWidth, this.strings[i].y - (fontSize / 2));
-                stringCenter = new Vec2(this.strings[i].x - (stringWidth / 2), this.strings[i].y + (fontSize / 2));
-                break;
+        var r = s.r;
+        var g = s.g;
+        var b = s.b;
+        var a = s.a;
+        var fontSize = s.fontSize;
+
+        if (flashes) {
+            if (Date.now() - s.lastFlash > s.flashDelay || (s.flashTime > 0 && s.flashTime < s.flashLength)) {
+                r = s.flashR;
+                g = s.flashG;
+                b = s.flashB;
+                a = s.flashA;
+                fontSize *= s.flashScale;
+
+                s.lastFlash = Date.now();
+                s.flashTime++;
+                if (s.flashTime > s.flashLength) {
+                    s.flashTime = 0;
+                }
+            }
+            else {
+                s.flashTime = 0;
+            }
         }
 
-        var r = this.strings[i].r;
-        var g = this.strings[i].g;
-        var b = this.strings[i].b;
-        var a = this.strings[i].a;
+        var stringWidth = s.text.length * fontSize;
+        var startPoint = null;
+        var stringCenter = null;
+
+        switch (s.align) {
+            case -1:
+                startPoint = new Vec2(s.x, s.y - (fontSize / 2));
+                stringCenter = new Vec2(s.x + (stringWidth / 2), s.y + (fontSize / 2))
+                break;
+            case 0:
+                startPoint = new Vec2(s.x - (stringWidth / 2), s.y - (fontSize / 2));
+                stringCenter = new Vec2(s.x, s.y + (fontSize / 2))
+                break;
+            case 1:
+                startPoint = new Vec2(s.x - stringWidth, s.y - (fontSize / 2));
+                stringCenter = new Vec2(s.x - (stringWidth / 2), s.y + (fontSize / 2));
+                break;
+        }
         var tempVerts = [];
 
         var angle = this.strings[i].angle;

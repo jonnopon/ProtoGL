@@ -1,55 +1,72 @@
-//The init function is called on page load, and is where you'll configure the game and start it
 var init = function() {
-    //Construct the Game object, setting its width and height in pixels
-    var game = new Game(800, 600);
-    game.setBackgroundColor(new Vec3(0, 0, 0));
+    var game = new Game(1024, 768);
+    game.setBackgroundColor(new Vec4(0, 0, 0, 1));
 
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {
-        "lastGen": 0
+        "wave": 0,
+        "maxEnemies": 10,
+        "triangleChance": 0.5,
+        "pentagonChance": 0
     };
     //STEP 2: attach initialisation function to the game (called during game.start())
     game.initFunc = function() {
         this.initManagers();
-        this.displayStats = true;
+        this.displayStats = false;
 
-        this.soundManager.addSound("point", "res/snd/collect.wav");
         this.soundManager.addSound("hit", "res/snd/hit.wav");
+        this.soundManager.addSound("shoot", "res/snd/shoot.wav");
+        this.soundManager.addSound("bonus", "res/snd/collect.wav");
+        this.soundManager.addSound("powerup", "res/snd/powerup.wav");
+        this.soundManager.addSound("enemydie", "res/snd/enemyhit.wav");
         this.switchToState("menu");
     };
 
     //STEP 3: attach reinit data to the game object (loaded upon game re-initialisation)
-    //it may be useful here, for more complex games, to leave some data unchanged on re-initialisation
-    //this is designed to allow flexible control of the game loop
-    game.reinitData = {
-        "lastGen": 0
-    };
-    //STEP 4: attach re-initialisation function to the game (called during game.reinit())
-    game.reinitFunc = function () {
-        this.initManagers();
-        this.displayStats = true;
+    game.reinitData = game.initData;
 
-        this.soundManager.addSound("point", "res/snd/collect.wav");
+    //STEP 4: attach re-initialisation function to the game (called during game.reinit())
+    game.reinitFunc = function() {
+        this.initManagers();
+        this.displayStats = false;
+
         this.soundManager.addSound("hit", "res/snd/hit.wav");
+        this.soundManager.addSound("shoot", "res/snd/shoot.wav");
+        this.soundManager.addSound("bonus", "res/snd/collect.wav");
+        this.soundManager.addSound("powerup", "res/snd/powerup.wav");
+        this.soundManager.addSound("enemydie", "res/snd/enemyhit.wav");
+        
         this.switchToState("game");
     };
 
     //STEP 5: attach utility functions to game - global game behaviors accessible anywhere
-    game.genFood = function() {
-        this.addEntity(Food());
-    };
-    game.genEnemy = function(currentPoints) {
-        if (currentPoints > this.lastGen) {
-            this.addEntity(Enemy());
+    game.entityShoot = function(e, gun) {
+        var g = gun || e.components.gun;
+        if (Date.now() - g.lastFire > g.fireRate) {
+            if (g.bulletList !== null) {
+                for (var i = 0; i < g.bulletList.length; i++) {
+                    var bullet = Bullet(e, g.startingAngles[i], g.bulletTargets !== null ? g.bulletTargets[i] : null);
+                    game.addEntity(bullet);
+                }
+            }
+            else {
+                game.addEntity(Bullet(e));
+            }
+            g.lastFire = Date.now();
+
+            GAME.soundManager.playSound("shoot");
         }
-        this.lastGen = currentPoints;
+    };
+    game.addPoints = function(p) {
+        var player = GAME.filterEntitiesByTag("player")[0];
+        player.components.points.value += p * player.components.multiplier.value;
+    };
+    game.addMultiplier = function(m) {
+        var player = GAME.filterEntitiesByTag("player")[0];
+        player.components.multiplier.value += m;
     };
 
     //STEP 6: add the states to the game
-    //for this demonstration, I have separated states into their own files
-    //each file contains a capitalised generator function that returns a State object to attach to the game
-    //You could choose to construct these states in this file, or you could do anything you like
-    //the only requirement is that addState() receives a complete State object with a name as well as its init and tick functions
     game.addState(MenuState());
     game.addState(GameState());
     game.addState(PausedState());

@@ -29,7 +29,7 @@ var AABBCollisionSystem = function() {
             //keeps the advantage of not calculating collisions for ents that can't collide but allows flexibility beyond "switching collision off" or "on" for a given entity
             //THE LIST SHOULD HAVE A SPECIAL KEYWORD THAT TURNS OFF ALL COLLISIONS FOR A GIVEN ENTITY (ALL?)
 
-            // var canCollide = validEnts[i].components.AABBCollisionBox.active && validEnts[j].components.AABBCollisionBox.active;
+            // var canCollide =  validEnts[i].components.AABBCollisionBox.active && validEnts[j].components.AABBCollisionBox.active;
             if (/*canCollide && */collides(validEnts[i], validEnts[j])) {
                 if (validEnts[i].onCollision !== null) {
                     validEnts[i].onCollision(validEnts[j]);

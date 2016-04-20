@@ -47,13 +47,14 @@ Game.prototype.run = function(t) {
     GAME.resizeCanvas();
 
     if (GAME.displayStats) {
-        GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 10, GAME.height - 25), new Vec3(255, 255, 255), 0);
+        GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);
+        GAME.textManager.addString("MousePos:\\n" + GAME.mousePos.str(), "Right", 25, new Vec2(GAME.width - 200, GAME.height - 65), new Vec4(255, 255, 255, 1), 0);
     }
-    GAME.currentState.tick();
 
     for (var i = 0; i < GAME.systems.length; i++) {
         GAME.systems[i]();
     }
+    GAME.currentState.tick();
 
     GAME.userInterfaceManager.render();
     GAME.textManager.render();
@@ -83,6 +84,7 @@ Game.prototype.addState = function(state) {
 };
 Game.prototype.switchToState = function(name) {
     this.currentState = this.states[name];
+    this.textManager.flushPersistentStrings();
     this.currentState.init();
 };
 Game.prototype.addSystem = function(system) {
@@ -93,6 +95,9 @@ Game.prototype.removeSystem = function(system) {
 };
 Game.prototype.addEntity = function(e) {
     this.entityManager.addEntity(e);
+};
+Game.prototype.addEntityList = function(l) {
+    this.entityManager.addEntityList(l);
 };
 Game.prototype.removeEntity = function(e) {
     this.entityManager.removeEntity(e);
