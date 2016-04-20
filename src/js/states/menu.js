@@ -13,8 +13,12 @@ var MenuState = function() {
         },
         function tick() {
             GAME.textManager.addString("SharpShifter", "center", 60, new Vec2(GAME.width / 2, GAME.height - 100), new Vec4(50, 255, 255, 1), 0, false);
-            GAME.textManager.addString("W:Move\\n\\nMouse:aim/fire\\n\\n", "right", 25, new Vec2(GAME.width - 15, 200), new Vec4(50, 255, 255, 1), 0, false);
-            GAME.textManager.addString("Ludum Dare 35 entry\\n\\nTheme: Shapeshift\\n\\nBy jonnopon3000", "left", 25, new Vec2(15, 255), new Vec4(50, 255, 255, 1), 0, false);
+
+            GAME.textManager.addString(
+                "Mouse:aim/fire\\n\\nW:Move Forward\\n\\nP:Pause\\n\\nE:Special Ability",
+                "center", 35, new Vec2(GAME.width / 2, GAME.height / 2 + 100), new Vec4(150, 200, 255, 1), 0, false);
+
+            GAME.textManager.addString("X" , "center", 20,  GAME.mousePos, new Vec4(255, 255, 255, 1), 0);
 
             if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
                 GAME.switchToState("game");

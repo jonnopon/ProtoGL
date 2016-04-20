@@ -59,11 +59,15 @@ var init = function() {
     };
     game.addPoints = function(p) {
         var player = GAME.filterEntitiesByTag("player")[0];
-        player.components.points.value += p * player.components.multiplier.value;
+        if (player !== null && player !== undefined) {
+            player.components.points.value += p * player.components.multiplier.value;
+        }
     };
     game.addMultiplier = function(m) {
         var player = GAME.filterEntitiesByTag("player")[0];
-        player.components.multiplier.value += m;
+        if (player !== null && player !== undefined) {
+            player.components.multiplier.value += m;
+        }
     };
 
     //STEP 6: add the states to the game

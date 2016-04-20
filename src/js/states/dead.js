@@ -19,6 +19,8 @@ var DeadState = function() {
             GAME.textManager.addString("Points: " + Math.round(this.player.components.points.value), "center", 60, new Vec2(GAME.width / 2, GAME.height / 2 - 100), new Vec4(50, 255, 255, 1), 0);
             GAME.textManager.addString("Wave: " + GAME.wave, "center", 60, new Vec2(GAME.width / 2, GAME.height / 2 + 100), new Vec4(50, 255, 255, 1), 0);
 
+            GAME.textManager.addString("X" , "center", 20,  GAME.mousePos, new Vec4(255, 255, 255, 1), 0);
+
             if (GAME.inputHandler.isKeyDown(KEYCODES.space)) {
                 GAME.reinit();
             }
