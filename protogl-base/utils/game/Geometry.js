@@ -6,7 +6,6 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
     var cy = pos.y;
 
     var vertList = [];
-    var glShape = gl.TRIANGLES;
     var texList = [];
     if (texture && sprite) {
         var bl = sprite.bottomLeft;
@@ -15,7 +14,9 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
         var br = sprite.bottomRight;
     }
 
-    if (name === "square") {
+    //TODO: glShape probably belongs here, not in Entity Component "Shape"
+
+    if (name === "rect") {
         vertList = [
                 new Vec2(cx - hDim.x, cy - hDim.y),
                 new Vec2(cx + hDim.x, cy - hDim.y),
@@ -25,7 +26,6 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
                 new Vec2(cx - hDim.x, cy + hDim.y),
                 new Vec2(cx - hDim.x, cy - hDim.y)
             ];
-        glShape = gl.TRIANGLES;
         if (texture && sprite) {
             texList = [
                 new Vec2(tl.x, tl.y),
@@ -44,7 +44,6 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
             new Vec2(cx, cy - hDim.y),
             new Vec2(cx + hDim.y, cy + hDim.y)
         ];
-        glShape = gl.TRIANGLES;
         if (texture && sprite) {
             texList = [
                 //TODO: doesn't look very good
@@ -76,7 +75,7 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
             new Vec2(cx - hDim.x, cy), //left mid
             new Vec2(cx, cy + hDim.y), //top
         ];
-        glShape = gl.TRIANGLES;
+        // glShape = gl.TRIANGLES;
         if (texture && sprite) {
             texList = [
                 //hmmm
@@ -89,7 +88,7 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
         // var cy = pos.y;
         var cellsHor = dimensions.x / cellSize;
         var cellsVer = dimensions.y / cellSize;
-        glShape = gl.LINES;
+        // glShape = gl.LINES;
         for (var i = 0; i < dim.x; i += dimensions.x / cellsHor) {
             var lineVerts = [
                 new Vec2(i, GAME.height),
@@ -104,22 +103,32 @@ var _getGeometry = function(name, pos, dimensions, texture, sprite, cellSize) {
             ];
             vertList = vertList.concat(lineVerts);
         }
-        
-        // //TODO: KEEP THIS FOR POTENTIAL COOL BOMB RIPPLE EFFECT?
-        // var cellsHor = dimensions.x / cellSize;
-        // glShape = gl.LINES;
-        // for (var i = 0; i < dim.x; i += dimensions.x / cellsHor) {
-        //     var lineVerts = [
-        //         new Vec2(i, GAME.height),
-        //         new Vec2(i, 0)
-        //     ];
-        //     vertList.push(lineVerts);
-        // }
+    }
+    else if (name === "circle") {
+        vertList = [];
+
+        var radius = ((dimensions.x + dimensions.y) / 2) / 2;
+        var twoPi = 2 * Math.PI;
+
+        vertList.push(pos);
+        for (var i = 0; i < 21; i++) {
+            //TODO: only draws with 21 triangles regardless at this stage
+            //should calculate required triangles
+            vertList.push(new Vec2(cx + (radius *  Math.cos(i * twoPi / 20)),
+                            cy + (radius * Math.sin(i * twoPi / 20))));
+        }
+
+        // glShape = gl.TRIANGLES;
+        if (texture && sprite) {
+            texList = [
+                //hmmm
+            ];
+        }
     }
 
     return {
         vertList: vertList,
-        glShape: glShape,
+        // glShape: glShape,
         texList: texList,
     };
 };

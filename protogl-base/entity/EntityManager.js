@@ -83,6 +83,16 @@ EntityManager.prototype.renderFlats = function(flatEnts) {
         // var glShape = Object.keys(grouped)[i].toString();
         verts = [];
 
+        var config = new RenderSettings();
+        config.addAttribute("pos", 2);
+        config.addAttribute("col", 4);
+        config.addAttribute("angle", 1);
+        config.addAttribute("scale", 1);
+        config.addAttribute("centre", 2);
+        config.addUniform("resX", GAME.resolution.x);
+        config.addUniform("resY", GAME.resolution.y);
+        config.setShape(glShape);
+
         for (var j = 0; j < grouped[glShape].length; j++) {
             var e = grouped[glShape][j];
             var color = e.components.flatColor.color;
@@ -96,23 +106,35 @@ EntityManager.prototype.renderFlats = function(flatEnts) {
             //shader in use - transform-colored
             //attributes: vec 2 pos, vec4 col, float angle, float scale, vec2 centre
             //uniforms: resX resY
-            var off = 0;
-            for (var k = 0; k < vertList.length; k++) {
-                var list = [vertList[k].x, vertList[k].y, color.x, color.y, color.z, color.w, angle, scale, pos.x, pos.y]
-                verts = verts.concat(list);
-                dataPerVert = list.length;
+
+            if (glShape === "6") {
+                //TODO: messy but have to render strips in single calls
+                var tempVerts = [];
+                var tempDataPerVert = 0;
+                for (var p = 0; p < vertList.length; p++) {
+                    var list = [vertList[p].x, vertList[p].y, color.x, color.y, color.z, color.w, angle, scale, pos.x, pos.y]
+                    tempVerts = tempVerts.concat(list);
+                    tempDataPerVert = list.length;
+                }
+
+                var vertsToSend = new Float32Array(tempVerts.length);
+                vertsToSend.set(tempVerts, 0);
+                renderer.addVerts("flatVerts", vertsToSend, dataPerVert);
+                renderer.bufferVertsToVBO("flatVerts", this.flatVBOName);
+                renderer.bindVBO(this.flatVBOName);
+                renderer.bindVerts("flatVerts");
+                renderer.bindShaderProgram(this.flatShaderProgram);
+                renderer.render2D(true, config);
+            }
+            else {
+                var off = 0;
+                for (var k = 0; k < vertList.length; k++) {
+                    var list = [vertList[k].x, vertList[k].y, color.x, color.y, color.z, color.w, angle, scale, pos.x, pos.y]
+                    verts = verts.concat(list);
+                    dataPerVert = list.length;
+                }
             }
         }
-
-        var config = new RenderSettings();
-        config.addAttribute("pos", 2);
-        config.addAttribute("col", 4);
-        config.addAttribute("angle", 1);
-        config.addAttribute("scale", 1);
-        config.addAttribute("centre", 2);
-        config.addUniform("resX", GAME.resolution.x);
-        config.addUniform("resY", GAME.resolution.y);
-        config.setShape(glShape);
 
         var vertsToSend = new Float32Array(verts.length);
         vertsToSend.set(verts, 0);
@@ -164,7 +186,7 @@ EntityManager.prototype.renderSprites = function(spriteEnts) {
         config.addUniform("tex", this.texPos);
         config.addUniform("resX", GAME.resolution.x);
         config.addUniform("resY", GAME.resolution.y);
-        config.setShape(gl.TRIANGLES);
+        config.setShape(glShape);
         config.setTextureName(this.textureName);
 
         var vertsToSend = new Float32Array(verts.length);

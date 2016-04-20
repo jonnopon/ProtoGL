@@ -5,15 +5,15 @@
 - physics-ey? (Acceleration/deceleration)? (fix physicsSystem in this regard)
 
 ##ENEMIES
-- Super form enemies
+- Superform enemies
     - all 1.5x size, different (darker?) color, change abilities:
         - triangle: follows player (not directly)
         - square: moves faster
         - pentagon: moves? better idea?
 - New shapes
-    - Circle
-        - Super fast straight-line, towards player's pos at spawn
-        - Doesn't bounce off screen edges
+    - ~~Circle~~
+        - ~~Super fast straight-line, towards player's pos at spawn~~
+        - ~~Doesn't bounce off screen edges~~
         - Superform: 4 circles spawn at corners, heading towards player pos (destroy each other on contact)
     - Line (thin rect not actual line)
         - Like a ping pong paddle in movement, shoots in front or behind from center (towards player)
@@ -57,3 +57,5 @@
 - (eventually) neon! / partial 3D!?
     - Definitely an animate-able 3D grid/net
     - Wireframe entities?
+- FIX ROTATION
+    - (good evidence of underlying problem: circles become ovals when rotated with the transform's angle property)
