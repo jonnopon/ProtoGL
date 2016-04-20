@@ -47,7 +47,7 @@ var TextManager = function() {
 	}
 };
 
-TextManager.prototype.addString = function(text, align, size, pos, col, angle, persist, flashing, flashDelay, flashLength, flashCol, flashScale) {
+TextManager.prototype.addString = function(text, align, size, pos, col, angle, persist, flashing, flashFrames, flashCol, flashScale) {
     var alignInt = null;
     if (angle !== 0) {
         //override if you're rotating text I want to cancel the orientation because the startPos is also rotated
@@ -88,15 +88,16 @@ TextManager.prototype.addString = function(text, align, size, pos, col, angle, p
             
         }
         if (flashing) {
-            str.flash= flashing,
-            str.flashDelay = flashDelay,
-            str.flashLength = flashLength,
+            str.flashing = flashing,
+            str.flashFrames = flashFrames;
             str.lastFlash = 0,
             str.flashR = flashCol.x,
             str.flashG = flashCol.y,
             str.flashB = flashCol.z,
             str.flashA = flashCol.w,
             str.flashScale = flashScale;
+            str.on = false;
+            str.frames = 0;
         }
         
         this.strings.push(str);
@@ -132,7 +133,7 @@ TextManager.prototype.constructVerts = function() {
     var verts = [];
     for (var i = 0; i < this.transformedStrings.length; i++) {
         var s = this.strings[i];
-        var flashes = s.flash || false;
+        var flashes = s.flashing || false;
 
         var r = s.r;
         var g = s.g;
@@ -141,21 +142,18 @@ TextManager.prototype.constructVerts = function() {
         var fontSize = s.fontSize;
 
         if (flashes) {
-            if (Date.now() - s.lastFlash > s.flashDelay || (s.flashTime > 0 && s.flashTime < s.flashLength)) {
+            if (s.frames % s.flashFrames === 0 || s.frames - s.lastFlash === s.flashFrames) {
+                s.on = !s.on;
+                s.lastFlash = s.frames;
+            }
+            s.frames++;
+
+            if (s.on) {
                 r = s.flashR;
                 g = s.flashG;
                 b = s.flashB;
                 a = s.flashA;
                 fontSize *= s.flashScale;
-
-                s.lastFlash = Date.now();
-                s.flashTime++;
-                if (s.flashTime > s.flashLength) {
-                    s.flashTime = 0;
-                }
-            }
-            else {
-                s.flashTime = 0;
             }
         }
 

@@ -50,10 +50,10 @@
 - Flashing text, changing color + scale etc on events like point gain, multiplier milestone hit, etc
 
 ##GENERAL
-- Fix mouse positioning on pointerLock
+- ~~Fix mouse positioning on pointerLock~~
 - ~~Show X at mousepos in all states~~
 - ~~Remove LD info from intro menu; replace with better tutorial~~
+- ~~Fix flashing text~~
 - (eventually) neon! / partial 3D!?
     - Definitely an animate-able 3D grid/net
     - Wireframe entities?
-- Fix flashing text
