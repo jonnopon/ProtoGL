@@ -4,13 +4,13 @@ In active development. API, overall structure, engine capabilities and demo/temp
 
 ----
 
-##This Branch (ludum-dare-35)
-Pretty self explanatory! It's time to make a game
-***Theme: Shapeshift***
+##This Branch (sharpshifter-dev)
+Improving the game I made for Ludum Dare 35, to further its benefit as a demonstration app for the engine as well as improve the engine's 2D capabilities.
+Main focus: increasing "game feel" and adding helpers/components/utilities to ProtoGL to help reproduce this in the future.
 
 ----
 
-##Rough TODO
+##Rough (engine) TODO
 Not necessarily a complete list, definitely not in priority order
 - ***(new) UI***
     - buttons + textboxes (+ wrapping for Text)
