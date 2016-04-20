@@ -1,6 +1,7 @@
 var MenuState = function() {
     return new State("menu",
         function init() {
+            GAME.clearEntities();
             GAME.addEntity(Background());
             GAME.addEntity(Player());
             GAME.entityManager.loadEnts();

@@ -2,32 +2,29 @@ var LevelSystem = function() {
     this.player = null;
     var currentEnemies = GAME.filterEntitiesByTag("enemy");
 
-    GAME.maxEnemies = GAME.maxEnemies || 10;
-
     if (currentEnemies.length === 0) {
         GAME.wave++;
+        
         GAME.maxEnemies = Math.ceil(GAME.maxEnemies * 1.0000005);
         if (GAME.maxEnemies > 100) {
             GAME.maxEnemies = 100;
         }
 
         for (var i = 0; i < GAME.maxEnemies; i++) {
-            var squareChance = 0.95, triangleChance = 0.05, pentagonChance = 0;
-
-            triangleChance += 0.05;
-            if (triangleChance > 0.35) {
-                triangleChance = 0.35;
+            GAME.triangleChance += 0.05;
+            if (GAME.triangleChance > 0.35) {
+                GAME.triangleChance = 0.35;
             }
-            pentagonChance += 0.005;
-            if (pentagonChance > 0.2) {
-                pentagonChance = 0.2;
+            GAME.pentagonChance += 0.005;
+            if (GAME.pentagonChance > 0.2) {
+                GAME.pentagonChance = 0.2;
             }
 
             var fives = GAME.wave % 5;
             var tens = GAME.wave % 10;
 
             if (tens === 0) {
-                //this round is a multiple of ten - give maxhealth and override next round as hand-crafted
+                //this round is a multiple of ten
                 if (this.player === null) {
                     this.player = GAME.filterEntitiesByTag("player")[0];
                     if (this.player) {
@@ -39,7 +36,7 @@ var LevelSystem = function() {
                 }
             }
             else if (fives === 0) {
-                //this round is a multiple of five - give health and adjust weights
+                //this round is a multiple of five
                 if (this.player === null) {
                     this.player = GAME.filterEntitiesByTag("player")[0];
                     if (this.player) {
@@ -56,19 +53,14 @@ var LevelSystem = function() {
             var r = Math.random();
 
             var shape = "square";
-            if (r < pentagonChance) {
+            if (r < GAME.pentagonChance) {
                 shape = "pentagon";
             }
-            else if (r < triangleChance) {
+            else if (r < GAME.triangleChance) {
                 shape = "triangle";
-            }
-
-            if (shape == "square") {
-                zz = 1000
             }
 
             GAME.addEntity(Enemy(shape));
         }
-        //delayed and telegraphed spawning for procedural waves (randomised per entity)
     }
 };

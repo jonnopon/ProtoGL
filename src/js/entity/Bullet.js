@@ -1,18 +1,18 @@
 var Bullet = function(owner, startAngle, target) {
-    var entity = new Entity("bullet:" + owner.tag);//can differentiate bullets fired by different types of entity
-    // entity.addComponent(new Sprite(0, 0, 0.25, 1)); //TODO: new Shape()
+    var entity = new Entity("bullet:" + owner.tag);
+
+    var center = owner.components.transform2D.position.clone();
+    var dimensions = new Vec2(10, 35);
     var col = new Vec4(255, 255, 255, 1);
     if (owner.tag.indexOf("enemy") > -1) {
         col = new Vec4(255, 0, 102, 1);
     }
 
-    var dimensions = new Vec2(10, 35);
-    entity.addComponent(new Transform2D(owner.components.transform2D.position.clone(), dimensions, new Vec2(0, 0)));
-
+    entity.addComponent(new Transform2D(center, dimensions, new Vec2(0, 0)));
     entity.addComponent(new AABBCollisionBox(dimensions));
     entity.addComponent(new Health(3));
     entity.addComponent(new Points());
-    entity.addComponent(new Shape("square", dimensions, new Vec2(GAME.width / 2, GAME.height / 2)));
+    entity.addComponent(new Shape("square", dimensions, center));
     entity.addComponent(new FlatColor(col));
 
     entity.components.transform2D.targetForwardVelocity = 150;
@@ -22,8 +22,7 @@ var Bullet = function(owner, startAngle, target) {
     entity.components.transform2D.maxVelocity = new Vec2(1000, 1000);
 
     var target = target || GAME.mousePos || new Vec2(0, 0);
-    var angle = target.getAngleBetweenVec2(entity.components.transform2D.position) - degToRad(90) + degToRad(startAngle);
-    entity.components.transform2D.angle = angle;
+    entity.components.transform2D.angle = target.getAngleBetweenVec2(entity.components.transform2D.position) - degToRad(90) + degToRad(startAngle);;
 
     entity.onUpdate = function() {
         var transform = this.components.transform2D;
@@ -35,10 +34,6 @@ var Bullet = function(owner, startAngle, target) {
         ) {
             GAME.removeEntity(this);
         }
-    };
-
-    entity.onCollision = function(e) {
-        //TODO
     };
 
     return entity;

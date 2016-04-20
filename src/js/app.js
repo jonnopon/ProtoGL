@@ -4,7 +4,10 @@ var init = function() {
 
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {
-        "wave": 0
+        "wave": 0,
+        "maxEnemies": 10,
+        "triangleChance": 0.5,
+        "pentagonChance": 0
     };
     //STEP 2: attach initialisation function to the game (called during game.start())
     game.initFunc = function() {
@@ -41,14 +44,12 @@ var init = function() {
         var g = gun || e.components.gun;
         if (Date.now() - g.lastFire > g.fireRate) {
             if (g.bulletList !== null) {
-                var actual = [];
                 for (var i = 0; i < g.bulletList.length; i++) {
                     var bullet = Bullet(e, g.startingAngles[i], g.bulletTargets !== null ? g.bulletTargets[i] : null);
                     game.addEntity(bullet);
                 }
             }
             else {
-                //spray somehow
                 game.addEntity(Bullet(e));
             }
             g.lastFire = Date.now();
@@ -63,12 +64,7 @@ var init = function() {
     game.addMultiplier = function(m) {
         var player = GAME.filterEntitiesByTag("player")[0];
         player.components.multiplier.value += m;
-
-        //shape transformations
     };
-    game.advanceRound = function(roundNum) {
-        //maybe belongs in LevelSystem
-    }
 
     //STEP 6: add the states to the game
     game.addState(MenuState());
