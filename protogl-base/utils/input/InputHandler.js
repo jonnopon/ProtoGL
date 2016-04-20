@@ -16,18 +16,6 @@ var InputHandler = function(canvas) {
 
     canvas.addEventListener("mousedown", function(event) {
         GAME.mouseDown = true;
-        if (document.pointerLockElement == null) {
-            this.requestPointerLock();
-            var fullScreenFunc = this.requestFullScreen || this.mozRequestFullScreen || this.webkitRequestFullScreen;
-            // fullScreenFunc();
-            if (GAME.clientX === undefined) {
-                GAME.clientX = event.layerX;
-            }
-            if (GAME.clientY === undefined) {
-                GAME.clientY = event.layerY;
-            }
-
-        }
     });
 
     canvas.addEventListener("mouseup", function(event) {
@@ -37,6 +25,9 @@ var InputHandler = function(canvas) {
     canvas.addEventListener("click", function(event) {
         if (document.pointerLockElement == null) {
             this.requestPointerLock();
+            GAME.mousePos = new Vec2(event.layerX, GAME.height - event.layerY);
+            GAME.clientX = event.layerX;
+            GAME.clientY = GAME.height - event.layerY;
         }
         GAME.mouseClickedPos = GAME.mousePos;
 
@@ -50,18 +41,7 @@ var InputHandler = function(canvas) {
     });
 
     canvas.addEventListener("mousemove", function(event) {
-        if (GAME.clientX === undefined) {
-            GAME.clientX = 0;
-        }
-        if (GAME.clientY === undefined) {
-            GAME.clientY = 0;
-        }
-
         GAME.mousePos = new Vec2(event.layerX, GAME.height - event.layerY);
-        GAME.moveX = event.movementX;
-        GAME.moveY = event.movementY;
-        GAME.layerX = event.layerX;
-        GAME.layerY = event.layerY;
 
         if (document.pointerLockElement) {
             GAME.clientX += (event.movementX) || (event.webkitMovementX) || 0;

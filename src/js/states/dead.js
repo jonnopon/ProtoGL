@@ -12,7 +12,7 @@ var DeadState = function() {
 
             GAME.userInterfaceManager.clearElements();
 
-            GAME.textManager.addString("Space to Restart", "center", 45, new Vec2(GAME.width / 2, 70), new Vec4(255, 255, 255, 0), 0, true, true, 150, 35, new Vec4(255, 255, 255, 1), 1);
+            GAME.textManager.addString("Space to Restart", "center", 45, new Vec2(GAME.width / 2, 70), new Vec4(255, 255, 255, 0), 0, true, true, 25, new Vec4(255, 255, 255, 1), 1);
         },
         function tick() {
             GAME.textManager.addString("You Died!", "center", 60, new Vec2(GAME.width / 2, GAME.height - 100), new Vec4(50, 255, 255, 1), 0);
