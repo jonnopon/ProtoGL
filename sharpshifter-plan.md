@@ -12,6 +12,8 @@
             - maybe this is constructed by the entity manager?
             - this is a good idea - allows for built-in scaling and rotation
             - needs to be an attribute of a shader? Think about it while writing the entity-rendersettings definition thingy
+- Shader experimentation (as part of above)
+    - Byproduct: improve/replace ProtoGL library shaders to improve
 - Cameras
     - Need to be generic for general use
         - have states (both 2D and 3D)

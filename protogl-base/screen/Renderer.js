@@ -8,6 +8,7 @@ var handleTextureLoaded = function(image, texture, ident) {
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.bindTexture(gl.TEXTURE_2D, null);
 };
+
 var Renderer = function(gameCanvas) {
     this.vbos = {};
     this.verts = {};
@@ -42,6 +43,7 @@ var Renderer = function(gameCanvas) {
         gl.TEXTURE2
     ];
 };
+
 Renderer.prototype.createTexture = function(name, src) {
     var ident = this.textureIdentifiers[Object.keys(this.textures).length];
     var tex = gl.createTexture();
@@ -53,34 +55,27 @@ Renderer.prototype.createTexture = function(name, src) {
     // return the gl texture position of the created texture
     return Object.keys(this.textures).length - 1;
 };
-
 Renderer.prototype.addVerts = function(name, vertArray, dataPerVert) {
     this.verts[name] = {'dataPerVert':dataPerVert, 'array':new Float32Array(vertArray)};
 };
-
 Renderer.prototype.addVBO = function(name) {
     this.vbos[name] = gl.createBuffer();
 };
-
 Renderer.prototype.bufferVertsToVBO = function(vertName, vboName) {
     var prevBuffer = this.activeVBO;
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[vboName]);
     gl.bufferData(gl.ARRAY_BUFFER, this.verts[vertName].array, gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, prevBuffer);
 };
-
 Renderer.prototype.bindVBO = function(name) {
     this.activeVBO = this.vbos[name];
 };
-
 Renderer.prototype.bindVerts = function(name) {
     this.activeVerts = this.verts[name];
 };
-//
 Renderer.prototype.bindShaderProgram = function(name) {
     this.activeShaderProgram = this.shaderPrograms[name];
 };
-
 Renderer.prototype.addShaderProgram = function(name, shaders) {
     /* Usage:
      in application, _get[Vert|Frag]Shader(String <name>) to get your shaders from vert and frag shaders
@@ -98,7 +93,6 @@ Renderer.prototype.addShaderProgram = function(name, shaders) {
 Renderer.prototype.getShaderProgram = function(name) {
     return this.shaderPrograms[name];
 };
-
 Renderer.prototype.createShaderProgram = function(gl, vshader, fshader, extras) {
     var vertexShader = this.compileShader(gl, gl.VERTEX_SHADER, vshader);
     var fragmentShader = this.compileShader(gl, gl.FRAGMENT_SHADER, fshader);
@@ -127,7 +121,6 @@ Renderer.prototype.createShaderProgram = function(gl, vshader, fshader, extras) 
     }
     return program;
 };
-
 Renderer.prototype.compileShader = function(gl, type, source) {
     var shader = gl.createShader(type);
     if (shader == null) {
@@ -148,7 +141,6 @@ Renderer.prototype.compileShader = function(gl, type, source) {
 
     return shader;
 };
-
 Renderer.prototype.clearScreen = function(col, depth) {
     gl.clearColor(col.x, col.y, col.z, 1.0);
     if (depth) {
@@ -158,8 +150,7 @@ Renderer.prototype.clearScreen = function(col, depth) {
         gl.clear(gl.COLOR_BUFFER_BIT);
     }
 };
-
-Renderer.prototype.render2D = function(rebuffer, settings) {
+Renderer.prototype.render = function(settings) {
     gl.disable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -173,18 +164,16 @@ Renderer.prototype.render2D = function(rebuffer, settings) {
     gl.useProgram(this.activeShaderProgram);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.activeVBO);
 
-    if (rebuffer) {
-        gl.bufferData(gl.ARRAY_BUFFER, this.activeVerts.array, gl.DYNAMIC_DRAW);
-        var off = 0;
+    gl.bufferData(gl.ARRAY_BUFFER, this.activeVerts.array, gl.DYNAMIC_DRAW);
+    var off = 0;
 
-        for (var i = 0; i < settings.attributes.length; i++) {
-            var attrib = settings.attributes[i];
-            var attribLoc = gl.getAttribLocation(this.activeShaderProgram, attrib.name);
-            gl.enableVertexAttribArray(attribLoc);
-            gl.vertexAttribPointer(attribLoc, attrib.size, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, off);
+    for (var i = 0; i < settings.attributes.length; i++) {
+        var attrib = settings.attributes[i];
+        var attribLoc = gl.getAttribLocation(this.activeShaderProgram, attrib.name);
+        gl.enableVertexAttribArray(attribLoc);
+        gl.vertexAttribPointer(attribLoc, attrib.size, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, off);
 
-            off += (attrib.size * 4);
-        }
+        off += (attrib.size * 4);
     }
 
     for (var j = 0; j < settings.uniforms.length; j++) {
@@ -196,7 +185,6 @@ Renderer.prototype.render2D = function(rebuffer, settings) {
 
     gl.drawArrays(settings.shape, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
 };
-
 Renderer.prototype.uploadUniform = function(name, type, value) {
     var loc = gl.getUniformLocation(this.activeShaderProgram, name);
 
@@ -212,31 +200,31 @@ Renderer.prototype.uploadUniform = function(name, type, value) {
     }
 };
 
-Renderer.prototype.render3D = function(rebuffer) {
-    gl.disable(gl.BLEND);
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LESS);
-    gl.useProgram(this.activeShaderProgram);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.activeVBO);
-
-    var pMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'projectionMatrix');
-    var mMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'modelMatrix');
-    var vMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'viewMatrix');
-
-    gl.uniformMatrix4fv(pMatrixUniformLoc, false, this.projectionMatrix.values);
-    gl.uniformMatrix4fv(mMatrixUniformLoc, false, this.modelMatrix.values);
-    gl.uniformMatrix4fv(vMatrixUniformLoc, false, this.viewMatrix.values);
-
-    if (rebuffer) {
-        var posAttrib = gl.getAttribLocation(this.activeShaderProgram, 'pos');
-        gl.enableVertexAttribArray(posAttrib);
-        gl.vertexAttribPointer(posAttrib, 3, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, 0);
-        var colAttrib = gl.getAttribLocation(this.activeShaderProgram, 'col');
-        gl.enableVertexAttribArray(colAttrib);
-        gl.vertexAttribPointer(colAttrib, 3, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, 3 * 4);
-    }
-    gl.drawArrays(gl.TRIANGLES, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
-};
+// Renderer.prototype.render3D = function(rebuffer) {
+//     gl.disable(gl.BLEND);
+//     gl.enable(gl.DEPTH_TEST);
+//     gl.depthFunc(gl.LESS);
+//     gl.useProgram(this.activeShaderProgram);
+//     gl.bindBuffer(gl.ARRAY_BUFFER, this.activeVBO);
+//
+//     var pMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'projectionMatrix');
+//     var mMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'modelMatrix');
+//     var vMatrixUniformLoc = gl.getUniformLocation(this.activeShaderProgram, 'viewMatrix');
+//
+//     gl.uniformMatrix4fv(pMatrixUniformLoc, false, this.projectionMatrix.values);
+//     gl.uniformMatrix4fv(mMatrixUniformLoc, false, this.modelMatrix.values);
+//     gl.uniformMatrix4fv(vMatrixUniformLoc, false, this.viewMatrix.values);
+//
+//     if (rebuffer) {
+//         var posAttrib = gl.getAttribLocation(this.activeShaderProgram, 'pos');
+//         gl.enableVertexAttribArray(posAttrib);
+//         gl.vertexAttribPointer(posAttrib, 3, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, 0);
+//         var colAttrib = gl.getAttribLocation(this.activeShaderProgram, 'col');
+//         gl.enableVertexAttribArray(colAttrib);
+//         gl.vertexAttribPointer(colAttrib, 3, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, 3 * 4);
+//     }
+//     gl.drawArrays(gl.TRIANGLES, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
+// };
 
 Renderer.prototype.resize = function(width, height) {
     gl.viewport(0, 0, width, height);

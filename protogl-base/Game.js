@@ -74,7 +74,7 @@ Game.prototype.resizeCanvas = function() {
     this.renderer.resize(this.canvas.width, this.canvas.height);
 };
 Game.prototype.initManagers = function() {
-    this.renderer = new Renderer(this.canvas); //TODO: might change
+    this.renderer = new Renderer(this.canvas);
     this.textManager = new TextManager(this);
     this.soundManager = new SoundManager();
     this.entityManager = new EntityManager(this);
@@ -138,12 +138,10 @@ Game.prototype.getAllEntities = function() {
 Game.prototype.clearEntities = function() {
     this.entityManager.clearAllEntities();
 };
-
 Game.prototype.addShader = function(shader) {
     this.renderer.addShaderProgram(shader["name"], [shader["vertSrc"], shader["fragSrc"]]);
     this.shaders[shader["name"]] = shader;
 };
-
 Game.prototype.getShader = function(name) {
     return this.shaders[name];
-}
+};
