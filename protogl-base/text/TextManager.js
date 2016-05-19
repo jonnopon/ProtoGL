@@ -10,12 +10,14 @@ var TextManager = function() {
         texPos = this.renderer.createTexture(this.textureName, 'res/img/font.png');
     }
 
+    var vert = VERTSHADERS2D["transform-textured-colored"];
+    var frag = FRAGSHADERS["textured-colored"];
     var textShader = {
         name: "textShader",
-        vertSrc: VERTSHADERS2D["transform-textured-colored"].src,
-        fragSrc: FRAGSHADERS["textured-colored"],
-        attributes: VERTSHADERS2D["transform-textured-colored"].attributes,
-        uniforms: VERTSHADERS2D["transform-textured-colored"].uniforms
+        vertSrc: vert.src,
+        fragSrc: frag,
+        attributes: vert.attributes,
+        uniforms: vert.uniforms
     };
     GAME.addShader(textShader);
 

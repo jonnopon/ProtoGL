@@ -27,7 +27,7 @@ RenderSettings.prototype.addAttributes = function(attributes) {
     
     for (var i = 0; i < attributeKeys.length; i++) {
         var attributeName = attributeKeys[i];
-        var attributeSize = attributes[attributeKeys[i]].size;
+        var attributeSize = attributes[attributeKeys[i]];
 
         this.addAttribute(attributeName, attributeSize);
     }

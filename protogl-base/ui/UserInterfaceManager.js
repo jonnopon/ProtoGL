@@ -5,12 +5,14 @@ var UserInterfaceManager = function() {
     this.verts = [];
     this.dataPerVert = 6;
 
+    var vert = VERTSHADERS2D["colored"];
+    var frag = FRAGSHADERS["colored"];
     var uiShader = {
         name: "uiShader",
-        vertSrc: VERTSHADERS2D["colored"].src,
-        fragSrc: FRAGSHADERS["colored"],
-        attributes: VERTSHADERS2D["colored"].attributes,
-        uniforms: VERTSHADERS2D["colored"].uniforms
+        vertSrc: vert.src,
+        fragSrc: frag,
+        attributes: vert.attributes,
+        uniforms: vert.uniforms
     };
     GAME.addShader(uiShader);
 
@@ -21,7 +23,7 @@ var UserInterfaceManager = function() {
     config.setShape(gl.TRIANGLES);
     config.addAttributes(uiShader.attributes);
     config.addUniforms(uiShader.uniforms);
-    
+
     this.renderSettings = config;
 
     this.elements = [];
