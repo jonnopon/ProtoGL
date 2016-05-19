@@ -76,7 +76,7 @@ Renderer.prototype.bindVBO = function(name) {
 Renderer.prototype.bindVerts = function(name) {
     this.activeVerts = this.verts[name];
 };
-
+//
 Renderer.prototype.bindShaderProgram = function(name) {
     this.activeShaderProgram = this.shaderPrograms[name];
 };
@@ -92,6 +92,8 @@ Renderer.prototype.addShaderProgram = function(name, shaders) {
     if (!this.shaderPrograms[name]) {
         alert("Could not create shader program named " + name);
     }
+
+    // return this.shaderPrograms[name];
 };
 Renderer.prototype.getShaderProgram = function(name) {
     return this.shaderPrograms[name];
@@ -167,6 +169,7 @@ Renderer.prototype.render2D = function(rebuffer, settings) {
         gl.bindTexture(gl.TEXTURE_2D, this.textures[settings.textureName].tex);
     }
 
+    this.bindShaderProgram(settings.shaderName);
     gl.useProgram(this.activeShaderProgram);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.activeVBO);
 
@@ -186,11 +189,27 @@ Renderer.prototype.render2D = function(rebuffer, settings) {
 
     for (var j = 0; j < settings.uniforms.length; j++) {
         var name = settings.uniforms[j].name;
+        var type = settings.uniforms[j].type;
         var value = settings.uniforms[j].val;
-        gl.uniform1i(gl.getUniformLocation(this.activeShaderProgram, name), value); //TODO currently assumes all uniforms are of type 1i
+        this.uploadUniform(name, type, value);
     }
 
     gl.drawArrays(settings.shape, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
+};
+
+Renderer.prototype.uploadUniform = function(name, type, value) {
+    var loc = gl.getUniformLocation(this.activeShaderProgram, name);
+
+    switch (type) {
+        case "int":
+            gl.uniform1i(loc, value);
+            break;
+        case "mat4":
+            var actualValue = new Float32Array(16);
+            actualValue.set(value, 0);
+            gl.uniformMatrix4fv(loc, false, actualValue);
+            break;
+    }
 };
 
 Renderer.prototype.render3D = function(rebuffer) {

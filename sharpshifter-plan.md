@@ -3,22 +3,23 @@
 ##ENGINE
 - Camera
 - Maybe rewrite of renderer?
-    - Want shader per object not per shape
-        - Entity component: shader (implicitly implying and setting the required shape? expansion of shape?)
-        - EntityManager groups entities by shader (then by shape?) and configs the renderer as such for calls
-            - This will require more sophisticated rendersettings construction
-              As well as new shader-defining capabilities for RenderSettings
-            - Render calls are minimised by the groupings
-            - RESULTANT PROBLEM: draw order is indeterminate! Maybe not a problem in practise?
+    - ~~Want shader per object not per shape~~
+        - ~~Entity component: shader~~
+        - ~~EntityManager groups entities by shader (then by shape?) and configs the renderer as such for calls~~
+            - ~~This will require more sophisticated rendersettings construction
+              As well as new shader-defining capabilities for RenderSettings~~
+            - ~~Render calls are minimised by the groupings~~
     - Need to work on a switch to perspective projection
         - Facilitates cameras both 2D and 3D
         - (The style of perspective projection used in the 3D vert shaders)
             - (need a 2D version)
     - Entity changes:
-        - shader component
-        - maybe components to represent everything the entitymanager will need to construct rendersettings?
-        - transform2D:
-            - Maybe nothing?
+        - ~~shader component~~
+        - ~~maybe components to represent everything the entitymanager will need to construct rendersettings?~~
+        - MODEL MATRIX representing the transformation of the entity?
+            - maybe this is constructed by the entity manager?
+            - this is a good idea - allows for built-in scaling and rotation
+            - needs to be an attribute of a shader? Think about it while writing the entity-rendersettings definition thingy
 - Cameras
     - Need to be generic for general use
         - have states (both 2D and 3D)
@@ -39,6 +40,8 @@
                 - an array of Entities to fit in the screen
         - Is represented as a "world transformation" matrix that can incorporate all 3 transformations
             - HOW TO HANDLE THE RENDERING ASPECT OF CAMERAS?
+            - SIMPLE - IF A CAMERA IS REPRESENTED AS A COMPOND MATRIX TRANSFORMATION, THE POSITION DATA OF ALL ENTITIES CAN JUST BE MULTIPLIED BY THIS MATRIX
+            - DON'T MAKE A DECISION UNTIL YOU'VE DONE THE CAMERA TUTORIAL ON LEARNWEBGL
                 - basically, somehow the camera transformation has to be applied to all vertices
                     - natural choice: uniform
                     - BUT: this makes a weird dependency - all shaders, including those written at app-level, have to have a camera uniform?
@@ -50,16 +53,6 @@
         - Entity can have transformation in space, doesn't need to be rendered (no vertices)
         - A camera should at least *manage* an Entity
             - This might help later on with being able to show cameras by adding a shape (+ shader) to the entity
-            
-            
-    - (need to create a renderSettings object per entity)
-    - (entities need to store some kind of representation of the shader required
-        - (or the entityManager needs to be able to figure it out based on the (maybe new) components)
-    - Rendersettings changes from representing the config for every shape of entity
-      to representing the config for every entity
-        - PROBLEM: this means one render call per Entity right?
-            - POSSIBLE SOLUTION: group by shader requirements, AND by shape?
-                - 
 
 ##MOVEMENT
 - Smooth the mouse target movement?

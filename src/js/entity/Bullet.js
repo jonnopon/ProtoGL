@@ -15,6 +15,9 @@ var Bullet = function(owner, startAngle, target) {
     entity.addComponent(new Shape("rect", dimensions, center));
     entity.addComponent(new FlatColor(col));
 
+    entity.addComponent(new Shader(GAME.getShader("stdShader")));
+
+
     entity.components.transform2D.targetForwardVelocity = 150;
     entity.components.transform2D.acceleration = new Vec2(1000, 1000);
     entity.components.transform2D.rotationalVelocity = 0;
