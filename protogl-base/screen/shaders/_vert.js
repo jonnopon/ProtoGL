@@ -16,25 +16,59 @@ VERTSHADERS2D["colored"] =
 ;
         
 //TODO move the matrix creation out of the shader duh
-VERTSHADERS2D["transform-colored"] =
-    'attribute vec2 pos;' +
-    'attribute vec4 col;' +
-    'attribute float angle;' +
-    'attribute float scale;' +
-    'attribute vec2 centre;' +
-    'uniform int resX;' +
-    'uniform int resY;' +
-    'varying vec4 Col;' +
-    'void main() {' +
-    '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
-    '   vec2 ccp = ((centre / vec2(resX, resY)) * 2.0) - 1.0;' +
-    '   Col = vec4(col.xyz * (1.0 / 255.0), col.w);' +
-    '	mat4 rot = mat4(cos(angle) * scale, -sin(angle), 0.0, 0.0, sin(angle), cos(angle) * scale, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '	mat4 tr = mat4(1.0, 0.0, 0.0, ccp.x, 0.0, 1.0, 0.0, ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -ccp.x, 0.0, 1.0, 0.0, -ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
-    '}'
-;
+VERTSHADERS2D["transform-colored"] = {
+    src:    'attribute vec2 pos;' +
+            'attribute vec4 col;' +
+            'attribute float angle;' +
+            'attribute float scale;' +
+            'attribute vec2 centre;' +
+            'uniform int resX;' +
+            'uniform int resY;' +
+            'varying vec4 Col;' +
+            'void main() {' +
+            '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
+            '   vec2 ccp = ((centre / vec2(resX, resY)) * 2.0) - 1.0;' +
+            '   Col = vec4(col.xyz * (1.0 / 255.0), col.w);' +
+            '	mat4 rot = mat4(cos(angle) * scale, -sin(angle), 0.0, 0.0, sin(angle), cos(angle) * scale, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+            '	mat4 tr = mat4(1.0, 0.0, 0.0, ccp.x, 0.0, 1.0, 0.0, ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+            '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -ccp.x, 0.0, 1.0, 0.0, -ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+            '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
+            '}',
+    attributes: {
+        pos: {
+            size: 2,
+            offset: 0
+        },
+        col: {
+            size: 4,
+            offset: 2
+        },
+        angle: {
+            size: 1,
+            offset: 6
+        },
+        scale: {
+            size: 1,
+            offset: 7
+        },
+        centre: {
+            size: 2,
+            offset: 8
+        }
+    },
+    uniforms: {
+        resX: {
+            type: "int",
+            path: ["GAME", "resolution", "x"]
+        },
+        resY: {
+            type: "int",
+            path: ["GAME", "resolution", "y"]
+        }
+    }
+};
+
+
 //TODO move the matrix creation out of the shader duh
 VERTSHADERS2D["transform-textured"] =
     'attribute vec2 pos;' +

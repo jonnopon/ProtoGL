@@ -9,9 +9,11 @@ var Player = function() {
     entity.addComponent(new Points(0));
     entity.addComponent(new Multiplier(0));
 
+    entity.addComponent(new Shader(GAME.getShader("stdShader")));
+
     var shapes = {
         "0" : {
-            "shape": new Shape("circle", dimensions, center),
+            "shape": new Shape("triangle", dimensions, center),
             "gun": new Gun(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 75, [
                 //bullet offsets
                 new Vec2(0, 0)
@@ -148,7 +150,7 @@ var Player = function() {
                 this.components.AABBCollisionBox.active = false;
                 this.components.health.value--;
                 if (this.components.health.value <= 0) {
-                    GAME.switchToState("dead");
+                    // GAME.switchToState("dead");
                 }
                 this.components.multiplier.value /= 2;
 

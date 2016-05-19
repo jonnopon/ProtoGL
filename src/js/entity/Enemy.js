@@ -99,6 +99,9 @@ var Enemy = function(type) {
     entity.addComponent(new Points(points));
     entity.addComponent(new Multiplier(mult));
 
+    entity.addComponent(new Shader(GAME.getShader("otherShader")));
+
+
     entity.components.transform2D.angle = angle;
 
     entity.onUpdate = function() {

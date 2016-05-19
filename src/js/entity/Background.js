@@ -10,5 +10,8 @@ var Background = function() {
     entity.addComponent(new Shape("grid", dimensions, center));
     entity.addComponent(new FlatColor(new Vec4(77, 77, 255, 1)));
 
+    entity.addComponent(new Shader(GAME.getShader("stdShader")));
+
+
     return entity;
 };

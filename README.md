@@ -18,7 +18,7 @@ Not necessarily a complete list, definitely not in priority order
     - events for components
 - ***Rendering***
     - *Renderer*
-        - stop assuming uniform types
+        - ~~stop assuming uniform types~~
         - Improve/split out 3D capabilities
         - Matrices need to become more prevalent
     - *Shaders*
@@ -40,9 +40,9 @@ Not necessarily a complete list, definitely not in priority order
     - 3D basic components
     - figure out if you want to adapt the input system to utilise a PlayerControlled component
     - Do some more physics-ey stuff
-    - Upgrade the manager to group entities better and correctly configure renderSettings for as few render calls as is necessary
+    - ~~Upgrade the manager to group entities better and correctly configure renderSettings for as few render calls as is necessary~~
     - *Sprite component*
-        - change representation of sprites on an atlas to be indices so u/v coordinates can be calculated
+        - change representation of sprites on an atlas to be indices so u/v coordinates can be calculated rather than provided
             - new assumption: spritesheets are a 1D row of same-size sprites - count indices from the left. Easy to fix if desired
     - *New Animation Component*
         - represented as alist of sprite indices (counting from left in a 1D sheet of same-size sprites) and calculated u/v coordinates
@@ -53,10 +53,10 @@ Not necessarily a complete list, definitely not in priority order
             - Entities can register an "onAnimate" function that's called for every entity with an Animation system
                 - Can use this function to define animation behavior; "if walking use walking animation, if still use idle animation"
 - New shapes utility
-    - Gets the vertex lists required to build basic 3D and 3D shapes based on input data
-        - EG: *_setGeometry("square", extraAttributesPerVertex);* or *_setGeometry("cube", extraAttributesPerVertex);*
-        - Use this in EntityManager as part of the rendering preparation
-        - send a list of attribute objects; a list of attributes to repeated after the position attributes in the returned list
+    - ~~Gets the vertex lists required to build basic 2D and 3D shapes based on input data~~
+        - ~~EG: *_setGeometry("square", extraAttributesPerVertex);* or *_setGeometry("cube", extraAttributesPerVertex);*~~
+        - ~~Use this in EntityManager as part of the rendering preparation~~
+        - ~~send a list of attribute objects; a list of attributes to repeated after the position attributes in the returned list~~
               
 
 ----

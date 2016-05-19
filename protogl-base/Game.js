@@ -11,6 +11,7 @@ var Game = function(width, height) {
     this.textManager = null;
     this.userInterfaceManager = null;
     this.renderer = null;
+    this.shaders = {};
 
     this.states = {};
 
@@ -137,3 +138,12 @@ Game.prototype.getAllEntities = function() {
 Game.prototype.clearEntities = function() {
     this.entityManager.clearAllEntities();
 };
+
+Game.prototype.addShader = function(shader) {
+    this.renderer.addShaderProgram(shader["name"], [shader["vertSrc"], shader["fragSrc"]]);
+    this.shaders[shader["name"]] = shader;
+};
+
+Game.prototype.getShader = function(name) {
+    return this.shaders[name];
+}
