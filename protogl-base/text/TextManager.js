@@ -10,24 +10,23 @@ var TextManager = function() {
         texPos = this.renderer.createTexture(this.textureName, 'res/img/font.png');
     }
 
-    var frag = FRAGSHADERS["textured-colored"];
-    var vert = VERTSHADERS2D["transform-textured-colored"];
-    this.renderer.addShaderProgram(this.shaderProgramName, [vert, frag]);
+    var textShader = {
+        name: "textShader",
+        vertSrc: VERTSHADERS2D["transform-textured-colored"].src,
+        fragSrc: FRAGSHADERS["textured-colored"],
+        attributes: VERTSHADERS2D["transform-textured-colored"].attributes,
+        uniforms: VERTSHADERS2D["transform-textured-colored"].uniforms
+    };
+    GAME.addShader(textShader);
 
     this.renderer.addVBO(this.vboName);
     
     var config = new RenderSettings();
-	config.addAttribute('pos', 2);
-	config.addAttribute('texCoord', 2);
-    config.addAttribute('col', 4);
-	config.addAttribute('angle', 1);
-	config.addAttribute('scale', 1);
-	config.addAttribute('centre', 2);
-	config.addUniform('tex', texPos);
-    config.addUniform('resX', GAME.resolution.x);
-    config.addUniform('resY', GAME.resolution.y);
-	config.setTextureName(this.textureName);
-	config.setShape(gl.TRIANGLES);
+    config.setShader(textShader.name);
+    config.setShape(gl.TRIANGLES);
+    config.setTextureName(this.textureName);
+    config.addAttributes(textShader.attributes);
+    config.addUniforms(textShader.uniforms);
     
     this.renderSettings = config;
 

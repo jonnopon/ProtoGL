@@ -150,7 +150,7 @@ var Player = function() {
                 this.components.AABBCollisionBox.active = false;
                 this.components.health.value--;
                 if (this.components.health.value <= 0) {
-                    // GAME.switchToState("dead");
+                    GAME.switchToState("dead");
                 }
                 this.components.multiplier.value /= 2;
 
