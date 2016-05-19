@@ -3,19 +3,11 @@
 ##ENGINE
 - Camera
 - Maybe rewrite of renderer?
-    - ~~Want shader per object not per shape~~
-        - ~~Entity component: shader~~
-        - ~~EntityManager groups entities by shader (then by shape?) and configs the renderer as such for calls~~
-            - ~~This will require more sophisticated rendersettings construction
-              As well as new shader-defining capabilities for RenderSettings~~
-            - ~~Render calls are minimised by the groupings~~
     - Need to work on a switch to perspective projection
         - Facilitates cameras both 2D and 3D
         - (The style of perspective projection used in the 3D vert shaders)
             - (need a 2D version)
     - Entity changes:
-        - ~~shader component~~
-        - ~~maybe components to represent everything the entitymanager will need to construct rendersettings?~~
         - MODEL MATRIX representing the transformation of the entity?
             - maybe this is constructed by the entity manager?
             - this is a good idea - allows for built-in scaling and rotation
@@ -104,10 +96,6 @@
 - Flashing text, changing color + scale etc on events like point gain, multiplier milestone hit, etc
 
 ##GENERAL
-- ~~Fix mouse positioning on pointerLock~~
-- ~~Show X at mousepos in all states~~
-- ~~Remove LD info from intro menu; replace with better tutorial~~
-- ~~Fix flashing text~~
 - (eventually) neon! / partial 3D!?
     - Definitely an animate-able 3D grid/net
     - Wireframe entities?

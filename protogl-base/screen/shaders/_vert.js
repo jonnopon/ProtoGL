@@ -14,12 +14,8 @@ VERTSHADERS2D["colored"] = {
             '   gl_Position = vec4(cp, 1.0, 1.0);' +
             '}',
     attributes: {
-        pos: {
-            size: 2
-        },
-        col: {
-            size: 4
-        }
+        pos: 2,
+        col: 4
     },
     uniforms: {
         resX: {
@@ -31,8 +27,7 @@ VERTSHADERS2D["colored"] = {
             path: ["GAME", "resolution", "y"]
         }
     }
-}
-;
+};
         
 //TODO move the matrix creation out of the shader duh
 VERTSHADERS2D["transform-colored"] = {
@@ -54,21 +49,11 @@ VERTSHADERS2D["transform-colored"] = {
             '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
             '}',
     attributes: {
-        pos: {
-            size: 2,
-        },
-        col: {
-            size: 4,
-        },
-        angle: {
-            size: 1,
-        },
-        scale: {
-            size: 1,
-        },
-        centre: {
-            size: 2,
-        }
+        pos: 2,
+        col: 4,
+        angle: 1,
+        scale: 1,
+        centre: 2
     },
     uniforms: {
         resX: {
@@ -82,27 +67,44 @@ VERTSHADERS2D["transform-colored"] = {
     }
 };
 
-
 //TODO move the matrix creation out of the shader duh
-VERTSHADERS2D["transform-textured"] =
-    'attribute vec2 pos;' +
-    'attribute vec2 texCoord;' +
-    'attribute float angle;' +
-    'attribute float scale;' +
-    'attribute vec2 centre;' +
-    'varying vec2 TexCoord;' +
-    'uniform int resX;' +
-    'uniform int resY;' +
-    'void main() {' +
-    '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
-    '   vec2 ccp = ((centre / vec2(resX, resY)) * 2.0) - 1.0;' +
-    '	TexCoord = texCoord;' +
-    '	mat4 rot = mat4(cos(angle) * scale, -sin(angle), 0.0, 0.0, sin(angle), cos(angle) * scale, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '	mat4 tr = mat4(1.0, 0.0, 0.0, ccp.x, 0.0, 1.0, 0.0, ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -ccp.x, 0.0, 1.0, 0.0, -ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
-    '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
-    '}';
-;
+VERTSHADERS2D["transform-textured"] = {
+    src:    'attribute vec2 pos;' +
+            'attribute vec2 texCoord;' +
+            'attribute float angle;' +
+            'attribute float scale;' +
+            'attribute vec2 centre;' +
+            'varying vec2 TexCoord;' +
+            'uniform int resX;' +
+            'uniform int resY;' +
+            'void main() {' +
+            '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
+            '   vec2 ccp = ((centre / vec2(resX, resY)) * 2.0) - 1.0;' +
+            '	TexCoord = texCoord;' +
+            '	mat4 rot = mat4(cos(angle) * scale, -sin(angle), 0.0, 0.0, sin(angle), cos(angle) * scale, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+            '	mat4 tr = mat4(1.0, 0.0, 0.0, ccp.x, 0.0, 1.0, 0.0, ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+            '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -ccp.x, 0.0, 1.0, 0.0, -ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
+            '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
+            '}',
+    attributes: {
+        pos: 2,
+        texCoord: 2,
+        angle: 1,
+        scale: 1,
+        centre: 2
+    },
+    uniforms: {
+        resX: {
+            type: "int",
+            path: ["GAME", "resolution", "x"]
+        },
+        resY: {
+            type: "int",
+            path: ["GAME", "resolution", "y"]
+        }
+    }
+};
+
 //TODO move the matrix creation out of the shader duh
 VERTSHADERS2D["transform-textured-colored"] = {
     src: 'attribute vec2 pos;' +
@@ -126,24 +128,12 @@ VERTSHADERS2D["transform-textured-colored"] = {
     '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
     '}',
     attributes: {
-        pos: {
-            size: 2,
-        },
-        texCoord: {
-            size: 2,
-        },
-        col: {
-            size: 4,
-        },
-        angle: {
-            size: 1,
-        },
-        scale: {
-            size: 1,
-        },
-        centre: {
-            size: 2
-        }
+        pos: 2,
+        texCoord: 2,
+        col: 4,
+        angle: 1,
+        scale: 1,
+        centre: 2
     },
     uniforms: {
         resX: {

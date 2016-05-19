@@ -21,32 +21,31 @@ var init = function() {
         this.soundManager.addSound("powerup", "res/snd/powerup.wav");
         this.soundManager.addSound("enemydie", "res/snd/enemyhit.wav");
 
+        var vert = VERTSHADERS2D["transform-colored"];
+        var frag = FRAGSHADERS["colored"];
 
         var stdShader = {
             name: "stdShader",
-            vertSrc: VERTSHADERS2D["transform-colored"].src,
-            fragSrc: FRAGSHADERS["colored"],
-            attributes: VERTSHADERS2D["transform-colored"].attributes,
-            uniforms: VERTSHADERS2D["transform-colored"].uniforms
+            vertSrc: vert.src,
+            fragSrc: frag,
+            attributes: vert.attributes,
+            uniforms: vert.uniforms
         };
-
         this.addShader(stdShader);
 
         var otherShader = {
             name: "otherShader",
-            vertSrc: VERTSHADERS2D["transform-colored"].src,
+            vertSrc: vert.src,
             fragSrc:    'precision mediump float;' +
                         'varying vec4 Col;' +
                         'void main() {' +
                         '   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);' +
                         '}',
-            attributes: VERTSHADERS2D["transform-colored"].attributes,
-            uniforms: VERTSHADERS2D["transform-colored"].uniforms
+            attributes: vert.attributes,
+            uniforms: vert.uniforms
         };
-
         this.addShader(otherShader);
-
-
+        
         this.switchToState("menu");
     };
 
