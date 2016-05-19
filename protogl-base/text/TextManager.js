@@ -217,6 +217,6 @@ TextManager.prototype.render = function() {
     this.renderer.bindShaderProgram(this.shaderProgramName);
     this.renderer.bindVerts('textVerts');
 
-    this.renderer.render2D(true, this.renderSettings);
+    this.renderer.render(this.renderSettings);
     this.flushStrings();
 };

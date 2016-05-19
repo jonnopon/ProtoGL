@@ -77,5 +77,5 @@ UserInterfaceManager.prototype.render = function() {
     renderer.bindVBO(this.vboName);
     renderer.bindVerts("uiVerts");
     renderer.bindShaderProgram(this.shaderProgramName);
-    renderer.render2D(true, this.renderSettings);
+    renderer.render(this.renderSettings);
 };

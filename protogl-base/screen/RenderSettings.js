@@ -21,7 +21,6 @@ RenderSettings.prototype.setTextureName = function(name) {
 RenderSettings.prototype.setShader = function(shader) {
     this.shaderName = shader;
 };
-
 RenderSettings.prototype.addAttributes = function(attributes) {
     var attributeKeys = Object.keys(attributes);
     
@@ -32,7 +31,6 @@ RenderSettings.prototype.addAttributes = function(attributes) {
         this.addAttribute(attributeName, attributeSize);
     }
 };
-
 RenderSettings.prototype.addUniforms = function(uniforms) {
     var uniformKeys = Object.keys(uniforms);
     for (var i = 0; i < uniformKeys.length; i++) {
@@ -44,7 +42,6 @@ RenderSettings.prototype.addUniforms = function(uniforms) {
             value = value[uniformPath[j]];
         }
 
-        //now, add the uniform to the config
         this.addUniform(uniformKeys[i], uniformData.type, value);
     }
 };
