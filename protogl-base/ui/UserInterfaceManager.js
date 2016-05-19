@@ -4,18 +4,23 @@ var UserInterfaceManager = function() {
     this.vboName = "uiVBO";
     this.verts = [];
     this.dataPerVert = 6;
-    
-    var frag = FRAGSHADERS["colored"];
-    var vert = VERTSHADERS2D["colored"];
-    this.renderer.addShaderProgram(this.shaderProgramName, [vert, frag]);
+
+    var uiShader = {
+        name: "uiShader",
+        vertSrc: VERTSHADERS2D["colored"].src,
+        fragSrc: FRAGSHADERS["colored"],
+        attributes: VERTSHADERS2D["colored"].attributes,
+        uniforms: VERTSHADERS2D["colored"].uniforms
+    };
+    GAME.addShader(uiShader);
+
     this.renderer.addVBO(this.vboName);
     
     var config = new RenderSettings();
-    config.addAttribute("pos", 2);
-    config.addAttribute("col", 4);
-    config.addUniform("resX", GAME.resolution.x);
-    config.addUniform("resY", GAME.resolution.y);
+    config.setShader(uiShader.name);
     config.setShape(gl.TRIANGLES);
+    config.addAttributes(uiShader.attributes);
+    config.addUniforms(uiShader.uniforms);
     
     this.renderSettings = config;
 

@@ -2,17 +2,36 @@ var VERTSHADERS2D = {};
 var VERTSHADERS3D = {};
 
 /*************************************************** 2D ***************************************************/
-VERTSHADERS2D["colored"] =
-    'attribute vec2 pos;' +
-    'attribute vec4 col;' +
-    'varying vec4 Col;' +
-    'uniform int resX;' +
-    'uniform int resY;' +
-    'void main() {' +
-    '   Col = vec4(col.xyz * (1.0 / 255.0), col.w);' +
-    '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
-    '   gl_Position = vec4(cp, 1.0, 1.0);' +
-    '}'
+VERTSHADERS2D["colored"] = {
+    src:    'attribute vec2 pos;' +
+            'attribute vec4 col;' +
+            'varying vec4 Col;' +
+            'uniform int resX;' +
+            'uniform int resY;' +
+            'void main() {' +
+            '   Col = vec4(col.xyz * (1.0 / 255.0), col.w);' +
+            '   vec2 cp = ((pos / vec2(resX, resY)) * 2.0) - 1.0;' +
+            '   gl_Position = vec4(cp, 1.0, 1.0);' +
+            '}',
+    attributes: {
+        pos: {
+            size: 2
+        },
+        col: {
+            size: 4
+        }
+    },
+    uniforms: {
+        resX: {
+            type: "int",
+            path: ["GAME", "resolution", "x"]
+        },
+        resY: {
+            type: "int",
+            path: ["GAME", "resolution", "y"]
+        }
+    }
+}
 ;
         
 //TODO move the matrix creation out of the shader duh
@@ -37,23 +56,18 @@ VERTSHADERS2D["transform-colored"] = {
     attributes: {
         pos: {
             size: 2,
-            offset: 0
         },
         col: {
             size: 4,
-            offset: 2
         },
         angle: {
             size: 1,
-            offset: 6
         },
         scale: {
             size: 1,
-            offset: 7
         },
         centre: {
             size: 2,
-            offset: 8
         }
     },
     uniforms: {
@@ -90,8 +104,8 @@ VERTSHADERS2D["transform-textured"] =
     '}';
 ;
 //TODO move the matrix creation out of the shader duh
-VERTSHADERS2D["transform-textured-colored"] =
-    'attribute vec2 pos;' +
+VERTSHADERS2D["transform-textured-colored"] = {
+    src: 'attribute vec2 pos;' +
     'attribute vec2 texCoord;' +
     'attribute vec4 col;' +
     'attribute float angle;' +
@@ -110,8 +124,38 @@ VERTSHADERS2D["transform-textured-colored"] =
     '	mat4 tr = mat4(1.0, 0.0, 0.0, ccp.x, 0.0, 1.0, 0.0, ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
     '   mat4 tr1 = mat4(1.0, 0.0, 0.0, -ccp.x, 0.0, 1.0, 0.0, -ccp.y, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);' +
     '   gl_Position = vec4(cp, 1.0, 1.0) * tr1 * rot * tr;' +
-    '}';
-;
+    '}',
+    attributes: {
+        pos: {
+            size: 2,
+        },
+        texCoord: {
+            size: 2,
+        },
+        col: {
+            size: 4,
+        },
+        angle: {
+            size: 1,
+        },
+        scale: {
+            size: 1,
+        },
+        centre: {
+            size: 2
+        }
+    },
+    uniforms: {
+        resX: {
+            type: "int",
+            path: ["GAME", "resolution", "x"]
+        },
+        resY: {
+            type: "int",
+            path: ["GAME", "resolution", "y"]
+        }
+    }
+};
 
 /*************************************************** 3D ***************************************************/
 VERTSHADERS3D["transform"] =

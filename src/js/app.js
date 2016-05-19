@@ -1,6 +1,7 @@
 var init = function() {
     var game = new Game(1024, 768);
     game.setBackgroundColor(new Vec4(0, 0, 0, 1));
+    game.displayStats  = true;
 
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {

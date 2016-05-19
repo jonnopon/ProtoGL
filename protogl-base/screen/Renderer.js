@@ -181,9 +181,9 @@ Renderer.prototype.render2D = function(rebuffer, settings) {
             var attrib = settings.attributes[i];
             var attribLoc = gl.getAttribLocation(this.activeShaderProgram, attrib.name);
             gl.enableVertexAttribArray(attribLoc);
-            gl.vertexAttribPointer(attribLoc, attrib.length, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, off);
+            gl.vertexAttribPointer(attribLoc, attrib.size, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, off);
 
-            off += (attrib.length * 4);
+            off += (attrib.size * 4);
         }
     }
 
