@@ -1,6 +1,6 @@
-//TODO MERGE/MIX/GENERIFY WITH TRANSFORM3D?
+//TODO MERGE/MIX/GENERIFY WITH TRANSFORM2D?
 
-var Transform2D = function(position, dimensions, velocity) {
+var Transform3D = function(position, dimensions, velocity) {
     this.position = position;
     this.dimensions = dimensions;
     this.velocity = velocity;
@@ -12,7 +12,7 @@ var Transform2D = function(position, dimensions, velocity) {
     this.lastMoveDelta = 0;
     this.thrust = 0;
     this.angle = 0;
-    this.scale = new Vec2(1, 1);
-    this.transform = new Mat3();
+    this.scale = new Vec3(1, 1, 1);
+    this.transform = new Mat4();
 };
-Transform2D.prototype.name = "transform2D";
+Transform3D.prototype.name = "transform3D";

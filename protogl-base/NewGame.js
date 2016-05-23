@@ -47,18 +47,21 @@ Game.prototype.run = function(t) {
     GAME.renderer.clearScreen(GAME.backgroundColor, false);
     GAME.resizeCanvas();
 
-    if (GAME.displayStats) {
-        GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);
-        GAME.textManager.addString("MousePos:\\n" + GAME.mousePos.str(), "Right", 25, new Vec2(GAME.width - 200, GAME.height - 65), new Vec4(255, 255, 255, 1), 0);
-    }
+    //TODO: reimplement text
+    // if (GAME.displayStats) {
+    //     GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);
+    //     GAME.textManager.addString("MousePos:\\n" + GAME.mousePos.str(), "Right", 25, new Vec2(GAME.width - 200, GAME.height - 65), new Vec4(255, 255, 255, 1), 0);
+    // }
 
     for (var i = 0; i < GAME.systems.length; i++) {
         GAME.systems[i]();
     }
     GAME.currentState.tick();
 
-    GAME.userInterfaceManager.render();
-    GAME.textManager.render();
+    //TODO: MAYBE STORE MANAGERS THE SAME WAY AS SYSTEMS?
+    //that makes way more sense than assuming they're there...
+    // GAME.userInterfaceManager.render();
+    // GAME.textManager.render();
 
     requestAnimationFrame(GAME.run);
 };
@@ -74,18 +77,19 @@ Game.prototype.resizeCanvas = function() {
     this.renderer.resize(this.canvas.width, this.canvas.height);
 };
 Game.prototype.initManagers = function() {
-    this.renderer = new Renderer(this.canvas);
-    this.textManager = new TextManager(this);
-    this.soundManager = new SoundManager();
+    //TODO obviously will change soon
+    this.renderer = new Renderer2D(this.canvas);
+    // this.textManager = new TextManager(this);
+    // this.soundManager = new SoundManager();
     this.entityManager = new EntityManager(this);
-    this.userInterfaceManager = new UserInterfaceManager(this);
+    // this.userInterfaceManager = new UserInterfaceManager(this);
 };
 Game.prototype.addState = function(state) {
     this.states[state.getName()] = state;
 };
 Game.prototype.switchToState = function(name) {
     this.currentState = this.states[name];
-    this.textManager.flushPersistentStrings();
+    // this.textManager.flushPersistentStrings();
     this.currentState.init();
 };
 Game.prototype.addSystem = function(system) {
@@ -139,8 +143,8 @@ Game.prototype.clearEntities = function() {
     this.entityManager.clearAllEntities();
 };
 Game.prototype.addShader = function(shader) {
-    this.renderer.addShaderProgram(shader["name"], [shader["vertSrc"], shader["fragSrc"]]);
-    this.shaders[shader["name"]] = shader;
+    this.renderer.createShaderProgram(shader.name, {vert: shader.vertSrc, frag: shader.fragSrc});
+    this.shaders[shader.name] = shader;
 };
 Game.prototype.getShader = function(name) {
     return this.shaders[name];

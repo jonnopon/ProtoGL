@@ -246,6 +246,15 @@ Mat4.prototype.rotate = function(angle, axisVector) {
 
     this.values = newMat;
 };
+Mat4.prototype.setAs3DProjection = function(width, height, depth) {
+    //Y 0 IS AT TOP
+    this.values = [
+        2 / width, 0, 0, 0,
+        0, -2 / height, 0, 0,
+        0, 0, 2 / depth, 0,
+        -1, 1, 0, 1
+    ];
+};
 Mat4.prototype.setAsPerspective = function(fov, aspectRatio, near, far) {
     var f = 1.0 / Math.tan(fov / 2),
         nf = 1 / (near - far),

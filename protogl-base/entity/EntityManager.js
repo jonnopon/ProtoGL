@@ -61,7 +61,7 @@ EntityManager.prototype.render = function() {
     //      it may be nice to include optional filtering
     //      so I could say "shader, shape, (transform2D or transform3D), (flatColor or Sprite)"
     //TODO: future (soon) consideration
-    var renderables = this.getEntsWithComponents([Shader, Shape, Transform2D, FlatColor]);
+    var renderables = this.getAllEntsWithComponents([Shader, Shape, Transform2D, FlatColor]);
 
     //GROUP BY SHADER
     var shaders = this.groupEntsByShader(renderables);
@@ -145,7 +145,7 @@ EntityManager.prototype.render = function() {
                     renderer.bufferVertsToVBO("verts", this.vboName);
                     renderer.bindVBO(this.vboName);
                     renderer.bindVerts("verts");
-                    renderer.render2D(true, config);
+                    renderer.render(config);
                 }
                 else {
                     for (var l = 0; l < vertList.length; l++) {
@@ -206,7 +206,7 @@ EntityManager.prototype.render = function() {
             renderer.bindVerts("verts");
 
             if (verts.length > 0) {
-                renderer.render2D(true, config); //TODO: SHOULDN'T NEED THIS WHEN THE TRIANGLE STRIPS PROBLEM IS SOLVED
+                renderer.render(config); //TODO: SHOULDN'T NEED THIS WHEN THE TRIANGLE STRIPS PROBLEM IS SOLVED
             }
         }
     }
@@ -231,7 +231,7 @@ EntityManager.prototype.groupEntsByShape = function(ents) {
     }
     return groupedEnts;
 };
-EntityManager.prototype.getEntsWithComponent = function(component) {
+EntityManager.prototype.getAllEntsWithComponent = function(component) {
     var matching = [];
     for (var i = 0; i < this.ents.length; i++) {
         if (this.ents[i].hasComponent(component.prototype.name)) {
@@ -241,7 +241,7 @@ EntityManager.prototype.getEntsWithComponent = function(component) {
 
     return matching;
 };
-EntityManager.prototype.getEntsWithComponents = function(componentList) {
+EntityManager.prototype.getAllEntsWithComponents = function(componentList) {
     var componentNames = [];
     for (var i = 0; i < componentList.length; i++) {
         componentNames.push(componentList[i].prototype.name);
@@ -256,7 +256,7 @@ EntityManager.prototype.getEntsWithComponents = function(componentList) {
 
     return matching;
 };
-EntityManager.prototype.getEntsWithTag = function(tag) {
+EntityManager.prototype.getAllEntsWithTag = function(tag) {
     var matching = [];
     for (var i = 0; i < this.ents.length; i++) {
         if (this.ents[i].tag === tag) {

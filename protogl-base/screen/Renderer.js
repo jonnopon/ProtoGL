@@ -1,48 +1,48 @@
-var gl = null;
-var handleTextureLoaded = function(image, texture, ident) {
-    gl.activeTexture(ident);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-    gl.generateMipmap(gl.TEXTURE_2D);
-    gl.bindTexture(gl.TEXTURE_2D, null);
-};
+// var gl = null;
+// var handleTextureLoaded = function(image, texture, ident) {
+//     gl.activeTexture(ident);
+//     gl.bindTexture(gl.TEXTURE_2D, texture);
+//     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+//     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+//     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+//     gl.generateMipmap(gl.TEXTURE_2D);
+//     gl.bindTexture(gl.TEXTURE_2D, null);
+// };
 
-var Renderer = function(gameCanvas) {
-    this.vbos = {};
-    this.verts = {};
-    this.shaderPrograms = {};
-    this.uniforms = {};
-    this.textures = {};
-    this.activeVBO;
-    this.activeVerts;
-    this.activeShaderProgram;
-    this.projectionMatrix = new Mat4();
-    this.projectionMatrix.setAsPerspective(Math.PI / 4, GAME.resolution.x / GAME.resolution.y, 1, 10);
-    this.modelMatrix = new Mat4();
-    this.viewMatrix = new Mat4();
-    this.viewMatrix.translate(new Vec3(0, 0, -4));
-
-    this.modelMatrix.setAsLookAt(new Vec3(0, 0, 0), new Vec3(0, 0, -4.5), new Vec3(0, 1, 0));
-    try {
-        gl = gameCanvas.getContext("webgl");
-    } catch (e) {
-        alert("Could not initialise WebGL - Error: \n" + e);
-        return false;
-    }
-    if (!gl) {
-        alert("Could not initialise WebGL");
-        return false;
-    }
-
-    //initialise texture capabilities
-    this.textureIdentifiers = [
-        gl.TEXTURE0,
-        gl.TEXTURE1,
-        gl.TEXTURE2
-    ];
-};
+// var Renderer = function(gameCanvas) {
+//     this.vbos = {};
+//     this.verts = {};
+//     this.shaderPrograms = {};
+//     this.uniforms = {};
+//     this.textures = {};
+//     this.activeVBO;
+//     this.activeVerts;
+//     this.activeShaderProgram;
+//     this.projectionMatrix = new Mat4();
+//     this.projectionMatrix.setAsPerspective(Math.PI / 4, GAME.resolution.x / GAME.resolution.y, 1, 10);
+//     this.modelMatrix = new Mat4();
+//     this.viewMatrix = new Mat4();
+//     this.viewMatrix.translate(new Vec3(0, 0, -4));
+//
+//     this.modelMatrix.setAsLookAt(new Vec3(0, 0, 0), new Vec3(0, 0, -4.5), new Vec3(0, 1, 0));
+//     try {
+//         gl = gameCanvas.getContext("webgl");
+//     } catch (e) {
+//         alert("Could not initialise WebGL - Error: \n" + e);
+//         return false;
+//     }
+//     if (!gl) {
+//         alert("Could not initialise WebGL");
+//         return false;
+//     }
+//
+//     //initialise texture capabilities
+//     this.textureIdentifiers = [
+//         gl.TEXTURE0,
+//         gl.TEXTURE1,
+//         gl.TEXTURE2
+//     ];
+// };
 
 Renderer.prototype.createTexture = function(name, src) {
     var ident = this.textureIdentifiers[Object.keys(this.textures).length];
@@ -150,55 +150,55 @@ Renderer.prototype.clearScreen = function(col, depth) {
         gl.clear(gl.COLOR_BUFFER_BIT);
     }
 };
-Renderer.prototype.render = function(settings) {
-    gl.disable(gl.DEPTH_TEST);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-    if (settings.textureName !== undefined) {
-        gl.activeTexture(this.textures[settings.textureName].ident);
-        gl.bindTexture(gl.TEXTURE_2D, this.textures[settings.textureName].tex);
-    }
-
-    this.bindShaderProgram(settings.shaderName);
-    gl.useProgram(this.activeShaderProgram);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.activeVBO);
-
-    gl.bufferData(gl.ARRAY_BUFFER, this.activeVerts.array, gl.DYNAMIC_DRAW);
-    var off = 0;
-
-    for (var i = 0; i < settings.attributes.length; i++) {
-        var attrib = settings.attributes[i];
-        var attribLoc = gl.getAttribLocation(this.activeShaderProgram, attrib.name);
-        gl.enableVertexAttribArray(attribLoc);
-        gl.vertexAttribPointer(attribLoc, attrib.size, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, off);
-
-        off += (attrib.size * 4);
-    }
-
-    for (var j = 0; j < settings.uniforms.length; j++) {
-        var name = settings.uniforms[j].name;
-        var type = settings.uniforms[j].type;
-        var value = settings.uniforms[j].val;
-        this.uploadUniform(name, type, value);
-    }
-
-    gl.drawArrays(settings.shape, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
-};
-Renderer.prototype.uploadUniform = function(name, type, value) {
-    var loc = gl.getUniformLocation(this.activeShaderProgram, name);
-
-    switch (type) {
-        case "int":
-            gl.uniform1i(loc, value);
-            break;
-        case "mat4":
-            var actualValue = new Float32Array(16);
-            actualValue.set(value, 0);
-            gl.uniformMatrix4fv(loc, false, actualValue);
-            break;
-    }
-};
+// Renderer.prototype.render = function(settings) {
+//     gl.disable(gl.DEPTH_TEST);
+//     gl.enable(gl.BLEND);
+//     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+//
+//     if (settings.textureName !== undefined) {
+//         gl.activeTexture(this.textures[settings.textureName].ident);
+//         gl.bindTexture(gl.TEXTURE_2D, this.textures[settings.textureName].tex);
+//     }
+//
+//     this.bindShaderProgram(settings.shaderName);
+//     gl.useProgram(this.activeShaderProgram);
+//     gl.bindBuffer(gl.ARRAY_BUFFER, this.activeVBO);
+//
+//     gl.bufferData(gl.ARRAY_BUFFER, this.activeVerts.array, gl.DYNAMIC_DRAW);
+//     var off = 0;
+//
+//     for (var i = 0; i < settings.attributes.length; i++) {
+//         var attrib = settings.attributes[i];
+//         var attribLoc = gl.getAttribLocation(this.activeShaderProgram, attrib.name);
+//         gl.enableVertexAttribArray(attribLoc);
+//         gl.vertexAttribPointer(attribLoc, attrib.size, gl.FLOAT, false, this.activeVerts.dataPerVert * 4, off);
+//
+//         off += (attrib.size * 4);
+//     }
+//
+//     for (var j = 0; j < settings.uniforms.length; j++) {
+//         var name = settings.uniforms[j].name;
+//         var type = settings.uniforms[j].type;
+//         var value = settings.uniforms[j].val;
+//         this.uploadUniform(name, type, value);
+//     }
+//
+//     gl.drawArrays(settings.shape, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
+// };
+// Renderer.prototype.uploadUniform = function(name, type, value) {
+//     var loc = gl.getUniformLocation(this.activeShaderProgram, name);
+//
+//     switch (type) {
+//         case "int":
+//             gl.uniform1i(loc, value);
+//             break;
+//         case "mat4":
+//             var actualValue = new Float32Array(16);
+//             actualValue.set(value, 0);
+//             gl.uniformMatrix4fv(loc, false, actualValue);
+//             break;
+//     }
+// };
 
 // Renderer.prototype.render3D = function(rebuffer) {
 //     gl.disable(gl.BLEND);
@@ -226,6 +226,6 @@ Renderer.prototype.uploadUniform = function(name, type, value) {
 //     gl.drawArrays(gl.TRIANGLES, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
 // };
 
-Renderer.prototype.resize = function(width, height) {
-    gl.viewport(0, 0, width, height);
-};
+// Renderer.prototype.resize = function(width, height) {
+//     gl.viewport(0, 0, width, height);
+// };

@@ -98,3 +98,6 @@ Vec2.prototype.getAngleBetweenVec2 = function(v) {
 Vec2.prototype.str = function() {
     return 'vec2(' + this.x + ', ' + this.y + ')';
 };
+Vec2.prototype.asArray = function() {
+    return [this.x, this.y];
+};
