@@ -17,7 +17,7 @@ Vec3.prototype.subVec3 = function(v) {
     this.y -= v.y;
     this.z -= v.z;
 };
-Vec3.scalarMult = function(s) {
+Vec3.prototype.scalarMult = function(s) {
     this.x *= s;
     this.y *= s;
     this.z *= s;
@@ -112,4 +112,7 @@ Vec3.prototype.getAngleBetweenV3 = function(v) {
 };
 Vec3.prototype.str = function() {
     return 'vec3(' + this.x + ', ' + this.y + ', ' + this.z + ')';
+};
+Vec3.prototype.asArray = function() {
+    return [this.x, this.y, this.z];
 };

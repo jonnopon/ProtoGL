@@ -1,19 +1,17 @@
 #TODO
 
 ##ENGINE
-- Camera
-- Maybe rewrite of renderer?
-    - Need to work on a switch to perspective projection
-        - Facilitates cameras both 2D and 3D
-        - (The style of perspective projection used in the 3D vert shaders)
-            - (need a 2D version)
-    - Entity changes:
-        - MODEL MATRIX representing the transformation of the entity?
-            - maybe this is constructed by the entity manager?
-            - this is a good idea - allows for built-in scaling and rotation
-            - needs to be an attribute of a shader? Think about it while writing the entity-rendersettings definition thingy
-- Shader experimentation (as part of above)
-    - Byproduct: improve/replace ProtoGL library shaders to improve
+- Camera - in progress
+- Maybe rewrite of renderer? - in progress
+    - NEXT: Continue building back up:
+        - Reimplement texture capabilities (2D for now)
+        
+    - then address todo's scattered about
+    
+    - then work on expanding/iterating and experimenting with new stuff
+
+- Shader experimentation (as part of above) - in progress
+    - Byproduct: improve/replace ProtoGL library shaders to improve - in progress
 - Cameras
     - Need to be generic for general use
         - have states (both 2D and 3D)
@@ -92,6 +90,7 @@
 ##BACKGROUND
 - Random color sequence (color the corners and allow for that in vertex construction; change corner colors during runtime)
 - Scaling/"bouncing-ish-effect"?
+- could be 3D now
 
 ##UI
 - Better paneling

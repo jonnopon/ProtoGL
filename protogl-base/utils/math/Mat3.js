@@ -168,11 +168,14 @@ Mat3.prototype.rotate = function(angle) {
     newMat[6] = v20;
     newMat[7] = v21;
     newMat[8] = v22;
+
+    this.values = newMat;
 };
 Mat3.prototype.setAs2DProjection = function(width, height) {
+    //Y 0 IS AT TOP
     this.values = [
         2 / width, 0, 0,
-        0, 2 / height, 0,
+        0,  -2 / height, 0,
         -1, 1, 1
     ];
 };

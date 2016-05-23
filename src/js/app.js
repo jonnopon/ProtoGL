@@ -21,7 +21,7 @@ var init = function() {
         this.soundManager.addSound("powerup", "res/snd/powerup.wav");
         this.soundManager.addSound("enemydie", "res/snd/enemyhit.wav");
 
-        var vert = VERTSHADERS2D["transform-colored"];
+        var vert = VERTSHADERS2D["transform-colored"]();
         var frag = FRAGSHADERS["colored"];
 
         var stdShader = {

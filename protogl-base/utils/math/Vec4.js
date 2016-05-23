@@ -103,6 +103,9 @@ Vec4.prototype.getDistanceFromVec4 = function(v) {
 
     return Math.sqrt(x2 + y2 + z2 + w2);
 };
-Vec3.prototype.str = function() {
+Vec4.prototype.str = function() {
     return 'vec4(' + this.x + ', ' + this.y + ', ' + this.z + ',' + this.w + ')';
+};
+Vec4.prototype.asArray = function() {
+    return [this.x, this.y, this.z, this.w];
 };

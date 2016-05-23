@@ -14,5 +14,7 @@ var Shape = function(shapeName, dimensions, center) {
     }
     this.dimensions = dimensions;
     this.center = center;
+
+    this.geometry = _getGeometry(shapeName, dimensions);
 };
 Shape.prototype.name = "shape";

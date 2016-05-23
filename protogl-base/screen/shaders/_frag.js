@@ -1,10 +1,12 @@
 var FRAGSHADERS = {};
 
+// TODO: rethink structure of how shaders are stored and retrieved
+
 FRAGSHADERS["colored"] =
     'precision mediump float;' +
     'varying vec4 Col;' +
     'void main() {' +
-    '   gl_FragColor = Col;' +
+    '   gl_FragColor = vec4(Col.xyz * (1.0 / 255.0), Col.w);' +
     '}'
 ;
 FRAGSHADERS["textured"] =
