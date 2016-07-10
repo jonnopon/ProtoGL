@@ -1,10 +1,21 @@
 var Mat3 = function(values) {
-    this.values = values ||
-        [
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1,
+    if (values instanceof Mat4) {
+        var v = values.values;
+
+        this.values = [
+            v[0], v[1], v[2],
+            v[4], v[5], v[6],
+            v[8], v[9], v[10]
         ];
+    }
+    else {
+        this.values = values ||
+            [
+                1, 0, 0,
+                0, 1, 0,
+                0, 0, 1,
+            ];
+    }
 };
 
 Mat3.prototype.clone = function() {
@@ -177,6 +188,18 @@ Mat3.prototype.setAs2DProjection = function(width, height) {
         2 / width, 0, 0,
         0,  -2 / height, 0,
         -1, 1, 1
+    ];
+};
+Mat3.prototype.transpose = function() {
+    var v = this.values,
+        v00 = v[0], v01 = v[1], v02 = v[2]
+        v10 = v[3], v11 = v[4], v12 = v[5]
+        v20 = v[6], v21 = v[7], v22 = v[8];
+
+    this.values = [
+        v00, v10, v20,
+        v01, v11, v21,
+        v02, v12, v22
     ];
 };
 Mat3.prototype.str = function() {

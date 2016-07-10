@@ -1,5 +1,7 @@
 var InputHandler = function(canvas) {
     window.onkeydown = function(event) {
+        console.log(event.which);
+
         if (event.which !== KEYCODES.f5 && event.which !== KEYCODES.f12) {
             event.preventDefault();
             if (GAME.keys.indexOf(event.which) === -1) {

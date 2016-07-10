@@ -1,20 +1,11 @@
-var Shape = function(shapeName, dimensions, center) {
+var Shape = function(shapeName, dimensions, gridCellsHor, gridCellsVert) {
     this.shapeName = shapeName;
-    this.glShape;
-    switch (shapeName) {
-        case "grid":
-        case "line":
-            this.glShape = gl.LINES;
-            break;
-        case "circle":
-            this.glShape = gl.TRIANGLE_FAN;
-            break;
-        default:
-            this.glShape = gl.TRIANGLES;
-    }
     this.dimensions = dimensions;
-    this.center = center;
 
-    this.geometry = _getGeometry(shapeName, dimensions);
+    var geometryData = _getGeometry(shapeName, dimensions, gridCellsHor, gridCellsVert);
+
+    this.geometry = geometryData.vertList;
+    this.normals = geometryData.normals || [];
+    this.glShape = geometryData.glShape;
 };
 Shape.prototype.name = "shape";

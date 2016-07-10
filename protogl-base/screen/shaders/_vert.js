@@ -3,7 +3,248 @@ var VERTSHADERS3D = {};
 
 // TODO: rethink structure of how shaders are stored and retrieved
 
-/*************************************************** 2D ***************************************************/
+/*************************************************** 3D ***************************************************/
+VERTSHADERS3D["perspective-1"] = function() {
+    return {
+        src:    'precision mediump float;' +
+        'attribute vec4 pos3D;' +
+        'attribute vec4 col;' +
+        'uniform mat4 transform3D;' +
+        'uniform mat4 perspective;' +
+        'uniform mat4 view;' +
+        'varying vec4 Col;' +
+        'void main() {' +
+        '   Col = col;' +
+        '   gl_Position = perspective * view * transform3D * pos3D;' +
+        '}',
+        attributes: {
+            pos3D: 3,
+            col: 4
+        },
+        dataPerVert: 7,
+        globalUniforms: {
+            perspective: {
+                type: "mat4",
+                value: GAME.renderer.perspectiveMatrix.values
+            },
+            view: {
+                type: "mat4",
+                value: function value() {
+                    return GAME.renderer.getViewMatrix();
+                }
+            }
+        },
+        instanceUniforms: {
+            transform3D: "mat4"
+        }
+    };
+};
+
+VERTSHADERS3D["lighting-1"] = function() {
+    return {
+        src:
+            'precision mediump float;' +
+            'attribute vec4 pos3D;' +
+            'attribute vec4 col;' +
+            'attribute vec3 normal;' +
+
+            'uniform mat4 transform3D;' +
+            // 'uniform mat4 transform3DInverseTranspose;' +
+            'uniform mat4 normalMatrix;' +
+
+            'uniform vec3 lightingDirection;' +
+            'uniform vec3 directionalColor;' +
+            'uniform vec3 ambientColor;' +
+
+            'uniform mat4 perspective;' +
+            'uniform mat4 view;' +
+
+            'varying vec4 Col;' +
+            // 'varying vec3 Normal;' +
+
+            'varying vec3 vLightWeighting;' +
+
+            'void main() {' +
+            '   Col = col;' +
+            '   vec3 ac = ambientColor.xyz * (1.0 / 255.0);' +
+            '   vec3 dc = directionalColor.xyz * (1.0 / 255.0);' +
+            '   vec3 transformedNormal = mat3(normalMatrix) * normal;' +
+            '   float directionalLightWeighting = max(dot(transformedNormal, lightingDirection), 0.0);' +
+            '   vLightWeighting = ac + dc * directionalLightWeighting;' +
+            // '   Normal = (transform3DInverseTranspose * vec4(normal, 0)).xyz;' +
+            '   gl_Position = perspective * view * transform3D * pos3D;' +
+            '}',
+        attributes: {
+            pos3D: 3,
+            col: 4,
+            normal: 3
+        },
+        dataPerVert: 10,
+        globalUniforms: {
+            perspective: {
+                type: "mat4",
+                value: GAME.renderer.perspectiveMatrix.values
+            },
+            view: {
+                type: "mat4",
+                value: function value() {
+                    return GAME.renderer.getViewMatrix();
+                }
+            },
+            lightingDirection: {
+                type: "vec3",
+                value: GAME.renderer.lightDirection
+            },
+            directionalColor: {
+                type: "vec3",
+                value: GAME.renderer.directionalColor
+            },
+            ambientColor: {
+                type: "vec3",
+                value: GAME.renderer.ambientColor
+            }
+        },
+        instanceUniforms: {
+            transform3D: "mat4",
+            // transform3DInverseTranspose: "mat4"
+            normalMatrix: "mat4",
+        }
+    };
+};
+
+VERTSHADERS3D["point-lighting"] = function() {
+    return {
+        src:
+        'precision mediump float;' +
+        'attribute vec4 pos3D;' +
+        'attribute vec4 col;' +
+        'attribute vec3 normal;' +
+
+        'uniform mat4 transform3D;' +
+        // 'uniform mat4 transform3DInverseTranspose;' +
+        'uniform mat4 normalMatrix;' +
+
+        // 'uniform vec3 lightingDirection;' +
+        // 'uniform vec3 directionalColor;' +
+        'uniform vec3 ambientColor;' +
+        'uniform vec3 pointLightPosition;' +
+        'uniform vec3 pointLightColor;' +
+
+        'uniform mat4 perspective;' +
+        'uniform mat4 view;' +
+
+        'varying vec4 Col;' +
+        // 'varying vec3 Normal;' +
+
+        'varying vec3 vLightWeighting;' +
+
+        'void main() {' +
+        '   Col = col;' +
+        '   vec3 ac = ambientColor * (1.0 / 255.0);' +
+        // '   vec3 dc = directionalColor.xyz * (1.0 / 255.0);' +
+        '   vec3 pc = pointLightColor * (1.0 / 255.0);' +
+
+        '   vec4 mvPosition = view * transform3D * pos3D;' +
+        '   gl_Position = perspective * mvPosition;' +
+
+        '   vec3 lightDirection = normalize(pointLightPosition - mvPosition.xyz);' +
+        '   vec3 transformedNormal = mat3(normalMatrix) * normal;' +
+        '   float directionalLightWeighting = max(dot(transformedNormal, lightDirection), 0.0);' +
+        '   vLightWeighting = ac + pc * directionalLightWeighting;' +
+
+        // '   vec3 transformedNormal = mat3(normalMatrix) * normal;' +
+        // '   float directionalLightWeighting = max(dot(transformedNormal, lightingDirection), 0.0);' +
+        // '   vLightWeighting = ac + dc * directionalLightWeighting;' +
+        // '   Normal = (transform3DInverseTranspose * vec4(normal, 0)).xyz;' +
+        // '   gl_Position = perspective * view * transform3D * pos3D;' +
+        '}',
+        attributes: {
+            pos3D: 3,
+            col: 4,
+            normal: 3
+        },
+        dataPerVert: 10,
+        globalUniforms: {
+            perspective: {
+                type: "mat4",
+                value: GAME.renderer.perspectiveMatrix.values
+            },
+            view: {
+                type: "mat4",
+                value: function value() {
+                    return GAME.renderer.getViewMatrix();
+                }
+            },
+            pointLightPosition: {
+                type: "vec3",
+                value: GAME.renderer.pointLightPosition
+            },
+            pointLightColor: {
+                type: "vec3",
+                value: GAME.renderer.pointLightColor
+            },
+            ambientColor: {
+                type: "vec3",
+                value: GAME.renderer.ambientColor
+            }
+        },
+        instanceUniforms: {
+            transform3D: "mat4",
+            // transform3DInverseTranspose: "mat4"
+            normalMatrix: "mat4",
+        }
+    };
+};
+
+VERTSHADERS3D["point-lighting-per-fragment"] = function() {
+    return {
+        src:
+        'precision mediump float;' +
+        'attribute vec4 pos3D;' +
+        'attribute vec4 col;' +
+        'attribute vec3 normal;' +
+
+        'uniform mat4 transform3D;' +
+        'uniform mat3 normalMatrix;' +
+
+        'uniform mat4 perspective;' +
+        'uniform mat4 view;' +
+
+        'varying vec4 Pos3D;' +
+        'varying vec3 transformedNormal;' +
+        'varying vec4 Col;' +
+
+        'void main() {' +
+        '   Col = col;' +
+        '   Pos3D = view * transform3D * pos3D;' +
+        '   gl_Position = perspective * Pos3D;' +
+        '   transformedNormal = normalMatrix * normal;' +
+        '}',
+        attributes: {
+            pos3D: 3,
+            col: 4,
+            normal: 3
+        },
+        dataPerVert: 10,
+        globalUniforms: {
+            perspective: {
+                type: "mat4",
+                value: GAME.renderer.perspectiveMatrix.values
+            },
+            view: {
+                type: "mat4",
+                value: function value() {
+                    return GAME.renderer.getViewMatrix();
+                }
+            }
+        },
+        instanceUniforms: {
+            transform3D: "mat4",
+            normalMatrix: "mat3"
+        }
+    };
+};
+
 VERTSHADERS3D["new-transform-colored"] = function() {
     return {
         src:    'precision mediump float;' +
@@ -29,7 +270,9 @@ VERTSHADERS3D["new-transform-colored"] = function() {
             },
             view: {
                 type: "mat4",
-                value: GAME.renderer.viewMatrix3D.values
+                value: function value() {
+                    return GAME.renderer.getViewMatrix();
+                }
             }
         },
         instanceUniforms: {
@@ -38,7 +281,7 @@ VERTSHADERS3D["new-transform-colored"] = function() {
     };
 };
 
-
+/*************************************************** 2D ***************************************************/
 VERTSHADERS2D["new-transform-colored"] = function() {
     return {
         src:'precision mediump float;' +
@@ -64,7 +307,51 @@ VERTSHADERS2D["new-transform-colored"] = function() {
             },
             view: {
                 type: "mat3",
-                value: GAME.renderer.viewMatrix2D.values
+                value: function value() {
+                    return GAME.renderer.getViewMatrix();
+                }
+            }
+        },
+        instanceUniforms: {
+            transform2D: "mat3"
+        }
+    }
+};
+
+VERTSHADERS2D["new-transform-textured-colored"] = function() {
+    return {
+        src:
+        'precision mediump float;' +
+        'attribute vec2 pos2D;' +
+        'attribute vec4 col;' +
+        'attribute vec2 texCoord;' +
+        'uniform mat3 transform2D;' +
+        'uniform mat3 projection;' +
+        'uniform mat3 view;' +
+        'varying vec4 Col;' +
+        'varying vec2 TexCoord;' +
+        'void main() {' +
+        '   TexCoord = texCoord;' +
+        '   Col = col;' +
+        '   gl_Position = vec4((view * projection * transform2D * vec3(pos2D, 1)).xy, 1.0, 1.0);' +
+        '}',
+        attributes: {
+            pos2D: 2,
+            col: 4,
+            texCoord: 2
+        },
+        dataPerVert: 8,
+        globalUniforms: {
+            projection: {
+                type: "mat3",
+                value: GAME.renderer.projectionMatrix2D.values
+            },
+            //TODO: MIGHT NOT WANT VIEW OR PROJECTION FOR TEXT/UI? SEPARATE SHADERS? HMM
+            view: {
+                type: "mat3",
+                value: function value() {
+                    return GAME.renderer.getViewMatrix();
+                }
             }
         },
         instanceUniforms: {
