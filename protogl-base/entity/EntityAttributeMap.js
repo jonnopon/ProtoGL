@@ -19,5 +19,17 @@ var ENTITY_ATTRIBUTE_MAP = {
     transform3D: {
         component: "transform3D",
         property: "transform"
+    },
+    transform3DInverseTranspose: {
+        component: "transform3D",
+        property: "transformInverseTranspose"
+    },
+    normal: {
+        component: "shape",
+        property: "normal"
+    },
+    normalMatrix: {
+        component: "transform3D",
+        property: "normalTransform"
     }
 };

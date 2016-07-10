@@ -39,10 +39,19 @@ var KEYCODES = {
     num0: 48,
     
     //Numpad
-    numPad8: 38,
+    numPad1: 35,
+    numPad2: 40,
+    numpad3: 34,
     numPad4: 37,
-    numPad6: 39,
+    
     numPad5: 12,
+    numPad6: 39,
+    
+    numPad7: 36,
+    
+    numPad8: 38,
+    
+    numPad9: 33,
     
     //Arrows
     leftArrow: 37,

@@ -9,7 +9,7 @@
 //     gl.bindTexture(gl.TEXTURE_2D, null);
 // };
 
-// var Renderer = function(gameCanvas) {
+var RendererOld = function(gameCanvas) {
 //     this.vbos = {};
 //     this.verts = {};
 //     this.shaderPrograms = {};
@@ -42,9 +42,9 @@
 //         gl.TEXTURE1,
 //         gl.TEXTURE2
 //     ];
-// };
+};
 
-Renderer.prototype.createTexture = function(name, src) {
+RendererOld.prototype.createTexture = function(name, src) {
     var ident = this.textureIdentifiers[Object.keys(this.textures).length];
     var tex = gl.createTexture();
     var image = new Image();
@@ -55,28 +55,28 @@ Renderer.prototype.createTexture = function(name, src) {
     // return the gl texture position of the created texture
     return Object.keys(this.textures).length - 1;
 };
-Renderer.prototype.addVerts = function(name, vertArray, dataPerVert) {
+RendererOld.prototype.addVerts = function(name, vertArray, dataPerVert) {
     this.verts[name] = {'dataPerVert':dataPerVert, 'array':new Float32Array(vertArray)};
 };
-Renderer.prototype.addVBO = function(name) {
+RendererOld.prototype.addVBO = function(name) {
     this.vbos[name] = gl.createBuffer();
 };
-Renderer.prototype.bufferVertsToVBO = function(vertName, vboName) {
+RendererOld.prototype.bufferVertsToVBO = function(vertName, vboName) {
     var prevBuffer = this.activeVBO;
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[vboName]);
     gl.bufferData(gl.ARRAY_BUFFER, this.verts[vertName].array, gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, prevBuffer);
 };
-Renderer.prototype.bindVBO = function(name) {
+RendererOld.prototype.bindVBO = function(name) {
     this.activeVBO = this.vbos[name];
 };
-Renderer.prototype.bindVerts = function(name) {
+RendererOld.prototype.bindVerts = function(name) {
     this.activeVerts = this.verts[name];
 };
-Renderer.prototype.bindShaderProgram = function(name) {
+RendererOld.prototype.bindShaderProgram = function(name) {
     this.activeShaderProgram = this.shaderPrograms[name];
 };
-Renderer.prototype.addShaderProgram = function(name, shaders) {
+RendererOld.prototype.addShaderProgram = function(name, shaders) {
     /* Usage:
      in application, _get[Vert|Frag]Shader(String <name>) to get your shaders from vert and frag shaders
      compile them into an array EG [VERT_SHADER, FRAG_SHADER, ...others]
@@ -90,10 +90,10 @@ Renderer.prototype.addShaderProgram = function(name, shaders) {
 
     // return this.shaderPrograms[name];
 };
-Renderer.prototype.getShaderProgram = function(name) {
+RendererOld.prototype.getShaderProgram = function(name) {
     return this.shaderPrograms[name];
 };
-Renderer.prototype.createShaderProgram = function(gl, vshader, fshader, extras) {
+RendererOld.prototype.createShaderProgram = function(gl, vshader, fshader, extras) {
     var vertexShader = this.compileShader(gl, gl.VERTEX_SHADER, vshader);
     var fragmentShader = this.compileShader(gl, gl.FRAGMENT_SHADER, fshader);
     //TODO extras
@@ -121,7 +121,7 @@ Renderer.prototype.createShaderProgram = function(gl, vshader, fshader, extras) 
     }
     return program;
 };
-Renderer.prototype.compileShader = function(gl, type, source) {
+RendererOld.prototype.compileShader = function(gl, type, source) {
     var shader = gl.createShader(type);
     if (shader == null) {
         alert('unable to create shader');
@@ -141,7 +141,7 @@ Renderer.prototype.compileShader = function(gl, type, source) {
 
     return shader;
 };
-Renderer.prototype.clearScreen = function(col, depth) {
+RendererOld.prototype.clearScreen = function(col, depth) {
     gl.clearColor(col.x, col.y, col.z, 1.0);
     if (depth) {
         gl.clear(gl.DEPTH_BUFFER_BIT);
@@ -150,7 +150,7 @@ Renderer.prototype.clearScreen = function(col, depth) {
         gl.clear(gl.COLOR_BUFFER_BIT);
     }
 };
-// Renderer.prototype.render = function(settings) {
+// RendererOld.prototype.render = function(settings) {
 //     gl.disable(gl.DEPTH_TEST);
 //     gl.enable(gl.BLEND);
 //     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -185,7 +185,7 @@ Renderer.prototype.clearScreen = function(col, depth) {
 //
 //     gl.drawArrays(settings.shape, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
 // };
-// Renderer.prototype.uploadUniform = function(name, type, value) {
+// RendererOld.prototype.uploadUniform = function(name, type, value) {
 //     var loc = gl.getUniformLocation(this.activeShaderProgram, name);
 //
 //     switch (type) {
@@ -200,7 +200,7 @@ Renderer.prototype.clearScreen = function(col, depth) {
 //     }
 // };
 
-// Renderer.prototype.render3D = function(rebuffer) {
+// RendererOld.prototype.render3D = function(rebuffer) {
 //     gl.disable(gl.BLEND);
 //     gl.enable(gl.DEPTH_TEST);
 //     gl.depthFunc(gl.LESS);
@@ -226,6 +226,6 @@ Renderer.prototype.clearScreen = function(col, depth) {
 //     gl.drawArrays(gl.TRIANGLES, 0, this.activeVerts.array.length / this.activeVerts.dataPerVert);
 // };
 
-// Renderer.prototype.resize = function(width, height) {
-//     gl.viewport(0, 0, width, height);
-// };
+RendererOld.prototype.resize = function(width, height) {
+    gl.viewport(0, 0, width, height);
+};

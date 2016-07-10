@@ -1,11 +1,11 @@
 var Mat4 = function(values) {
     this.values = values ||
-        [
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        ];
+    [
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ];
 };
 
 Mat4.prototype.clone = function() {
@@ -256,30 +256,60 @@ Mat4.prototype.setAs3DProjection = function(width, height, depth) {
     ];
 };
 Mat4.prototype.setAsPerspective = function(fov, aspectRatio, near, far) {
-    var f = 1.0 / Math.tan(fov / 2),
-        nf = 1 / (near - far),
-        newMat = [];
+    var f = Math.tan(Math.PI * 0.5 - 0.5 * degToRad(fov));
+    var rangeInv = 1.0 / (near - far);
 
-    newMat[0] = f / aspectRatio;
-    newMat[1] = 0;
-    newMat[2] = 0;
-    newMat[3] = 0;
-    newMat[4] = 0;
-    newMat[5] = f;
-    newMat[6] = 0;
-    newMat[7] = 0;
-    newMat[8] = 0;
-    newMat[9] = 0;
-    newMat[10] = (far + near) * nf;
-    newMat[11] = -1;
-    newMat[12] = 0;
-    newMat[13] = 0;
-    newMat[14] = (2 * far * near) * nf;
-    newMat[15] = 0;
+    var newMat = [
+        f / aspectRatio, 0, 0, 0,
+        0, f, 0, 0,
+        0, 0, (near + far) * rangeInv, -1,
+        0, 0, near * far * rangeInv * 2, 0
+    ];
+
+    // var f = 1.0 / Math.tan(fov / 2),
+    //     nf = 1 / (near - far),
+    //     newMat = [];
+    //
+    // newMat[0] = f / aspectRatio;
+    // newMat[1] = 0;
+    // newMat[2] = 0;
+    // newMat[3] = 0;
+    // newMat[4] = 0;
+    // newMat[5] = f;
+    // newMat[6] = 0;
+    // newMat[7] = 0;
+    // newMat[8] = 0;
+    // newMat[9] = 0;
+    // newMat[10] = (far + near) * nf;
+    // newMat[11] = -1;
+    // newMat[12] = 0;
+    // newMat[13] = 0;
+    // newMat[14] = (2 * far * near) * nf;
+    // newMat[15] = 0;
 
     this.values = newMat;
 };
 Mat4.prototype.setAsLookAt = function(eyeVector, center, upVector) {
+    // var zAxis = cameraPos.clone();
+    // zAxis.subVec3(target);
+    // zAxis.normalize();
+    //
+    // var xAxis = up.clone();
+    // xAxis.crossWithVec3(zAxis);
+    //
+    // var yAxis = zAxis.clone();
+    // yAxis.crossWithVec3(xAxis);
+    //
+    // var newMat = [
+    //     xAxis.x, xAxis.y, xAxis.z, 0,
+    //     yAxis.x, yAxis.y, yAxis.z, 0,
+    //     zAxis.x, zAxis.y, zAxis.z, 0,
+    //     cameraPos.x, cameraPos.y, cameraPos.z, 1
+    // ];
+    //
+    // this.values = newMat;
+
+
     var x0, x1, x2, y0, y1, y2, z0, z1, z2, len,
         ex = eyeVector.x, ey = eyeVector.y, ez = eyeVector.z,
         ux = upVector.x, uy = upVector.y, uz = upVector.z,
@@ -386,6 +416,29 @@ Mat4.prototype.setAsOrtho = function(left, right, bottom, top, near, far) {
     newMat[15] = 1;
 
     this.values = newMat;
+};
+Mat4.prototype.transpose = function() {
+    var v = this.values,
+        v00 = v[0], v01 = v[1], v02 = v[2], v03 = v[3],
+        v10 = v[4], v11 = v[5], v12 = v[6], v13 = v[7],
+        v20 = v[8], v21 = v[9], v22 = v[10], v23 = v[11],
+        v30 = v[12], v31 = v[13], v32 = v[14], v33 = v[15];
+
+    this.values = [
+        v00, v10, v20, v30,
+        v01, v11, v21, v31,
+        v02, v12, v22, v32,
+        v03, v13, v23, v33
+    ];
+};
+Mat4.prototype.getForwardVector = function() {
+    return new Vec3(this.values[8], this.values[9], this.values[10]);
+};
+Mat4.prototype.getRightVector = function() {
+    return new Vec3(this.values[0], this.values[1], this.values[2]);;
+};
+Mat4.prototype.getUpVector = function() {
+    return new Vec3(this.values[4], this.values[5], this.values[6]);
 };
 Mat4.prototype.str = function() {
     var a = this.values;

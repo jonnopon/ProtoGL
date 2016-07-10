@@ -1,5 +1,13 @@
 var gl = null;
-
+var handleTextureLoaded = function(image, texture, ident) {
+    gl.activeTexture(ident);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+};
 //TODO:
 /*
 IDEA: PIPE EVERYTHING THROUGH ENTITYMANAGER BY LITERALLY USING ENTITIES?
@@ -19,20 +27,53 @@ IDEA: PIPE EVERYTHING THROUGH ENTITYMANAGER BY LITERALLY USING ENTITIES?
  */
 
 //TODO: SPLIT 2D AND 3D OR ACHIEVE BOTH IN ONE (HIGH COMPLEXITY?/REDUNDANCY?) ENGINE
-var Renderer2D = function(gameCanvas) {
+var Renderer = function(gameCanvas) {
+    this.camera = null;
     this.shaderPrograms = {};
     this.activeShaderProgram = 0;
     this.vbos = {};
+    this.textures = {};
+    this.lastConfig = {};
     this.projectionMatrix2D = new Mat3();
     this.projectionMatrix2D.setAs2DProjection(GAME.resolution.x, GAME.resolution.y);
 
     this.projectionMatrix3D = new Mat4();
     this.projectionMatrix3D.setAs3DProjection(GAME.resolution.x, GAME.resolution.y, 400);
+
+    // this.reverseLight = new Vec3(-1, 0.7, 1);
+    // this.reverseLight = new Vec3(0, 0, 1);
+    this.ambientColor = new Vec3(100, 100, 100);
+    this.directionalColor = new Vec3(255, 255, 255);
+    
+
+    this.lightDirection = new Vec3(0, 0, -1);
+    this.lightDirection.normalize();
+    this.lightDirection.scale(-1);
+
+    //TODO: REDUCE BACK DOWN TO DIRECTIONAL + AMBIENT LIGHT,
+    //REIMPLEMENT POINTS AND THEN PER-FRAGMENT
+    //MAYBE USE THIS AS AN OPPORTUNITY TO LOOK AT YOUR WHOLE "COMPUTE MATRIX" THING
+    this.pointLightPosition = new Vec3(500, 50, 0);
+    this.pointLightColor = new Vec3(0, 255, 255);
+    
+    
+    
+    
+    
+    // this.reverseLight.normalize();
+
     //TODO: will naturally come across perspective again soon
-    // this.projectionMatrix3D.setAsPerspective(90, GAME.resolution.x / GAME.resolution.y, 0.01, 1000);
-    this.viewMatrix2D = new Mat3();
-    this.viewMatrix3D = new Mat4();
-    this.viewMatrix3D.setAsLookAt(new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, 1, 0));
+
+    //TODO: PROBLEM: FOR SOME REASON: GAME.RESOLUTION.X / 2, GAME.RESOLUTION.Y / 2 IS AT THE TOP RIGHT
+    //(THIS COULD ALSO BE A VIEW PROBLEM)
+    this.perspectiveMatrix = new Mat4();
+    this.perspectiveMatrix.setAsPerspective(90, GAME.resolution.x / GAME.resolution.y, 0.1, 10000000);
+
+    //TODO: TO BE ABSTRACTED INTO A CAMERA
+    // this.viewMatrix = null;
+    this.viewMatrix2D = null;
+    this.viewMatrix3D = null;
+    // this.viewMatrix3D.setAsLookAt(new Vec3(0, 0, 0), new Vec3(0, 0, 0), new Vec3(0, 1, 0));
     
     //create gl context
     try {
@@ -45,24 +86,82 @@ var Renderer2D = function(gameCanvas) {
         alert("Could not initialise WebGL");
         return false;
     }
+
+    //initialise texture capabilities
+    this.textureIdentifiers = [
+        gl.TEXTURE0,
+        gl.TEXTURE1,
+        gl.TEXTURE2
+    ];
 };
-Renderer2D.prototype.clearScreen = function(col, depth) {
+Renderer.prototype.clearScreen = function(col, depth) {
+    // gl.enable(gl.CULL_FACE);
+    gl.enable(gl.DEPTH_TEST);
+    // gl.enable(gl.BLEND);
+    // gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
     gl.clearColor(col.x, col.y, col.z, 1.0);
-    if (depth) {
-        gl.clear(gl.DEPTH_BUFFER_BIT);
-    }
-    else {
-        gl.clear(gl.COLOR_BUFFER_BIT);
-    }
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.DEPTH_BUFFER_BIT);
 };
-Renderer2D.prototype.resize = function(width, height) {
+Renderer.prototype.resize = function(width, height) {
     gl.viewport(0, 0, width, height);
 };
+///////////////////////////////////////////////////////////////////////////////////////////////
+///CAMERA STUFF
+///////////////////////////////////////////////////////////////////////////////////////////////
+Renderer.prototype.addCamera = function(camera) {
+    this.camera = camera;
+
+    if (this.camera instanceof Camera3D) {
+        this.viewMatrix3D = new Mat4();
+    }
+    else {
+        this.viewMatrix2D = new Mat3();
+    }
+
+    GAME.addEntity(this.camera.e);
+};
+Renderer.prototype.updateViewMatrix = function() {
+    this.camera.update();
+
+    if (this.camera instanceof Camera3D) {
+        this.viewMatrix3D = this.camera.getViewMatrix().clone();
+        this.viewMatrix3D.invert();
+    }
+    else {
+        this.viewMatrix2D = this.camera.getViewMatrix().clone();
+        this.viewMatrix2D.invert();
+    }
+};
+Renderer.prototype.getViewMatrix = function() {
+    return this.viewMatrix2D || this.viewMatrix3D;
+};
+///////////////////////////////////////////////////////////////////////////////////////////////
+///END CAMERA STUFF
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///TEXTURE STUFF
+///////////////////////////////////////////////////////////////////////////////////////////////
+Renderer.prototype.createTexture = function(name, src) {
+    var ident = this.textureIdentifiers[Object.keys(this.textures).length];
+    var tex = gl.createTexture();
+    var image = new Image();
+    image.onload = function() {handleTextureLoaded(image, tex, ident);};
+    this.textures[name] = {'ident': ident, 'tex': tex};
+    image.src = src;
+
+    // return the gl texture position of the created texture
+    return Object.keys(this.textures).length - 1;
+};
+///////////////////////////////////////////////////////////////////////////////////////////////
+///END TEXTURE STUFF
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///SHADER STUFF
 ///////////////////////////////////////////////////////////////////////////////////////////////
-Renderer2D.prototype.compileShader = function(type, src) {
+Renderer.prototype.compileShader = function(type, src) {
     var shader = gl.createShader(type);
     if (!shader) {
         alert("unable to create shader");
@@ -82,7 +181,7 @@ Renderer2D.prototype.compileShader = function(type, src) {
 
     return shader;
 };
-Renderer2D.prototype.createShaderProgram = function(name, shaders) {
+Renderer.prototype.createShaderProgram = function(name, shaders) {
     var vertexShader = this.compileShader(gl.VERTEX_SHADER, shaders.vert);
     var fragmentShader = this.compileShader(gl.FRAGMENT_SHADER, shaders.frag);
     
@@ -105,16 +204,16 @@ Renderer2D.prototype.createShaderProgram = function(name, shaders) {
     this.shaderPrograms[name] = program;
 };
 //TODO COMBINE THE TWO BELOW METHODS?
-Renderer2D.prototype.useShaderProgram = function(name) {
+Renderer.prototype.useShaderProgram = function(name) {
     this.activeShaderProgram = this.shaderPrograms[name];
     gl.useProgram(this.shaderPrograms[name]);
 };
-Renderer2D.prototype.setShader = function(dataPerVert, attributes, instanceUniforms) {
+Renderer.prototype.setShader = function(dataPerVert, attributes, instanceUniforms) {
     this.loadAttributes(dataPerVert, attributes);
     this.loadUniforms(instanceUniforms);
 };
 
-Renderer2D.prototype.loadAttributes = function(dataPerVert, attributes) {
+Renderer.prototype.loadAttributes = function(dataPerVert, attributes) {
     var attributeNames = Object.keys(attributes);
     var off = 0;
     for (var i = 0; i < attributeNames.length; i++) {
@@ -129,7 +228,7 @@ Renderer2D.prototype.loadAttributes = function(dataPerVert, attributes) {
         off += (size * 4);
     }
 };
-Renderer2D.prototype.loadUniforms = function(uniforms) {
+Renderer.prototype.loadUniforms = function(uniforms) {
     var uniformNames = Object.keys(uniforms);
     for (var i = 0; i < uniformNames.length; i++) {
         var name = uniformNames[i];
@@ -137,11 +236,23 @@ Renderer2D.prototype.loadUniforms = function(uniforms) {
         var value = uniforms[name].value;
         var type = uniforms[name].type;
 
+        if (typeof value === "function") {
+            //TODO THIS IS BAD - ASSUMES MATRIX TYPE
+            value = value().values;
+        }
+        else if (value instanceof Vec3) {
+            value = value.asArray();
+        }
+
         var loc = gl.getUniformLocation(this.activeShaderProgram, name);
 
         switch (type) {
             case "int":
                 gl.uniform1i(loc, value);
+                break;
+            case "vec3":
+                // gl.uniform3fv()
+                gl.uniform3fv(loc, value);
                 break;
             case "vec4":
                 gl.uniform4fv(loc, value);
@@ -162,11 +273,14 @@ Renderer2D.prototype.loadUniforms = function(uniforms) {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///VBO STUFF
 ///////////////////////////////////////////////////////////////////////////////////////////////
-Renderer2D.prototype.addVBO = function(name) {
+Renderer.prototype.addVBO = function(name) {
     this.vbos[name] = gl.createBuffer();
 };
-Renderer2D.prototype.bufferVertsToVBO = function(verts, vboName) {
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[vboName]);
+Renderer.prototype.bindVBO = function(name) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[name]);
+};
+Renderer.prototype.bufferVerts = function(verts) {
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.vbos[vboName]);
     gl.bufferData(gl.ARRAY_BUFFER, verts, gl.DYNAMIC_DRAW);
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,13 +290,60 @@ Renderer2D.prototype.bufferVertsToVBO = function(verts, vboName) {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///RENDERING
 ///////////////////////////////////////////////////////////////////////////////////////////////
-Renderer2D.prototype.render = function(shape, vertices) {
-    //TODO: make these flags (and others?) configurable from the outside
-    gl.disable(gl.DEPTH_TEST);
+// Renderer.prototype.render = function(shape, vertices) {
+//     //TODO: make these flags (and others?) configurable from the outside
+//     gl.disable(gl.DEPTH_TEST);
+//     gl.enable(gl.BLEND);
+//     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+//
+//     gl.drawArrays(shape, 0, vertices);
+// };
+Renderer.prototype.renderWithConfig = function(config) {
+    //TODO GIVEN THE BUG AT THE BOTTOM, THIS WHOLE THING NEEDS A RE-DO
+
+
+    //flags
+    //TODO: if transparency/textures?
+
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    
+    this.updateViewMatrix();
 
-    gl.drawArrays(shape, 0, vertices);
+    //TODO: this may end up being handled by the vertex provider
+    if (config.vboName !== this.lastConfig.vboName) {
+        //vertices + vbo
+
+        this.bindVBO(config.vboName);
+        // this.bufferVertsToVBO()
+    }
+
+    if (config.shaderProgramName !== this.lastConfig.shaderProgramName) {
+        this.useShaderProgram(config.shaderProgramName);
+        this.loadAttributes(config.dataPerVert, config.attributes);
+    }
+    this.loadUniforms(config.vertGlobalUniforms);
+    this.loadUniforms(config.fragGlobalUniforms);
+
+    //texture
+
+    //TODO: this may end up being handled by the vertex provider
+    // if (config.instanceUniforms !== this.lastConfig.instanceUniforms) {
+    //  NEED A LOADUNIFORMS FLAG ON CONFIG?
+        this.loadUniforms(config.vertInstanceUniforms);
+        this.loadUniforms(config.fragInstanceUniforms);
+    // }
+
+    //TODO: this may end up being handled by the vertex provider
+    // if (config.verts !== this.lastConfig.verts) {
+    //  NEED A BUFFER FLAG ON CONFIG?
+        this.bufferVerts(config.verts);
+    // }
+
+    //draw w/ shape and numOfVertices
+    gl.drawArrays(config.glShape, 0, config.numVerts);
+
+    // this.lastConfig = config; //TODO THIS CAUSES A BUG WHEN IT SHOULD BE THE FIX?
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///END RENDERING

@@ -48,10 +48,11 @@ Game.prototype.run = function(t) {
     GAME.resizeCanvas();
 
     //TODO: reimplement text
-    // if (GAME.displayStats) {
+    if (GAME.displayStats) {
+        // console.log("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10);
     //     GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);
     //     GAME.textManager.addString("MousePos:\\n" + GAME.mousePos.str(), "Right", 25, new Vec2(GAME.width - 200, GAME.height - 65), new Vec4(255, 255, 255, 1), 0);
-    // }
+    }
 
     for (var i = 0; i < GAME.systems.length; i++) {
         GAME.systems[i]();
@@ -62,7 +63,6 @@ Game.prototype.run = function(t) {
     //that makes way more sense than assuming they're there...
     // GAME.userInterfaceManager.render();
     // GAME.textManager.render();
-
     requestAnimationFrame(GAME.run);
 };
 Game.prototype.resizeCanvas = function() {
@@ -75,14 +75,6 @@ Game.prototype.resizeCanvas = function() {
     }
 
     this.renderer.resize(this.canvas.width, this.canvas.height);
-};
-Game.prototype.initManagers = function() {
-    //TODO obviously will change soon
-    this.renderer = new Renderer2D(this.canvas);
-    // this.textManager = new TextManager(this);
-    // this.soundManager = new SoundManager();
-    this.entityManager = new EntityManager(this);
-    // this.userInterfaceManager = new UserInterfaceManager(this);
 };
 Game.prototype.addState = function(state) {
     this.states[state.getName()] = state;
@@ -113,6 +105,13 @@ Game.prototype.loadAttributes = function(data) {
     }
 };
 Game.prototype.init = function() {
+    //TODO obviously will change soon
+    this.renderer = new Renderer(this.canvas);
+    this.textManager = new TextManager(this);
+    // this.soundManager = new SoundManager();
+    this.entityManager = new EntityManager(this);
+    this.userInterfaceManager = new UserInterfaceManager(this);
+
     this.loadAttributes(this.initData);
     this.initFunc();
 };

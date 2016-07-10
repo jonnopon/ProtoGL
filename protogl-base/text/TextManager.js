@@ -1,17 +1,64 @@
+//TODO: THIS NEXT
+//REQUIREMENT: TEXTURE SUPPORT WORKING AGAIN IN RENDERER
+//IF STRINGS/CHARACTERS ARE TO BE REPRESENTED AS ENTITIES:
+//  REQUIRED: ENTITY TEXTURE SUPPORT
+//            PLUS A COMPLETE CHANGE OF HOW THIS CLASS PIPES TO THE RENDERER
+//            (BREAK STRING (AND CHAR?) DOWN TO THEIR OWN CLASSES
+//              (UTILISE THE NEW ENTITY COMPONENTS TO CREATE STRINGS)
+//THINK OF OTHER ACCEPTABLE SOLUTIONS (EG JUST ADAPTING THE BELOW?)
+
+/*
+    EXAMPLE FOR POTENTIAL CLASS STRING:
+
+     var String = function(text, align, size, pos, col, angle, persist, flashing, flashFrames, flashCol, flashScale) {
+
+         var entity = new Entity("text");
+         //TODO: DIMENSIONS
+         entity.addComponent(new Transform2D(pos, dimensions, new Vec2()));
+         entity.addComponent(new Shape("grid", dimensions));
+         entity.addComponent(new FlatColor(col));
+         entity.addComponent(new Shader(GAME.getShader("textShader")));
+
+         //TODO: texcoords?
+         entity.addComponent(new Texture("fontTexture"), texCoords);
+
+         var alignInt = null;
+         if (angle !== 0) {
+            alignInt = -1;
+         }
+         else {
+             switch (align) {
+                 case "left":
+                    alignInt = -1;
+                    break;
+                 case "center":
+                    alignInt = 0;
+                    break;
+                 case "right":
+                    alignInt = 1;
+                    break;
+                 default:
+                    alignInt = 0;
+             }
+         }
+     }
+ */
+
 var TextManager = function() {
     this.renderer = GAME.renderer;
     this.shaderProgramName = 'textProgram';
     this.vboName = 'textVBO';
-    this.textureName = 'font';
+    this.textureName = 'fontTexture';
     this.counter = 0;
 
    	var texPos = -1;
+    //TODO: BAD ERROR HANDLING LOL
     while (texPos < 0) {
         texPos = this.renderer.createTexture(this.textureName, 'res/img/font.png');
     }
 
-    var vert = VERTSHADERS2D["transform-textured-colored"];
-    var frag = FRAGSHADERS["textured-colored"];
+    var vert = VERTSHADERS2D["new-transform-textured-colored"]();
+    var frag = FRAGSHADERS["texturedColored"];
     var textShader = {
         name: "textShader",
         vertSrc: vert.src,
@@ -19,18 +66,19 @@ var TextManager = function() {
         attributes: vert.attributes,
         uniforms: vert.uniforms
     };
-    GAME.addShader(textShader);
+    // GAME.addShader(textShader);
+    this.shaderProgram = GAME.getShader("textShader");
 
     this.renderer.addVBO(this.vboName);
     
-    var config = new RenderSettings();
-    config.setShader(textShader.name);
-    config.setShape(gl.TRIANGLES);
-    config.setTextureName(this.textureName);
-    config.addAttributes(textShader.attributes);
-    config.addUniforms(textShader.uniforms);
+    // var config = new RenderSettings();
+    // config.setShader(textShader.name);
+    // config.setShape(gl.TRIANGLES);
+    // config.setTextureName(this.textureName);
+    // config.addAttributes(textShader.attributes);
+    // config.addUniforms(textShader.uniforms);
     
-    this.renderSettings = config;
+    // this.renderSettings = config;
 
 	this.uvMap = {};
 	this.strings = [];
@@ -86,8 +134,7 @@ TextManager.prototype.addString = function(text, align, size, pos, col, angle, p
             a: col.w,
             angle: angle,
             persist: persist
-            
-        }
+        };
         if (flashing) {
             str.flashing = flashing,
             str.flashFrames = flashFrames;
@@ -206,17 +253,24 @@ TextManager.prototype.constructVerts = function() {
     return vertFloat32;
 };
 TextManager.prototype.render = function() {
-    if (this.strings.length == 0) {
-        return;
-    }
+    // if (this.strings.length == 0) {
+    //     return;
+    // }
+    //
+    // // this.prepareForRendering();
+    // // this.renderer.addVerts('textVerts', this.constructVerts(), 12);
+    // // this.renderer.bufferVertsToVBO('textVerts', this.vboName);
+    // // this.renderer.bindVBO(this.vboName);
+    // // this.renderer.bindShaderProgram(this.shaderProgramName);
+    // // this.renderer.bindVerts('textVerts');
+    //
+    // // this.renderer.render(this.renderSettings);
+    // // this.flushStrings();
+    //
+    // var config = new RenderConfig();
+    // config.setShader(this.shaderProgram.name, this.shaderProgram.globalUniforms, this.shaderProgram.attributes, this.shaderProgram.dataPerVert);
+    // config.setInstanceUniforms()
 
-    this.prepareForRendering();
-    this.renderer.addVerts('textVerts', this.constructVerts(), 12);
-    this.renderer.bufferVertsToVBO('textVerts', this.vboName);
-    this.renderer.bindVBO(this.vboName);
-    this.renderer.bindShaderProgram(this.shaderProgramName);
-    this.renderer.bindVerts('textVerts');
-
-    this.renderer.render(this.renderSettings);
-    this.flushStrings();
+    
+    // this.renderer.renderWithConfig(config);
 };

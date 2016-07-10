@@ -17,35 +17,6 @@ var PhysicsSystem2D = function() {
             position.addVec2(deltaVelocity);
 
             e.components.transform2D.lastMoveDelta = deltaVelocity;
-
-            //todo COMPUTE MATRIX this is likely to want to end up somewhere else
-            var transform2D = e.components.transform2D;
-            var tr = transform2D.transform;
-            t = new Mat3();
-
-            var moveToOrigin = new Mat3();
-            var origin = transform2D.dimensions.clone();
-            origin.scalarDivide(-2);
-            moveToOrigin.translate(origin);
-            // moveToOrigin.setAsTranslation(dimensions);
-
-            var rot = new Mat3();
-            rot.rotate(transform2D.angle);
-            // rot.setAsRotation(transform2D.angle);
-            var trans = new Mat3();
-            trans.translate(transform2D.position);
-            // trans.setAsTranslation(transform2D.position);
-            var scale = new Mat3();
-            scale.scale(transform2D.scale);
-            // scale.setAsScale(transform2D.scale);
-
-
-            var result = moveToOrigin.clone();
-            result.mat3Mult(rot);
-            result.mat3Mult(scale);
-            result.mat3Mult(trans);
-
-            transform2D.transform = result;
         }
 
         //handle rotation?

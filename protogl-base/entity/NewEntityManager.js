@@ -6,6 +6,8 @@ var EntityManager = function() {
     this.vboName = "entVBO";
     this.textureName = "entTex";
 
+    // this.lastShaderProgram = null;
+
     this.renderer.addVBO(this.vboName);
 
     //TODO: as part of texture reimplementation
@@ -42,8 +44,15 @@ EntityManager.prototype.cleanEnts = function() {
 };
 EntityManager.prototype.update = function() {
     for (var i = 0; i < this.ents.length; i++) {
-        if (this.ents[i].onUpdate !== null) {
+        if (this.ents[i].onUpdate) {
             this.ents[i].onUpdate();
+        }
+
+        if (GAME.displayStats && this.ents[i].arrows === undefined && this.ents[i].tag !== "arrow") {
+            this.addAxesFor3DEntity(this.ents[i]);
+        }
+        else if (!GAME.displayStats && this.ents[i].arrows !== undefined) {
+            this.removeAxesFor3DEntity(this.ents[i]);
         }
     }
 
@@ -54,83 +63,117 @@ EntityManager.prototype.update = function() {
         this.cleanEnts();
     }
 };
-EntityManager.prototype.render = function() {
+EntityManager.prototype.render = function(ents) {
     var renderer = this.renderer;
+    
+    var ents = ents || this.ents;
 
     //TODO MIX 2D AND 3D VARIANTS? OR GIVE THEM THE SAME NAME AND THUS GENERIFY THEM? ideas ideas
-    var renderables = this.getAllEntsWithComponents([Transform2D, Shape, Shader]);
-    var renderables = renderables.concat(this.getAllEntsWithComponents([Transform3D, Shape, Shader]));
+    var renderables = this.getEntsWithComponentsFrom([Transform2D, Shape, Shader], ents);
+    var renderables = renderables.concat(this.getEntsWithComponentsFrom([Transform3D, Shape, Shader], ents));
 
-    var shaders = this.groupEntsByShader(renderables);
-    var shaderNames = Object.keys(shaders);
+    var config = new RenderConfig();
+    for (var i = 0; i < renderables.length; i++) {
+        var e = renderables[i];
 
-    for (var i = 0; i < shaderNames.length; i++) {
-        var name = shaderNames[i];
+        //PROBABLY A MORE ELEGANT WAY OF DOING THIS
+        // if (e.components.transform2D) {
+        //     this.computeMatrix2D(e);
+        // }
+        // else if (e.components.transform3D) {
+        //     this.computeMatrix3D(e);
+        // }
 
-        var shaderProgram = shaders[name][0].components.shader.shaderData;
-        var globalUniforms = shaderProgram.globalUniforms;
-        var instanceUniforms = shaderProgram.instanceUniforms;
-        var instanceUniformKeys = Object.keys(instanceUniforms);
-        var instanceUniformsActual = {};
+        //TODO GOTTA MODIFY THIS TO THE NEW SHADER STANDARD
+        var glShape = e.components.shape.glShape;
+        var geometryVerts = e.components.shape.geometry; //TODO: geometry might change in structure
+        var normals = e.components.shape.normals;
+        var shaderProgram = e.components.shader.shaderData;
+
+        var vertGlobalUniforms = shaderProgram.vertUniforms.global || {};
+        var fragGlobalUniforms = shaderProgram.fragUniforms.global || {};
+
+        config.setShader(shaderProgram.name, vertGlobalUniforms, fragGlobalUniforms, shaderProgram.attributes, shaderProgram.dataPerVert);
+
+        var vertInstanceUniforms = shaderProgram.vertUniforms.instance || {};
+        var fragInstanceUniforms = shaderProgram.fragUniforms.instance || {};
+
+        var vertInstanceUniformKeys = Object.keys(vertInstanceUniforms);
+        var vertInstanceUniformsActual = {};
+        for (var j = 0; j < vertInstanceUniformKeys.length; j++) {
+            var key = vertInstanceUniformKeys[j];
+            var type = vertInstanceUniforms[key];
+
+            var value = this.getShaderValueFromEntity(key, e, geometryVerts[j]);
+            var vF32 = new Float32Array(value.length);
+            vF32.set(value, 0);
+            value = vF32;
+
+            vertInstanceUniformsActual[key] = {value: value, type: type};
+        }
+
+        var fragInstanceUniformKeys = Object.keys(fragInstanceUniforms);
+        var fragInstanceUniformsActual = {};
+        for (var j = 0; j < fragInstanceUniformKeys.length; j++) {
+            var key = fragInstanceUniformKeys[j];
+            var type = fragInstanceUniforms[key];
+
+            var value = this.getShaderValueFromEntity(key, e, geometryVerts[j]);
+            var vF32 = new Float32Array(value.length);
+            vF32.set(value, 0);
+            value = vF32;
+
+            fragInstanceUniformsActual[key] = {value: value, type: type};
+        }
+
+
+        // var instanceUniforms = shaderProgram.instanceUniforms;
+        // var instanceUniformKeys = Object.keys(instanceUniforms);
+        // var instanceUniformsActual = {};
+        // for (var j = 0; j < instanceUniformKeys.length; j++) {
+        //     //for every uniform, add the attribute value for this onto the array
+        //     var key = instanceUniformKeys[j];
+        //     var type = instanceUniforms[key];
+        //
+        //     var value = this.getShaderValueFromEntity(key, e, geometryVerts[j]);
+        //     var vF32 = new Float32Array(value.length);
+        //     vF32.set(value, 0);
+        //     value = vF32;
+        //
+        //     instanceUniformsActual[key] = { value: value, type: type };
+        // }
+
+        config.setVertInstanceUniforms(vertInstanceUniformsActual);
+        config.setFragInstanceUniforms(fragInstanceUniformsActual);
+
+        // config.setInstanceUniforms(instanceUniformsActual);
+
         var attributes = shaderProgram.attributes;
         var attributeKeys = Object.keys(attributes);
-        
-        renderer.useShaderProgram(shaderProgram.name);
-        renderer.loadUniforms(globalUniforms);
+        var verts = [];
+        for (var j = 0; j < geometryVerts.length; j++) {
+            //for every vertex, build an array of values representing this vertex's attributes
 
-        var ents = shaders[name];
-
-        //TODO: FUTURE: TRANSPARENT/NON-TRANSPARENT?
-        //TODO: REIMPLEMENT TEXTURE SUPPORT
-        var textured = this.getEntsWithComponentFrom(Sprite, ents);
-        var nontextured = this.getEntsWithComponentFrom(FlatColor, ents);
-
-        //SHOULD THESE BE SPLIT SUCH? PROBABLY NOT
-
-        for (var i = 0; i < nontextured.length; i++) {
-            //for every ENTITY
-            var e = nontextured[i];
-            var transform = e.components.transform2D;
-            var glShape = e.components.shape.glShape;
-            var geometryVerts = e.components.shape.geometry; //TODO: geometry might change in structure
-            var verts = [];
-
-            for (var j = 0; j < geometryVerts.length; j++) {
-                //for every vertex, build an array of values representing this vertex's attributes
-
-                for (var k = 0; k < attributeKeys.length; k++) {
-                    //for every attribute, add the attribute value for this entity onto the array
-                    verts = verts.concat(this.getShaderValueFromEntity(attributeKeys[k], e, geometryVerts[j]));
-                }
+            for (var k = 0; k < attributeKeys.length; k++) {
+                //for every attribute, add the attribute value for this entity onto the array
+                verts = verts.concat(this.getShaderValueFromEntity(attributeKeys[k], e, geometryVerts[j], normals[j]));
             }
-
-            for (var k = 0; k < instanceUniformKeys.length; k++) {
-                //for every uniform, add the attribute value for this onto the array
-                var key = instanceUniformKeys[k];
-                var type = instanceUniforms[key];
-
-                var value = this.getShaderValueFromEntity(key, e, geometryVerts[j]);
-                var vF32 = new Float32Array(value.length);
-                vF32.set(value, 0);
-                value = vF32;
-
-                instanceUniformsActual[key] = { value: value, type: type };
-            }
-
-            var vertsFloat32 = new Float32Array(verts.length);
-            vertsFloat32.set(verts, 0);
-            renderer.bufferVertsToVBO(vertsFloat32, this.vboName);
-            renderer.setShader(shaderProgram.dataPerVert, attributes, instanceUniformsActual);
-            renderer.render(glShape, geometryVerts.length);
         }
-    }
 
-    //TODO: REMOVE
-    console.log(this.ents.length);
+        var vertsFloat32 = new Float32Array(verts.length);
+        vertsFloat32.set(verts, 0);
+
+        config.setVerts(glShape, this.vboName, vertsFloat32, geometryVerts.length);
+
+        renderer.renderWithConfig(config);
+    }
 };
-EntityManager.prototype.getShaderValueFromEntity = function(key, ent, geometryVert) {
+EntityManager.prototype.getShaderValueFromEntity = function(key, ent, geometryVert, normalVert) {
     if (key === "pos2D" || key === "pos3D") {
         return geometryVert.asArray();
+    }
+    else if (key === "normal") {
+        return normalVert ? normalVert.asArray() : [0, 0, 11];
     }
     else {
         var path = ENTITY_ATTRIBUTE_MAP[key];
@@ -160,6 +203,65 @@ EntityManager.prototype.getShaderValueFromEntity = function(key, ent, geometryVe
             return value;
         }
     }
+};
+EntityManager.prototype.computeMatrix2D = function(ent) {
+    //todo COMPUTE MATRIX this is likely to want to end up somewhere else
+    var transform2D = ent.components.transform2D;
+    var tr = transform2D.transform;
+    t = new Mat3();
+
+    var moveToOrigin = new Mat3();
+    var origin = transform2D.dimensions.clone();
+    origin.scalarDivide(-2);
+    moveToOrigin.translate(origin);
+    // moveToOrigin.setAsTranslation(dimensions);
+
+    var rot = new Mat3();
+    rot.rotate(transform2D.angle);
+    // rot.setAsRotation(transform2D.angle);
+    var trans = new Mat3();
+    trans.translate(transform2D.position);
+    // trans.setAsTranslation(transform2D.position);
+    var scale = new Mat3();
+    scale.scale(transform2D.scale);
+    // scale.setAsScale(transform2D.scale);
+
+    var result = moveToOrigin.clone();
+    result.mat3Mult(rot);
+    result.mat3Mult(scale);
+    result.mat3Mult(trans);
+
+    transform2D.transform = result;
+};
+EntityManager.prototype.computeMatrix3D = function(ent) {
+    // //todo COMPUTE MATRIX this is likely to want to end up somewhere else
+    // var transform3D = ent.components.transform3D;
+    // var tr = transform3D.transform;
+    // t = new Mat4();
+    //
+    // // var moveToOrigin = new Mat4();
+    // // var dimensions = transform3D.dimensions.clone();
+    // // dimensions.scalarDivide(-2);
+    // // moveToOrigin.translate(dimensions);
+    //
+    // var trans = new Mat4();
+    // trans.translate(transform3D.position);
+    // var scale = new Mat4();
+    // scale.scale(transform3D.scale);
+    //
+    // var rot = new Mat4();
+    // rot.rotate(transform3D.angle.x, transform3D.right);
+    // rot.rotate(transform3D.angle.y, transform3D.up);
+    // rot.rotate(transform3D.angle.z, transform3D.forward);
+    //
+    //
+    // // var result = moveToOrigin.clone();
+    // var result = rot.clone();
+    // // result.mat4Mult(rot);
+    // result.mat4Mult(scale);
+    // result.mat4Mult(trans);
+    //
+    // transform3D.transform = result;
 };
 EntityManager.prototype.groupEntsByShader = function(ents) {
     var groupedEnts = {};
@@ -246,4 +348,51 @@ EntityManager.prototype.getAllEntities = function() {
 };
 EntityManager.prototype.clearAllEntities = function() {
     this.ents = [];
+};
+EntityManager.prototype.addAxesFor3DEntity = function (e) {
+    var transform = e.components.transform3D;
+
+    var position = transform.position;
+    var colors = [new Vec4(255, 0, 0, 1), new Vec4(0, 255, 0, 1), new Vec4(0, 0, 255, 1)];
+
+    var ents = [];
+
+    for (var i = 0; i < 3; i++) {
+        var arrow = new Entity("arrow");
+        arrow.addComponent(new Transform3D(position, new Vec3(), new Vec3()));
+        arrow.addComponent(new Shape("line3D", new Vec3()));
+        arrow.addComponent(new FlatColor(colors[i]));
+        arrow.addComponent(new Shader(GAME.getShader("perspective")));
+        arrow.PARENT = e;
+        arrow.direction = i;
+
+        arrow.onUpdate = function() {
+            this.components.transform3D.position = this.PARENT.components.transform3D.position.clone();
+
+            var direction = this.PARENT.components.transform3D.up.clone();
+            switch (this.direction) {
+                case 1:
+                    direction = this.PARENT.components.transform3D.forward.clone();
+                    break;
+                case 2:
+                    direction = this.PARENT.components.transform3D.right.clone();
+                    break;
+            }
+
+            direction.scalarMult(100);
+
+            this.components.shape = new Shape("line3D", direction);
+
+            this.components.transform3D.dimensions = direction;
+        };
+
+        ents.push(arrow);
+    }
+
+    e.arrows = ents;
+    this.addEntityList(ents);
+};
+EntityManager.prototype.removeAxesFor3DEntity = function(e) {
+    this.removeEntityList(e.arrows);
+    e.arrows = undefined;
 };
