@@ -47,18 +47,17 @@ Game.prototype.run = function(t) {
     GAME.renderer.clearScreen(GAME.backgroundColor, false);
     GAME.resizeCanvas();
 
+    //TODO: reimplement text
     if (GAME.displayStats) {
-        GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);
-        GAME.textManager.addString("MousePos:\\n" + GAME.mousePos.str(), "Right", 25, new Vec2(GAME.width - 200, GAME.height - 65), new Vec4(255, 255, 255, 1), 0);
+        // console.log("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10);
+    //     GAME.textManager.addString("FPS: " + Math.round((1000 / GAME.delta) * 10) / 10, "right", 25, new Vec2(GAME.width - 15, GAME.height - 25), new Vec4(255, 255, 255, 1), 0);
+    //     GAME.textManager.addString("MousePos:\\n" + GAME.mousePos.str(), "Right", 25, new Vec2(GAME.width - 200, GAME.height - 65), new Vec4(255, 255, 255, 1), 0);
     }
 
     for (var i = 0; i < GAME.systems.length; i++) {
         GAME.systems[i]();
     }
     GAME.currentState.tick();
-
-    GAME.userInterfaceManager.render();
-    GAME.textManager.render();
 
     requestAnimationFrame(GAME.run);
 };
@@ -73,19 +72,12 @@ Game.prototype.resizeCanvas = function() {
 
     this.renderer.resize(this.canvas.width, this.canvas.height);
 };
-Game.prototype.initManagers = function() {
-    this.renderer = new Renderer(this.canvas);
-    this.textManager = new TextManager(this);
-    this.soundManager = new SoundManager();
-    this.entityManager = new EntityManager(this);
-    this.userInterfaceManager = new UserInterfaceManager(this);
-};
 Game.prototype.addState = function(state) {
     this.states[state.getName()] = state;
 };
 Game.prototype.switchToState = function(name) {
     this.currentState = this.states[name];
-    this.textManager.flushPersistentStrings();
+    // this.textManager.flushPersistentStrings();
     this.currentState.init();
 };
 Game.prototype.addSystem = function(system) {
@@ -103,12 +95,19 @@ Game.prototype.addEntityList = function(l) {
 Game.prototype.removeEntity = function(e) {
     this.entityManager.removeEntity(e);
 };
+//TODO removeEntityList
 Game.prototype.loadAttributes = function(data) {
     for (key in data) {
         this[key] = data[key];
     }
 };
 Game.prototype.init = function() {
+    this.renderer = new Renderer(this.canvas);
+    this.textManager = new TextManager(this);
+    // this.soundManager = new SoundManager();
+    this.entityManager = new EntityManager(this);
+    this.userInterfaceManager = new UserInterfaceManager(this);
+
     this.loadAttributes(this.initData);
     this.initFunc();
 };
@@ -139,8 +138,8 @@ Game.prototype.clearEntities = function() {
     this.entityManager.clearAllEntities();
 };
 Game.prototype.addShader = function(shader) {
-    this.renderer.addShaderProgram(shader["name"], [shader["vertSrc"], shader["fragSrc"]]);
-    this.shaders[shader["name"]] = shader;
+    this.renderer.createShaderProgram(shader.name, {vert: shader.vertSrc, frag: shader.fragSrc});
+    this.shaders[shader.name] = shader;
 };
 Game.prototype.getShader = function(name) {
     return this.shaders[name];

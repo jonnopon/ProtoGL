@@ -25,7 +25,7 @@ var Camera3D = function(position/*,*/ /*target*/) {
     // this.xAxis = null; /* cross product of zAxis and up */
     // this.yAxis = null; /* cross product of zAxis and xAxis */
 
-    this.e = new Entity();
+    this.e = new Entity("camera");
     this.e.addComponent(new Transform3D(position, new Vec3(), new Vec3()));
 
     this.e.components.transform3D.moveType = 0;
@@ -45,9 +45,12 @@ Camera3D.prototype.update = function() {
 
     // this.e.components.transform3D.velocity.rotate()
 
-    GAME.entityManager.computeMatrix3D(this.e);
+    // GAME.entityManager.computeMatrix3D(this.e);
 
-    this.position = this.e.components.transform3D.position;
+    this.position = this.e.components.transform3D.position.clone();
+
+    // GAME.renderer.pointLightPosition = this.position.clone();
+    // GAME.renderer.pointLightPosition.z = -1000;
 
     //
     //
