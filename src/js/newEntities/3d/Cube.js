@@ -12,7 +12,7 @@ var Cube = function(position, col) {
     entity.originalPos = entity.components.transform3D.position.clone();
     entity.onUpdate = function() {
         // this.components.transform3D.angle.x += (degToRad(0.55));
-        this.components.transform3D.angle.y += (degToRad(1.5));
+        // this.components.transform3D.angle.y += (degToRad(1.5));
         // this.components.transform3D.angle.z += (degToRad(0.75));
     };
 

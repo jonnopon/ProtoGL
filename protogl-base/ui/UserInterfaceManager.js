@@ -1,81 +1,47 @@
-var OldUserInterfaceManager = function() {
-    // this.renderer = GAME.renderer;
-    // this.shaderProgramName = "uiProgram";
-    // this.vboName = "uiVBO";
-    // this.verts = [];
-    // this.dataPerVert = 6;
-    //
-    // var vert = VERTSHADERS2D["colored"];
-    // var frag = FRAGSHADERS["colored"];
-    // var uiShader = {
-    //     name: "uiShader",
-    //     vertSrc: vert.src,
-    //     fragSrc: frag,
-    //     attributes: vert.attributes,
-    //     uniforms: vert.uniforms
-    // };
-    // GAME.addShader(uiShader);
-    //
-    // this.renderer.addVBO(this.vboName);
-    //
-    // var config = new RenderSettings();
-    // config.setShader(uiShader.name);
-    // config.setShape(gl.TRIANGLES);
-    // config.addAttributes(uiShader.attributes);
-    // config.addUniforms(uiShader.uniforms);
-    //
-    // this.renderSettings = config;
-    //
-    // this.elements = [];
+var UserInterfaceManager = function() {
+    this.renderer = GAME.renderer;
+    this.elements = [];
+    this.removeList = [];
+    this.addList = [];
+    this.vboName = "uiVBO";
+
+    this.renderer.addVBO(this.vboName);
 };
 
-// UserInterfaceManager.prototype.addElement = function(e) {
-//     this.elements.push(e);
-// };
-// UserInterfaceManager.prototype.clearElements = function() {
-//     this.elements = [];
-// };
-// UserInterfaceManager.prototype.constructVerts = function() {
-//     var vertSize = this.dataPerVert * 6 * this.elements.length;
-//     this.verts = new Float32Array(vertSize);
-//     var off = 0;
-//
-//     for (var i = 0; i < this.elements.length; i++) {
-//         var pos = this.elements[i].position;
-//         var dim = this.elements[i].dimensions;
-//         var col = this.elements[i].color,
-//             r = col.x,
-//             g = col.y,
-//             b = col.z,
-//             a = col.w;
-//
-//         var tempVerts = [
-//             pos.x, pos.y, r, g, b, a,
-//             pos.x + dim.x, pos.y, r, g, b, a,
-//             pos.x + dim.x, pos.y + dim.y, r, g, b, a,
-//
-//             pos.x + dim.x, pos.y + dim.y, r, g, b, a,
-//             pos.x, pos.y + dim.y, r, g, b, a,
-//             pos.x, pos.y, r, g, b, a
-//         ];
-//
-//         this.verts.set(tempVerts, off);
-//         off += tempVerts.length;
-//     }
-//
-// };
-OldUserInterfaceManager.prototype.render = function() {
-    // var renderer = this.renderer;
-    // this.constructVerts();
-    //
-    // if (this.verts.length === 0) {
-    //     return;
-    // }
-    //
-    // renderer.addVerts("uiVerts", this.verts, this.dataPerVert);
-    // renderer.bufferVertsToVBO("uiVerts", this.vboName);
-    // renderer.bindVBO(this.vboName);
-    // renderer.bindVerts("uiVerts");
-    // renderer.bindShaderProgram(this.shaderProgramName);
-    // renderer.render(this.renderSettings);
+UserInterfaceManager.prototype.addElement = function(e) {
+    this.addList.push(e);
+};
+UserInterfaceManager.prototype.removeElement = function(e) {
+    this.removeList.push(e);
+};
+UserInterfaceManager.prototype.loadElements = function() {
+    for (var i = 0; i < this.addList.length; i++) {
+        this.elements.push(this.addList[i]);
+    }
+    this.addList = [];
+};
+UserInterfaceManager.prototype.cleanElements = function() {
+    for (var i = 0; i < this.removeList.length; i++) {
+        this.elements.splice(this.elements.indexOf(this.removeList[i]), 1);
+    }
+    this.removeList = [];
+};
+
+UserInterfaceManager.prototype.update = function() {
+    for (var i = 0; i < this.elements.length; i++) {
+        if (this.elements[i].onUpdate !== null) {
+            this.elements[i].onUpdate();
+        }
+    }
+
+    if (this.addList.length) {
+        this.loadElements();
+    }
+    if (this.removeList.length) {
+        this.cleanElements();
+    }
+};
+
+UserInterfaceManager.prototype.render = function() {
+    GAME.entityManager.render(this.elements);
 };

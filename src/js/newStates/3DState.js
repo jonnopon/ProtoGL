@@ -5,6 +5,17 @@ var State3D = function() {
 
             GAME.addEntity(Plane(new Vec3(0, -100, 0), new Vec3(1, 0, 1), 10000, new Vec4(200, 200, 200, 1)));
 
+            var e = Cube(new Vec3(-500, 250, 0), new Vec4(255, 255, 0, 1));
+            e.removeComponent("shader");
+            e.addComponent(new Shader(GAME.getShader("perspective")));
+            e.onUpdate = function() {
+                this.components.transform3D.position.x += (7.5 * GAME.delta) / 100;
+                GAME.renderer.pointLightPosition.x += (7.5 * GAME.delta) / 100;
+            };
+            GAME.addEntity(e);
+            // this.pointLightPosition = new Vec3(-500, 0, 0);
+            // this.pointLightColor = new Vec3(255, 255, 0);
+
             for (var z = -5500; z < 4000; z += 1000) {
                 // GAME.addEntity(Cube(new Vec3(-175, 0, z), new Vec4(255, 0, 200, 1)));
                 // GAME.addEntity(Cone(new Vec3(0, 0, z), new Vec4(150, 200, 125, 1)));

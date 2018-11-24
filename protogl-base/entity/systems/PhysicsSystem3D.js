@@ -71,7 +71,7 @@ var PhysicsSystem3D = function() {
             var normalMatrix = new Mat3(computeMatrix.clone());
             normalMatrix.invert();
             normalMatrix.transpose();
-            e.components.normalTransform = normalMatrix;
+            e.components.transform3D.normalTransform = normalMatrix;
 
             // var inTr = computeMatrix.clone();
             // inTr.invert();
