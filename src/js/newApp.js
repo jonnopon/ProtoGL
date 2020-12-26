@@ -1,14 +1,14 @@
-var init = function() {
+var init = function () {
     var game = new Game(1024, 768);
     game.setBackgroundColor(new Vec4(1, 1, 1, 1));
-    game.displayStats  = true;
+    game.displayStats = true;
 
     //STEP 1: attach init data to the game object (loaded upon game initialisation)
     game.initData = {
 
     };
     //STEP 2: attach initialisation function to the game (called during game.start())
-    game.initFunc = function() {
+    game.initFunc = function () {
         var vPerspective = VERTSHADERS3D["perspective-1"]();
         // var vert2D = VERTSHADERS2D["new-transform-colored"]();
         var fPerspective = FRAGSHADERS["colored"];
@@ -46,8 +46,8 @@ var init = function() {
                 instance: vLighting.instanceUniforms
             },
             fragUniforms: {
-                    global: fLighting.globalUniforms,
-                    instance: fLighting.instanceUniforms
+                global: fLighting.globalUniforms,
+                instance: fLighting.instanceUniforms
             },
             // instanceUniforms: iUniform3D
         };
@@ -66,21 +66,21 @@ var init = function() {
 
         this.renderer.addCamera(new Camera3D(new Vec3(0, 0, 1000)));
 
-        this.switchToState("3DState");
+        this.switchToState("2DState");
     };
 
     //STEP 3: attach reinit data to the game object (loaded upon game re-initialisation)
     game.reinitData = game.initData;
 
     //STEP 4: attach re-initialisation function to the game (called during game.reinit())
-    game.reinitFunc = function() {
+    game.reinitFunc = function () {
         // this.displayStats = true;
 
-        this.switchToState("3DState");
+        this.switchToState("2DState");
     };
 
     //STEP 5: attach utility functions to game - global game behaviors accessible anywhere
-    game.genStuff = function() {
+    game.genStuff = function () {
         for (var i = 0; i < 250; i++) {
             var r = randomBetween(1, 900);
             var e = undefined;
@@ -124,7 +124,7 @@ var init = function() {
             e.components.transform3D.velocity = new Vec3(randomBetween(-15, 15), randomBetween(-15, 15), randomBetween(-15, 15));
             e.components.transform3D.moveType = 1;
 
-            e.onUpdate = function() {
+            e.onUpdate = function () {
                 switch (this.ROTATION) {
                     case 1:
                         this.components.transform3D.angle.x += degToRad(1.5);
@@ -155,7 +155,7 @@ var init = function() {
 
     //STEP 6: add the states to the game
     // game.addState(State2D());
-    game.addState(State3D());
+    game.addState(State2D());
 
     //STEP 7: start the game!
     game.start();
