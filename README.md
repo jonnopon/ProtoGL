@@ -6,7 +6,7 @@ years of biannual [LDJam](https://ldjam.com/) entries.
 Project source, commit history and system stability are assumed to be generally terrible due to my experience at the time and a poor development approach. The
 last earnest work (circa ~2014) left the project in a state of partial rewrite. There is no documentation or testing.
 
-**[ProtoGL](https://github.com/jonnopon/ProtoGL)** is an attempt at reviving this project and its concepts.
+**[Aura](https://github.com/optionallychained/Aura)** is an attempt at reviving this project and its concepts.
 
 
 ## Setup
